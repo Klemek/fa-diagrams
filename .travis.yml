@@ -1,0 +1,13 @@
+dist: xenial
+language: node_js
+node_js:
+  - "12"
+cache:
+  npm: true
+  directories:
+    - node_modules
+install:
+  - npm install
+script:
+  - jest --silent --coverage --coverageReporters=text-lcov | coveralls
+  - jshint ./src

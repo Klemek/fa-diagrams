@@ -1,0 +1,35 @@
+{
+  "name": "fa-diagrams",
+  "version": "1.0.0",
+  "description": "SVG diagrams built from Font-Awesome icons",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --silent"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Klemek/fa-diagrams.git"
+  },
+  "keywords": [
+    "font-awesome",
+    "diagram",
+    "icon"
+  ],
+  "author": "Klemek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Klemek/fa-diagrams/issues"
+  },
+  "homepage": "https://github.com/Klemek/fa-diagrams#readme",
+  "dependencies": {
+    "coveralls": "^3.0.4",
+    "jest": "^24.8.0",
+    "jshint": "^2.10.2"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!/node_modules/"
+    ]
+  }
+}
