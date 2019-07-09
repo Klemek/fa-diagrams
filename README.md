@@ -10,7 +10,7 @@ const diag = require('fa-diagrams');
 
 const data = {
     options: {
-        font: 'times'
+        font: 'Courier New'
     },
     nodes: [
         {
