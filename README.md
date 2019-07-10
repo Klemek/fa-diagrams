@@ -1,10 +1,52 @@
+[![npm version](https://img.shields.io/npm/v/fa-diagrams.svg)](https://www.npmjs.com/package/fa-diagrams)
 [![Build Status](https://img.shields.io/travis/Klemek/fa-diagrams.svg?branch=master)](https://travis-ci.org/Klemek/fa-diagrams)
 [![Coverage Status](https://img.shields.io/coveralls/github/Klemek/fa-diagrams.svg?branch=master)](https://coveralls.io/github/Klemek/fa-diagrams?branch=master)
 
-# fa-diagrams
-## (WIP) SVG diagrams built from Font-Awesome icons
+# (WIP) fa-diagrams
+## SVG diagrams built from Font-Awesome icons
 
-## Build from sources
+* [Install](#install)
+  * [CDN](#cdn)
+  * [Static script](#static-script)
+  * [NPM](#npm)
+  * [Build from sources](#build-from-sources)
+* [Usage](#usage)
+  * [Node module](#node-module)
+  * [Html script](#script
+
+## Install
+
+### Static script
+
+Get the scripts from this repository `dist` folder
+
+```html
+<script src="fa-diagrams-data.min.js"></script>
+<script src="fa-diagrams.min.js"></script>
+```
+
+### CDN (soon)
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/fa-diagrams@latest/dist/fa-diagrams-data.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fa-diagrams@latest/dist/fa-diagrams.min.js"></script>
+```
+
+or
+
+```html
+<script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams-data.min.js"></script>
+<script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams.min.js"></script>
+```
+
+
+### NPM (soon)
+
+```
+npm install fa-diagrams
+```
+
+### Build from sources
 
 You will need subversion installed (used for precise folder fetching in GitHub)
 
@@ -17,7 +59,7 @@ node build.sh
 
 ## Usage
 
-### With node
+### Node module
 
 ```javascript
 const diag = require('fa-diagrams');
@@ -56,7 +98,7 @@ Will produce the following diagram :
 
 ![sample](sample.png)
 
-### On web page
+### Html script
 
 ```html
 <head>
