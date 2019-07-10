@@ -2,9 +2,14 @@
   "name": "fa-diagrams",
   "version": "1.0.0",
   "description": "SVG diagrams built from Font-Awesome icons",
-  "main": "index.js",
+  "main": "src/index.js",
+  "files": [
+    "/src",
+    "/svg_list.json"
+  ],
   "scripts": {
-    "test": "jest --silent"
+    "test": "jest --silent",
+    "prepublishOnly": "node build.js --output svg_list.json"
   },
   "repository": {
     "type": "git",
@@ -21,15 +26,18 @@
     "url": "https://github.com/Klemek/fa-diagrams/issues"
   },
   "homepage": "https://github.com/Klemek/fa-diagrams#readme",
-  "dependencies": {
-    "coveralls": "^3.0.4",
-    "jest": "^24.8.0",
-    "jshint": "^2.10.2"
-  },
+  "dependencies": {},
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.js",
       "!/node_modules/"
     ]
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.4",
+    "jest": "^24.8.0",
+    "jshint": "^2.10.2",
+    "node-svn-ultimate": "^1.2.0",
+    "rimraf": "^2.6.3"
   }
 }

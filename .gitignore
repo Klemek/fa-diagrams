@@ -1,3 +1,5 @@
 /.idea
 /node_modules
 /coverage
+/build
+/svg_list.json

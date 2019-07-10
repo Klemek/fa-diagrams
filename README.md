@@ -4,6 +4,19 @@
 # fa-diagrams
 ## (WIP) SVG diagrams built from Font-Awesome icons
 
+## Build from sources
+
+You will need subversion installed (used for precise folder fetching in GitHub)
+
+```
+git clone https://github.com/klemek/fa-diagrams.git
+cd fa-diagrams
+npm install
+node build.sh
+```
+
+## Usage
+
 How to use (theorically)
 ```javascript
 const diag = require('fa-diagrams');
