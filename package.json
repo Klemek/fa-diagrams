@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Klemek/fa-diagrams#readme",
   "dependencies": {
-
+    "xml-js": "^1.6.11"
   },
   "jest": {
     "collectCoverageFrom": [

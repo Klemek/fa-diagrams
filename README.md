@@ -7,16 +7,16 @@
 
 * [Install](#install)
   * [CDN](#cdn)
-  * [Static script](#static-script)
+  * [Static scripts](#static-scripts)
   * [NPM](#npm)
   * [Build from sources](#build-from-sources)
 * [Usage](#usage)
   * [Node module](#node-module)
-  * [Html script](#script
+  * [Html script](#html-script)
 
 ## Install
 
-### Static script
+### Static scripts
 
 Get the scripts from this repository `dist` folder
 
@@ -62,7 +62,7 @@ node build.sh
 ### Node module
 
 ```javascript
-const diag = require('fa-diagrams');
+const faDiagrams = require('fa-diagrams');
 
 const data = {
     options: {
@@ -91,7 +91,7 @@ const data = {
     ]
 };
 
-const svg = diag.compute(data); // string containing xml data
+const svg = faDiagrams.compute(data); // string containing xml data
 ```
 
 Will produce the following diagram :
