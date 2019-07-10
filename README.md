@@ -41,6 +41,7 @@ const data = {
     ],
     links: [
         {
+            type: 'arrow',
             from: 'node1',
             to: 'node2',
             bottom: {text: 'Hello World!'}
