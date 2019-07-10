@@ -3,4 +3,4 @@
 # temporary file
 
 npm run prepublishOnly
-cp dist/*.min.js site
+cp dist/*.min.js docs
