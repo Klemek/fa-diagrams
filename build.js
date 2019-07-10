@@ -97,11 +97,10 @@ svn.commands.checkout(FA_SVG_FOLDER_URL, svgDir, (err) => {
       console.log(`\t\t${type}: ${Object.keys(svgs[type]).length} SVGs`);
     });
 
-    const argIndex = process.argv.indexOf('--output');
-    const output = (argIndex === -1 || !process.argv[argIndex + 1]) ? path.join(buildDir, 'svg_list.json') : process.argv[argIndex + 1];
+    const output = path.join(__dirname, 'svg_list.json');
 
-    fs.writeFileSync(output, JSON.stringify(svgs), {encoding: 'utf8'});
-
+    fs.writeFileSync(output, JSON.stringify(svgs, null, 4), {encoding: 'utf8'});
     console.log(`\tSVG list saved at "${output}"`);
+
   });
 });

@@ -5,11 +5,12 @@
   "main": "src/index.js",
   "files": [
     "/src",
+    "/dist",
     "/svg_list.json"
   ],
   "scripts": {
     "test": "jest --silent",
-    "prepublishOnly": "node build.js --output svg_list.json"
+    "prepublishOnly": "browserify --require ./svg_list.json:../svg_list.json -o dist/fa-diagrams-data.js && browserify --exclude ../svg_list.json src/index.js -o dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams.min.js -- dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams-data.min.js -- dist/fa-diagrams-data.js"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,9 @@
     "url": "https://github.com/Klemek/fa-diagrams/issues"
   },
   "homepage": "https://github.com/Klemek/fa-diagrams#readme",
-  "dependencies": {},
+  "dependencies": {
+
+  },
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.js",
@@ -34,6 +37,8 @@
     ]
   },
   "devDependencies": {
+    "uglify-es": "^3.3.9",
+    "browserify": "^16.3.0",
     "coveralls": "^3.0.4",
     "jest": "^24.8.0",
     "jshint": "^2.10.2",

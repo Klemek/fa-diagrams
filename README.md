@@ -17,7 +17,8 @@ node build.sh
 
 ## Usage
 
-How to use (theorically)
+### With node
+
 ```javascript
 const diag = require('fa-diagrams');
 
@@ -53,5 +54,26 @@ const svg = diag.compute(data); // string containing xml data
 Will produce the following diagram :
 
 ![sample](sample.png)
+
+### On web page
+
+```html
+<head>
+    ...
+    <script src="fa-diagrams-data.min.js"></script>
+    <script src="fa-diagrams.min.js"></script>
+    ...
+</head>
+<body>
+...
+<script>
+    ...
+    const svg = faDiagrams.compute(data); // string containing xml data
+    ...
+</script>
+...
+</body>
+</html>
+```
 
 
