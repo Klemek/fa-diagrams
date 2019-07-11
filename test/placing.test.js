@@ -129,7 +129,21 @@ describe('getPosition', () => {
     }, 'a', true);
     expect(res).toEqual({x: null, y: null, free: true});
   });
-  test('constrained to another', () => {
+  test('constrained to another not placed', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: ['b'],
+          afterY: [],
+          beforeY: []
+        }
+      },
+      'b': {}
+    }, 'a', true);
+    expect(res).toEqual({x: null, y: null, free: true});
+  });
+  test('constrained to another left', () => {
     const res = placing({debug: true, 'max-link-length': 2}).getPosition({
       'a': {
         const: {
@@ -142,6 +156,48 @@ describe('getPosition', () => {
       'b': {x: 0, y: 0}
     }, 'a', true);
     expect(res).toEqual({x: 1, y: 0, free: false});
+  });
+  test('constrained to another right', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: ['b'],
+          beforeX: [],
+          afterY: [],
+          beforeY: []
+        }
+      },
+      'b': {x: 0, y: 0}
+    }, 'a', true);
+    expect(res).toEqual({x: -1, y: 0, free: false});
+  });
+  test('constrained to another up', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: [],
+          afterY: [],
+          beforeY: ['b']
+        }
+      },
+      'b': {x: 0, y: 0}
+    }, 'a', true);
+    expect(res).toEqual({x: 0, y: 1, free: false});
+  });
+  test('constrained to another down', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: [],
+          afterY: ['b'],
+          beforeY: []
+        }
+      },
+      'b': {x: 0, y: 0}
+    }, 'a', true);
+    expect(res).toEqual({x: 0, y: -1, free: false});
   });
   test('double constrained diagonal', () => {
     const res = placing({debug: true, 'max-link-length': 2}).getPosition({

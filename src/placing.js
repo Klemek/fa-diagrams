@@ -23,7 +23,7 @@ module.exports = (options) => {
     /**
      * @param {Object<string,Node1>} nodes
      */
-    debugMap: (nodes) => {
+    /*debugMap: (nodes) => {
       const b = self.getBounds(nodes);
 
       const map = newmap(b.w, b.h).map(row => row.map(() => []));
@@ -38,7 +38,7 @@ module.exports = (options) => {
       }));
       out = out.map(row => row.map(cell => cell + new Array(maxLen - cell.length).fill(' ').join('')));
       console.log('\n' + out.map(row => row.join('|')).join('\n') + '\n');
-    },
+    },*/
 
     /**
      * Get the current bounds of the graph of nodes
@@ -255,7 +255,7 @@ module.exports = (options) => {
      * @returns {null|Object<string,Node1>}
      */
     applyLinks: (nodes, links, depth = 0) => {
-      if (self.debug) self.debugMap(nodes);
+      //if (self.debug) self.debugMap(nodes);
 
       if (!self.isValid(nodes, links)) {
         if (self.debug) console.log(`${new Array(depth).fill('.').join('')}invalid node placement`);
