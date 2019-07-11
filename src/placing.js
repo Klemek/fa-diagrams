@@ -92,23 +92,33 @@ module.exports = (options) => {
      * @returns {boolean}
      */
     nodeBetween: (nodes, n1, n2) => {
-      const x1 = nodes[n1].x;
-      const y1 = nodes[n1].y;
-      const x2 = nodes[n2].x;
-      const y2 = nodes[n2].y;
+      let x1 = nodes[n1].x;
+      let y1 = nodes[n1].y;
+      let x2 = nodes[n2].x;
+      let y2 = nodes[n2].y;
 
-      const dx = Math.sign(x2 - x1);
-      const dy = Math.sign(y2 - y1);
+      const dx = x2 - x1;
+      const dy = y2 - y1;
 
       const samePos = (x, y) => n => n.x === x && n.y === y && n.name !== n1 && n.name !== n2;
 
-      if (dx >= dy) {
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        if (x1 > x2) {
+          let tmp = x1;
+          x1 = x2;
+          x2 = tmp;
+        }
         for (let x = x1; x <= x2; x++) {
           let y = Math.round(y1 + dy * (x - x1) / dx);
           if (Object.values(nodes).find(samePos(x, y)))
             return true;
         }
       } else {
+        if (y1 > y2) {
+          let tmp = y1;
+          y1 = y2;
+          y2 = tmp;
+        }
         for (let y = y1; y <= y2; y++) {
           let x = Math.round(x1 + dx * (y - y1) / dy);
           if (Object.values(nodes).find(samePos(x, y)))
@@ -368,8 +378,13 @@ module.exports = (options) => {
 
       nodes = self.applyLinks(nodes, links);
 
-      if (nodes)
+      if (nodes) {
         self.correctPlacing(nodes);
+
+        Object.values(nodes).forEach(node => {
+          delete node.const;
+        });
+      }
 
       return nodes;
     },

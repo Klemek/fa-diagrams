@@ -112,6 +112,17 @@ describe('nodeBetween', () => {
     }, 'a', 'b');
     expect(res).toBe(true);
   });
+  test('between diagonal 3', () => {
+    const res = placing({debug: true}).nodeBetween({
+      '1': {'name': '1', 'x': 1, 'y': 0},
+      '2': {'name': '2', 'x': 2, 'y': 0},
+      '3': {'name': '3', 'x': 1, 'y': 1},
+      '4': {'name': '4', 'x': 2, 'y': 1},
+      '5': {'name': '5', 'x': 0, 'y': 0},
+      '6': {'name': '6', 'x': 0, 'y': 1}
+    }, '4', '5');
+    expect(res).toBe(true);
+  });
 });
 
 describe('getPosition', () => {
@@ -344,6 +355,65 @@ describe('isValid', () => {
       {from: 'a', to: 'b', direction: 'down'}
     ]);
     expect(res).toBe(true);
+  });
+});
+
+describe('correctPlacing', () => {
+  test('no nodes', () => {
+    const nodes = {};
+    placing({debug: true}).correctPlacing(nodes);
+    expect(nodes).toEqual({});
+  });
+  test('several nodes', () => {
+    const nodes = {
+      'a': {x: 3, y: 2},
+      'b': {x: -2, y: 5},
+      'c': {x: -4, y: 3}
+    };
+    placing({debug: true}).correctPlacing(nodes);
+    expect(nodes).toEqual({
+      'a': {x: 7, y: 0},
+      'b': {x: 2, y: 3},
+      'c': {x: 0, y: 1}
+    });
+  });
+});
+
+describe('compute', () => {
+  const createNodes = (n) => {
+    const nodes = {};
+    new Array(n).fill(0).forEach((u, i) => nodes['' + (i + 1)] = {name: '' + (i + 1)});
+    return nodes;
+  };
+
+  test('no nodes', () => {
+    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: false}).compute({}, []);
+    expect(nodes).toEqual({});
+  });
+  test('3 nodes no link', () => {
+    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: false}).compute(createNodes(3), []);
+    expect(nodes).toEqual({
+      '1': {name: '1', x: 0, y: 0},
+      '2': {name: '2', x: 1, y: 0},
+      '3': {name: '3', x: 2, y: 0}
+    });
+  });
+  test('6 nodes 6 links', () => {
+    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: true}).compute(createNodes(6), [
+      {from: '1', to: '2', direction: 'right'},
+      {from: '1', to: '3', direction: 'down'},
+      {from: '3', to: '4', direction: 'right'},
+      {from: '4', to: '5', direction: 'up'},
+      {from: '3', to: '6', direction: 'left'}
+    ]);
+    expect(nodes).toEqual({
+      '1': {name: '1', x: 1, y: 1},
+      '2': {name: '2', x: 2, y: 1},
+      '3': {name: '3', x: 1, y: 2},
+      '4': {name: '4', x: 3, y: 1},
+      '5': {name: '5', x: 3, y: 0},
+      '6': {name: '6', x: 0, y: 2}
+    });
   });
 });
 
