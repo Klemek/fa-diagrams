@@ -113,3 +113,79 @@ describe('nodeBetween', () => {
     expect(res).toBe(true);
   });
 });
+
+describe('getPosition', () => {
+  test('free node', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: [],
+          afterY: [],
+          beforeY: []
+        }
+      },
+      'b': {x: 0, y: 0}
+    }, 'a', true);
+    expect(res).toEqual({x: null, y: null, free: true});
+  });
+  test('constrained to another', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: ['b'],
+          afterY: [],
+          beforeY: []
+        }
+      },
+      'b': {x: 0, y: 0}
+    }, 'a', true);
+    expect(res).toEqual({x: 1, y: 0, free: false});
+  });
+  test('double constrained diagonal', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: ['b'],
+          afterY: ['c'],
+          beforeY: []
+        }
+      },
+      'b': {x: 0, y: 0},
+      'c': {x: 2, y: 1}
+    }, 'a', true);
+    expect(res).toEqual({x: 1, y: 0, free: false});
+  });
+  test('double constrained no diagonal', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: ['b'],
+          afterY: ['c'],
+          beforeY: []
+        }
+      },
+      'b': {x: 0, y: 0},
+      'c': {x: 2, y: 1}
+    }, 'a', false);
+    expect(res).toEqual({x: 2, y: 0, free: false});
+  });
+  test('double constrained impossible', () => {
+    const res = placing({debug: true, 'max-link-length': 2}).getPosition({
+      'a': {
+        const: {
+          afterX: [],
+          beforeX: ['b'],
+          afterY: ['c'],
+          beforeY: []
+        }
+      },
+      'b': {x: 0, y: 0},
+      'c': {x: 2, y: 10}
+    }, 'a', false);
+    expect(res).toEqual(null);
+  });
+});

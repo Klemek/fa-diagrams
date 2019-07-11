@@ -85,7 +85,7 @@ module.exports = (options) => {
         return {x: b.x, y: b.y + b.h}; //expand vertically
     },
     /**
-     * Check if no other nodes are located in the path of n1 <-> n2 (even on the same pos)
+     * Check if no other nodes are located in the path of n1 <-> n2
      * @param {Object<string,Node1>} nodes
      * @param {string} n1
      * @param {string} n2
@@ -128,12 +128,12 @@ module.exports = (options) => {
     getPosition: (nodes, n, diagonals) => {
       const node = nodes[n];
       const c = {
-        maxX: undefined,
-        maxY: undefined,
-        minX: undefined,
-        minY: undefined,
-        startX: undefined,
-        startY: undefined,
+        maxX: null,
+        maxY: null,
+        minX: null,
+        minY: null,
+        startX: null,
+        startY: null,
         free: true,
       };
 
@@ -141,14 +141,15 @@ module.exports = (options) => {
         if (nodes[n2].x !== undefined) {
           const x2 = nodes[n2].x;
           const y2 = nodes[n2].y;
-          c.minX = c.minX ? Math.max(x2 + dMinX, c.minX) : x2 + dMinX;
-          c.maxX = c.maxX ? Math.min(x2 + dMaxX, c.maxX) : nodes[n2].x + dMaxX;
-          c.minY = c.minY ? Math.max(y2 + dMinY, c.minY) : y2 + dMinY;
-          c.maxY = c.maxY ? Math.min(y2 + dMaxY, c.maxY) : y2 + dMaxY;
-          if (!c.startX) {
+          c.minX = c.minX !== null ? Math.max(x2 + dMinX, c.minX) : x2 + dMinX;
+          c.maxX = c.maxX !== null ? Math.min(x2 + dMaxX, c.maxX) : x2 + dMaxX;
+          c.minY = c.minY !== null ? Math.max(y2 + dMinY, c.minY) : y2 + dMinY;
+          c.maxY = c.maxY !== null ? Math.min(y2 + dMaxY, c.maxY) : y2 + dMaxY;
+          if (c.startX === null) {
             c.startX = Math.abs(dMaxY + dMinY) > 0 ? x2 : (Math.abs(dMinX) === 1 ? 'minX' : 'maxX');
             c.startY = Math.abs(dMaxX + dMinX) > 0 ? y2 : (Math.abs(dMinY) === 1 ? 'minY' : 'maxY');
           }
+          if (self.debug) console.log(` ${n} constraints with ${n2}(${x2}, ${y2}): x(${c.minX} -> ${c.maxX}) y(${c.minY} -> ${c.maxY})`);
           c.free = false;
         }
       };
@@ -156,10 +157,10 @@ module.exports = (options) => {
       const area = options['max-link-length'];
       const sideArea = diagonals ? area : 0;
 
-      node.const.afterX.forEach(apply(1 - area, -1, -sideArea, sideArea));
       node.const.beforeX.forEach(apply(1, 1 + area, -sideArea, sideArea));
-      node.const.afterY.forEach(apply(-sideArea, sideArea, -1 - area, -1));
       node.const.beforeY.forEach(apply(-sideArea, sideArea, 1, 1 + area));
+      node.const.afterX.forEach(apply(1 - area, -1, -sideArea, sideArea));
+      node.const.afterY.forEach(apply(-sideArea, sideArea, -1 - area, -1));
 
       if (self.debug && !c.free) console.log(` ${n} constraints: x(${c.minX} -> ${c.maxX}) y(${c.minY} -> ${c.maxY}) start(${c.startX}, ${c.startY})`);
 
@@ -179,6 +180,18 @@ module.exports = (options) => {
      */
     isValid: (nodes, links) => {
       let link, src, dst;
+
+      //check overlapping
+      const list = Object.values(nodes);
+      for (let n1 = 0; n1 < list.length - 1; n1++) {
+        for (let n2 = n1 + 1; n2 < list.length; n2++) {
+          if (list[n1].x === list[n2].x && list[n1].y === list[n2].y) {
+            if (self.debug) console.log(` ${list[n1].name} and ${list[n2].name} overlapping`);
+            return false;
+          }
+        }
+      }
+
       for (let li = 0; li < links.length; li++) {
         link = links[li];
         src = nodes[link.from];
@@ -192,26 +205,26 @@ module.exports = (options) => {
             case 'up':
             case 'top':
               if (dst.y - src.y >= 0) {
-                if (self.debug) console.log(` ${src.name} -> ${dst.name}: invalid dy: ${dst.y - src.y} >= 0`);
+                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dy: ${dst.y - src.y} >= 0`);
                 return false;
               }
               break;
             case 'down':
             case 'bottom':
               if (dst.y - src.y <= 0) {
-                if (self.debug) console.log(` ${src.name} -> ${dst.name}: invalid dy: ${dst.y - src.y} <= 0`);
+                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dy: ${dst.y - src.y} <= 0`);
                 return false;
               }
               break;
             case 'left':
               if (dst.x - src.x >= 0) {
-                if (self.debug) console.log(` ${src.name} -> ${dst.name}: invalid dx: ${dst.x - src.x} >= 0`);
+                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dx: ${dst.x - src.x} >= 0`);
                 return false;
               }
               break;
             case 'right':
               if (dst.x - src.x <= 0) {
-                if (self.debug) console.log(` ${src.name} -> ${dst.name}: invalid dx; ${dst.x - src.x} <= 0`);
+                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dx; ${dst.x - src.x} <= 0`);
                 return false;
               }
               break;
