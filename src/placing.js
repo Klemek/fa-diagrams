@@ -49,15 +49,15 @@ module.exports = (options) => {
       const list = Object.values(nodes).filter(n => n.x !== undefined);
       if (list.length === 0)
         return {x: 0, y: 0, w: 0, h: 0}; //empty
-      let minX = 0;
-      let minY = 0;
-      let maxX = 0;
-      let maxY = 0;
+      let minX = null;
+      let minY = null;
+      let maxX = null;
+      let maxY = null;
       list.forEach(n => {
-        minX = Math.min(n.x, minX);
-        minY = Math.min(n.y, minY);
-        maxX = Math.max(n.x, maxX);
-        maxY = Math.max(n.y, maxY);
+        minX = minX !== null ? Math.min(n.x, minX) : n.x;
+        minY = minY !== null ? Math.min(n.y, minY) : n.y;
+        maxX = maxX !== null ? Math.max(n.x, maxX) : n.x;
+        maxY = maxY !== null ? Math.max(n.y, maxY) : n.y;
       });
       return {x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1};
     },
@@ -73,13 +73,13 @@ module.exports = (options) => {
       list.forEach(n => {
         map[n.x - b.x][n.y - b.y] = true;
       });
-      for (let x = 0; x < b.w; x++) {
-        for (let y = 0; y < b.h; y++) {
+      for (let y = 0; y < b.h; y++) {
+        for (let x = 0; x < b.w; x++) {
           if (!map[x][y])
             return {x: x + b.x, y: y + b.y};
         }
       }
-      if (options['expand'] === 'h')
+      if (options['expand'] !== 'v')
         return {x: b.x + b.w, y: b.y}; //expand horizontally
       else
         return {x: b.x, y: b.y + b.h}; //expand vertically
