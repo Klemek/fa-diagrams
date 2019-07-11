@@ -50,25 +50,19 @@ describe('getNewPos', () => {
     expect(res).toEqual({x: 0, y: 0});
   });
   test('one node', () => {
-    const res = placing({debug: true, expand: 'h'}).getNewPos({
+    const res = placing({debug: true}).getNewPos({
       'a': {x: 0, y: 0}, 'b': {}
     });
     expect(res).toEqual({x: 1, y: 0});
   });
-  test('one node expand vert', () => {
-    const res = placing({debug: true, expand: 'v'}).getNewPos({
-      'a': {x: 0, y: 0}, 'b': {}
-    });
-    expect(res).toEqual({x: 0, y: 1});
-  });
   test('one node not 0,0', () => {
-    const res = placing({debug: true, expand: 'h'}).getNewPos({
+    const res = placing({debug: true}).getNewPos({
       'a': {x: 5, y: 6}, 'b': {}
     });
     expect(res).toEqual({x: 6, y: 6});
   });
   test('2 nodes', () => {
-    const res = placing({debug: true, expand: 'h'}).getNewPos({
+    const res = placing({debug: true}).getNewPos({
       'a': {x: 0, y: 0}, 'b': {x: 1, y: 1}
     });
     expect(res).toEqual({x: 1, y: 0});
@@ -387,19 +381,19 @@ describe('compute', () => {
   };
 
   test('no nodes', () => {
-    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: false}).compute({}, []);
+    const nodes = placing({'max-link-length': 2, diagonals: false}).compute({}, []);
     expect(nodes).toEqual({});
   });
   test('3 nodes no link', () => {
-    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: false}).compute(createNodes(3), []);
+    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(3), []);
     expect(nodes).toEqual({
       '1': {name: '1', x: 0, y: 0},
       '2': {name: '2', x: 1, y: 0},
-      '3': {name: '3', x: 2, y: 0}
+      '3': {name: '3', x: 0, y: 1}
     });
   });
   test('6 nodes 6 links with directions', () => {
-    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: true}).compute(createNodes(6), [
+    const nodes = placing({'max-link-length': 2, diagonals: true}).compute(createNodes(6), [
       {from: '1', to: '2', direction: 'right'},
       {from: '1', to: '3', direction: 'down'},
       {from: '3', to: '4', direction: 'right'},
@@ -407,16 +401,33 @@ describe('compute', () => {
       {from: '3', to: '6', direction: 'left'}
     ]);
     expect(nodes).toEqual({
-      '1': {name: '1', x: 1, y: 1},
-      '2': {name: '2', x: 2, y: 1},
-      '3': {name: '3', x: 1, y: 2},
+      '1': {name: '1', x: 0, y: 0},
+      '2': {name: '2', x: 1, y: 0},
+      '3': {name: '3', x: 1, y: 1},
+      '4': {name: '4', x: 2, y: 1},
+      '5': {name: '5', x: 2, y: 0},
+      '6': {name: '6', x: 0, y: 1}
+    });
+  });
+  test('6 nodes 6 links with directions no diagonals', () => {
+    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(6), [
+      {from: '1', to: '2', direction: 'right'},
+      {from: '1', to: '3', direction: 'down'},
+      {from: '3', to: '4', direction: 'right'},
+      {from: '4', to: '5', direction: 'up'},
+      {from: '3', to: '6', direction: 'left'}
+    ]);
+    expect(nodes).toEqual({
+      '1': {name: '1', x: 1, y: 0},
+      '2': {name: '2', x: 2, y: 0},
+      '3': {name: '3', x: 1, y: 1},
       '4': {name: '4', x: 3, y: 1},
       '5': {name: '5', x: 3, y: 0},
-      '6': {name: '6', x: 0, y: 2}
+      '6': {name: '6', x: 0, y: 1}
     });
   });
   test('6 nodes 6 links no directions', () => {
-    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: true}).compute(createNodes(6), [
+    const nodes = placing({'max-link-length': 2, diagonals: true}).compute(createNodes(6), [
       {from: '1', to: '2'},
       {from: '1', to: '3'},
       {from: '3', to: '4'},
@@ -432,16 +443,11 @@ describe('compute', () => {
       '6': {name: '6', x: 0, y: 1}
     });
   });
-});
-
-test('no debug (coverage)', () => {
-  placing({'max-link-length': 2, 'expand': 'h', diagonals: false}).compute({
-    '1': {name: '1'}, '2': {name: '2'}, '3': {name: '3'}, '4': {name: '4'}, '5': {name: '5'}, '6': {name: '6'}
-  }, [
-    {from: '1', to: '2', direction: 'right'},
-    {from: '1', to: '3', direction: 'down'},
-    {from: '3', to: '4', direction: 'right'},
-    {from: '4', to: '5', direction: 'up'},
-    {from: '3', to: '6', direction: 'left'}
-  ]);
+  test('3 nodes impossible', () => {
+    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(3), [
+      {from: '1', to: '2', direction: 'left'},
+      {from: '1', to: '3', direction: 'left'},
+    ]);
+    expect(nodes).toBeNull();
+  });
 });
