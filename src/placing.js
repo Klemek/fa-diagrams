@@ -18,28 +18,6 @@ const newmap = (w, h, fill = 0) => new Array(w).fill(0).map(() => new Array(h).f
 
 module.exports = (options) => {
   const self = {
-    debug: options['debug'],
-
-    /**
-     * @param {Object<string,Node1>} nodes
-     */
-    /*debugMap: (nodes) => {
-      const b = self.getBounds(nodes);
-
-      const map = newmap(b.w, b.h).map(row => row.map(() => []));
-      const list = Object.values(nodes).filter(n => n.x !== undefined);
-      list.forEach(n => {
-        map[n.x - b.x][n.y - b.y].push(n.name);
-      });
-      let out = map.map(row => row.map(cell => cell.join(',')));
-      let maxLen = 0;
-      out.forEach(row => row.forEach(cell => {
-        maxLen = Math.max(maxLen, cell.length);
-      }));
-      out = out.map(row => row.map(cell => cell + new Array(maxLen - cell.length).fill(' ').join('')));
-      console.log('\n' + out.map(row => row.join('|')).join('\n') + '\n');
-    },*/
-
     /**
      * Get the current bounds of the graph of nodes
      * @param {Object<string,Node1>} nodes
@@ -79,7 +57,7 @@ module.exports = (options) => {
             return {x: x + b.x, y: y + b.y};
         }
       }
-      if (options['expand'] !== 'v')
+      if (b.w <= b.h)
         return {x: b.x + b.w, y: b.y}; //expand horizontally
       else
         return {x: b.x, y: b.y + b.h}; //expand vertically
@@ -159,7 +137,6 @@ module.exports = (options) => {
             c.startX = Math.abs(dMaxY + dMinY) > 0 ? x2 : (Math.abs(dMinX) === 1 ? 'minX' : 'maxX');
             c.startY = Math.abs(dMaxX + dMinX) > 0 ? y2 : (Math.abs(dMinY) === 1 ? 'minY' : 'maxY');
           }
-          if (self.debug) console.log(` ${n} constraints with ${n2}(${x2}, ${y2}): x(${c.minX} -> ${c.maxX}) y(${c.minY} -> ${c.maxY})`);
           c.free = false;
         }
       };
@@ -171,8 +148,6 @@ module.exports = (options) => {
       node.const.beforeY.forEach(apply(-sideArea, sideArea, 1, 1 + area));
       node.const.afterX.forEach(apply(1 - area, -1, -sideArea, sideArea));
       node.const.afterY.forEach(apply(-sideArea, sideArea, -1 - area, -1));
-
-      if (self.debug && !c.free) console.log(` ${n} constraints: x(${c.minX} -> ${c.maxX}) y(${c.minY} -> ${c.maxY}) start(${c.startX}, ${c.startY})`);
 
       if (typeof c.startX === 'string')
         c.startX = c[c.startX];
@@ -196,7 +171,6 @@ module.exports = (options) => {
       for (let n1 = 0; n1 < list.length - 1; n1++) {
         for (let n2 = n1 + 1; n2 < list.length; n2++) {
           if (list[n1].x === list[n2].x && list[n1].y === list[n2].y) {
-            if (self.debug) console.log(` ${list[n1].name} and ${list[n2].name} overlapping`);
             return false;
           }
         }
@@ -208,33 +182,28 @@ module.exports = (options) => {
         dst = nodes[link.to];
         if (src.x !== undefined && dst.x !== undefined) {
           if (self.nodeBetween(nodes, link.from, link.to)) {
-            if (self.debug) console.log(` ${link.from} -> ${link.to}: path obstructed`);
             return false;
           }
           switch (link.direction) {
             case 'up':
             case 'top':
               if (dst.y - src.y >= 0) {
-                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dy: ${dst.y - src.y} >= 0`);
                 return false;
               }
               break;
             case 'down':
             case 'bottom':
               if (dst.y - src.y <= 0) {
-                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dy: ${dst.y - src.y} <= 0`);
                 return false;
               }
               break;
             case 'left':
               if (dst.x - src.x >= 0) {
-                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dx: ${dst.x - src.x} >= 0`);
                 return false;
               }
               break;
             case 'right':
               if (dst.x - src.x <= 0) {
-                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dx: ${dst.x - src.x} <= 0`);
                 return false;
               }
               break;
@@ -265,10 +234,7 @@ module.exports = (options) => {
      * @returns {null|Object<string,Node1>}
      */
     applyLinks: (nodes, links, depth = 0) => {
-      //if (self.debug) self.debugMap(nodes);
-
       if (!self.isValid(nodes, links)) {
-        if (self.debug) console.log(`${new Array(depth).fill('.').join('')}invalid node placement`);
         return null;
       }
 
@@ -283,7 +249,6 @@ module.exports = (options) => {
         const nodes2 = ezclone(nodes);
         nodes2[key].x = x;
         nodes2[key].y = y;
-        if (self.debug) console.log(`${new Array(depth).fill('.').join('')}${key} -> [${x}, ${y}]`);
         return self.applyLinks(nodes2, links, depth + 1);
       };
 
@@ -296,7 +261,6 @@ module.exports = (options) => {
         key = keys[ln];
         p = self.getPosition(nodes, key, false);
         if (!p && !options['diagonals']) {
-          if (self.debug) console.log(`${new Array(depth).fill('.').join('')}${key} -> impossible`);
           return null;
         } else if (p && p.free) {
           free.push(keys[ln]);
@@ -304,8 +268,6 @@ module.exports = (options) => {
           nodes2 = tryPos(key, p.x, p.y);
           if (nodes2)
             return nodes2;
-        } else {
-          if (self.debug) console.log(`${new Array(depth).fill('.').join('')}${key} -> impossible without diagonals`);
         }
       }
 
@@ -314,7 +276,6 @@ module.exports = (options) => {
         key = keys[ln];
         p = self.getPosition(nodes, key, true);
         if (!p) {
-          if (self.debug) console.log(`${new Array(depth).fill('.').join('')}${key} -> impossible`);
           return null;
         } else if (p.free) {
           free.push(keys[ln]);

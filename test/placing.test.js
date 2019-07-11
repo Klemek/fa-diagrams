@@ -398,7 +398,7 @@ describe('compute', () => {
       '3': {name: '3', x: 2, y: 0}
     });
   });
-  test('6 nodes 6 links', () => {
+  test('6 nodes 6 links with directions', () => {
     const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: true}).compute(createNodes(6), [
       {from: '1', to: '2', direction: 'right'},
       {from: '1', to: '3', direction: 'down'},
@@ -413,6 +413,23 @@ describe('compute', () => {
       '4': {name: '4', x: 3, y: 1},
       '5': {name: '5', x: 3, y: 0},
       '6': {name: '6', x: 0, y: 2}
+    });
+  });
+  test('6 nodes 6 links no directions', () => {
+    const nodes = placing({'max-link-length': 2, 'expand': 'h', diagonals: true}).compute(createNodes(6), [
+      {from: '1', to: '2'},
+      {from: '1', to: '3'},
+      {from: '3', to: '4'},
+      {from: '4', to: '5'},
+      {from: '3', to: '6'}
+    ]);
+    expect(nodes).toEqual({
+      '1': {name: '1', x: 0, y: 0},
+      '2': {name: '2', x: 1, y: 0},
+      '3': {name: '3', x: 1, y: 1},
+      '4': {name: '4', x: 2, y: 0},
+      '5': {name: '5', x: 2, y: 1},
+      '6': {name: '6', x: 0, y: 1}
     });
   });
 });
