@@ -182,7 +182,7 @@ module.exports = (options) => {
       let link, src, dst;
 
       //check overlapping
-      const list = Object.values(nodes);
+      const list = Object.values(nodes).filter(n => n.x !== undefined);
       for (let n1 = 0; n1 < list.length - 1; n1++) {
         for (let n2 = n1 + 1; n2 < list.length; n2++) {
           if (list[n1].x === list[n2].x && list[n1].y === list[n2].y) {
@@ -224,7 +224,7 @@ module.exports = (options) => {
               break;
             case 'right':
               if (dst.x - src.x <= 0) {
-                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dx; ${dst.x - src.x} <= 0`);
+                if (self.debug) console.log(` ${link.from} -> ${link.to}: invalid dx: ${dst.x - src.x} <= 0`);
                 return false;
               }
               break;
