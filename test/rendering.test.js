@@ -104,6 +104,6 @@ describe('toXML', () => {
 describe('compute', () => {
   test('no nodes no links', () => {
     const res = rendering({beautify: true}).compute({}, []);
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0">\n\n</svg>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0">\n</svg>');
   });
 });
