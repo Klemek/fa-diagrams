@@ -30,9 +30,11 @@ const merge = (ref, src) => {
 };
 
 const DEFAULT_OPTIONS = {
-  'expand': 'h',
-  'max-link-length': 2,
-  'diagonals': true,
+  'placing': {
+    'max-link-length': 2,
+    'diagonals': true,
+  },
+  'rendering': {}
 };
 
 
@@ -50,7 +52,7 @@ const self = {
     links.filter(l => !nodes[l.to]).forEach(l => console.warn(`unknown destination node "${l.to}"`));
     links = links.filter(l => nodes[l.from] && nodes[l.to]);
 
-    nodes = placing(options).compute(nodes, links);
+    nodes = placing(options['placing']).compute(nodes, links);
 
     if (!nodes)
       throw 'Failed to place nodes';

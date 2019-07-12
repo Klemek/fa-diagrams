@@ -4,7 +4,9 @@ const faDiagrams = require('../src/index');
 test('test fail placing', () => {
   const data = {
     options: {
-      'diagonals': false,
+      'placing': {
+        'diagonals': false,
+      }
     },
     nodes: [
       {name: '1', icon: ''},
