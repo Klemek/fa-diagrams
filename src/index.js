@@ -38,7 +38,6 @@ const DEFAULT_OPTIONS = {
 
 const self = {
   options: DEFAULT_OPTIONS,
-  debug: false,
   compute: (data) => {
     const options = merge(DEFAULT_OPTIONS, data['options']);
 
