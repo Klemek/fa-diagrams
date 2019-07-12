@@ -1,5 +1,5 @@
 const ezclone = (a) => JSON.parse(JSON.stringify(a));
-const newmap = (w, h, fill = 0) => new Array(w).fill(0).map(() => new Array(h).fill(fill));
+const newmap = (w, h, fill) => new Array(w).fill(0).map(() => new Array(h).fill(fill));
 
 /**
  * @typedef Node1
@@ -146,7 +146,7 @@ module.exports = (options) => {
 
       node.const.beforeX.forEach(apply(1, 1 + area, -sideArea, sideArea));
       node.const.beforeY.forEach(apply(-sideArea, sideArea, 1, 1 + area));
-      node.const.afterX.forEach(apply(1 - area, -1, -sideArea, sideArea));
+      node.const.afterX.forEach(apply(-1 - area, -1, -sideArea, sideArea));
       node.const.afterY.forEach(apply(-sideArea, sideArea, -1 - area, -1));
 
       if (typeof c.startX === 'string')
