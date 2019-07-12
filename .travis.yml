@@ -12,7 +12,7 @@ addons:
       - subversion
 install:
   - npm install
-  - node build.sh
+  - node build.js
 script:
   - jest --silent --coverage --coverageReporters=text-lcov | coveralls
   - jshint ./src

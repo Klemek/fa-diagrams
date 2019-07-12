@@ -6,7 +6,8 @@
   "files": [
     "/src",
     "/dist",
-    "/svg_list.json"
+    "/svg_list.json",
+    "/build.js"
   ],
   "scripts": {
     "test": "jest --silent",
