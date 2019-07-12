@@ -18,6 +18,7 @@ const newmap = (w, h, fill) => new Array(w).fill(0).map(() => new Array(h).fill(
 
 module.exports = (options) => {
   const self = {
+
     /**
      * Get the current bounds of the graph of nodes
      * @param {Object<string,Node1>} nodes
@@ -39,6 +40,7 @@ module.exports = (options) => {
       });
       return {x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1};
     },
+
     /**
      * Get a new available position around the existing nodes
      * @param {Object<string,Node1>} nodes
@@ -62,6 +64,7 @@ module.exports = (options) => {
       else
         return {x: b.x, y: b.y + b.h}; //expand vertically
     },
+
     /**
      * Check if no other nodes are located in the path of n1 <-> n2
      * @param {Object<string,Node1>} nodes
