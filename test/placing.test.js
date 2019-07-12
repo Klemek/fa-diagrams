@@ -253,11 +253,11 @@ describe('getPosition', () => {
 
 describe('isValid', () => {
   test('no nodes', () => {
-    const res = placing({debug: true}).isValid({}, []);
+    const res = placing({debug: true, diagonals: true}).isValid({}, []);
     expect(res).toBe(true);
   });
   test('no placed nodes', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {}, 'b': {}
     }, [
       {from: 'a', to: 'b'}
@@ -265,7 +265,7 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('one nodes', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {}
     }, [
       {from: 'a', to: 'b'}
@@ -273,13 +273,13 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('overlapping nodes', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 0, y: 0}
     }, []);
     expect(res).toBe(false);
   });
   test('in between node', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 0}, 'c': {name: 'c', x: 1, y: 0}
     }, [
       {from: 'a', to: 'b'}
@@ -287,7 +287,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid right link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: -2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'right'}
@@ -295,7 +295,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid left link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'left'}
@@ -303,7 +303,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid up link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'up'}
@@ -311,7 +311,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid down link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: -2}
     }, [
       {from: 'a', to: 'b', direction: 'down'}
@@ -319,7 +319,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('valid right link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'right'}
@@ -327,7 +327,7 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('valid left link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: -2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'left'}
@@ -335,7 +335,7 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('valid up link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: -2}
     }, [
       {from: 'a', to: 'b', direction: 'up'}
@@ -343,12 +343,20 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('valid down link', () => {
-    const res = placing({debug: true}).isValid({
+    const res = placing({debug: true, diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'down'}
     ]);
     expect(res).toBe(true);
+  });
+  test('invalid diagonal link', () => {
+    const res = placing({debug: true, diagonals: false}).isValid({
+      'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
+    }, [
+      {from: 'a', to: 'b'}
+    ]);
+    expect(res).toBe(false);
   });
 });
 
@@ -441,6 +449,23 @@ describe('compute', () => {
       '4': {name: '4', x: 2, y: 0},
       '5': {name: '5', x: 2, y: 1},
       '6': {name: '6', x: 0, y: 1}
+    });
+  });
+  test('6 nodes 6 links no directions no diagonals', () => {
+    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(6), [
+      {from: '1', to: '2'},
+      {from: '1', to: '3'},
+      {from: '3', to: '4'},
+      {from: '4', to: '5'},
+      {from: '3', to: '6'}
+    ]);
+    expect(nodes).toEqual({
+      '1': {name: '1', x: 0, y: 0},
+      '2': {name: '2', x: 0, y: 1},
+      '3': {name: '3', x: 1, y: 0},
+      '4': {name: '4', x: 1, y: 1},
+      '5': {name: '5', x: 2, y: 1},
+      '6': {name: '6', x: 2, y: 0}
     });
   });
   test('3 nodes impossible', () => {

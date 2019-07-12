@@ -168,46 +168,36 @@ module.exports = (options) => {
 
       //check overlapping
       const list = Object.values(nodes).filter(n => n.x !== undefined);
-      for (let n1 = 0; n1 < list.length - 1; n1++) {
-        for (let n2 = n1 + 1; n2 < list.length; n2++) {
-          if (list[n1].x === list[n2].x && list[n1].y === list[n2].y) {
+      for (let n1 = 0; n1 < list.length - 1; n1++)
+        for (let n2 = n1 + 1; n2 < list.length; n2++)
+          if (list[n1].x === list[n2].x && list[n1].y === list[n2].y)
             return false;
-          }
-        }
-      }
 
       for (let li = 0; li < links.length; li++) {
         link = links[li];
         src = nodes[link.from];
         dst = nodes[link.to];
         if (src.x !== undefined && dst.x !== undefined) {
-          if (self.nodeBetween(nodes, link.from, link.to)) {
+          if (self.nodeBetween(nodes, link.from, link.to))
             return false;
-          }
           switch (link.direction) {
             case 'up':
             case 'top':
-              if (dst.y - src.y >= 0) {
-                return false;
-              }
+              if (dst.y - src.y >= 0) return false;
               break;
             case 'down':
             case 'bottom':
-              if (dst.y - src.y <= 0) {
-                return false;
-              }
+              if (dst.y - src.y <= 0) return false;
               break;
             case 'left':
-              if (dst.x - src.x >= 0) {
-                return false;
-              }
+              if (dst.x - src.x >= 0) return false;
               break;
             case 'right':
-              if (dst.x - src.x <= 0) {
-                return false;
-              }
+              if (dst.x - src.x <= 0) return false;
               break;
           }
+          if (!options['diagonals'] && src.x !== dst.x && src.y !== dst.y)
+            return false;
         }
       }
       return true;
