@@ -86,7 +86,7 @@ svn.commands.checkout(FA_SVG_FOLDER_URL, svgDir, (err) => {
 
       svgs[type][name] = {
         path: match2[1],
-        width: match1[1]
+        width: parseInt(match1[1])
       };
 
       count++;
