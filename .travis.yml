@@ -14,5 +14,6 @@ install:
   - npm install
   - node build.js
 script:
-  - jest --silent --coverage && cat ./coverage/lcov.info | coveralls
+  - jest --coverage
   - jshint ./src
+  - cat ./coverage/lcov.info | coveralls
