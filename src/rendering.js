@@ -15,9 +15,26 @@ try {
  * @property {string} icon
  */
 
+/**
+ * @typedef Link2
+ * @property {string} from
+ * @property {string} to
+ * @property {string|undefined} type
+ */
+
 const DEFAULT_OPTIONS = {
-  'beautify': false
+  'beautify': false,
+  'scale': 128,
+  'h-spacing': 1.3,
+  'icons': {
+    'scale': 1
+  },
+  'links': {
+    'scale': 1
+  },
 };
+
+const DEFAULT_SCALE = 0.4;
 
 module.exports = (options = DEFAULT_OPTIONS) => {
   const self = {
@@ -61,31 +78,118 @@ module.exports = (options = DEFAULT_OPTIONS) => {
       return null;
     },
 
+    getLinkPath: (type, width) => {
+      switch (type) {
+        case 'line':
+          return `M12 216c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h${width * 488}c6.627 0 12 -5.373 12 -12v-56c0 -6.627 -5.373 -12 -12 -12z`;
+        case 'double':
+          const scale = 363.88;
+          return `M${134.059 + width * scale} 216h-${width * scale}v-46.059c0-21.382-25.851-32.09-40.971-16.971l-86.059 86.059c-9.373 9.373-9.373 24.568 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971v-46.059h${width * scale}v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.568 0-33.941l-86.059-86.059c-15.119-15.12-40.971-4.412-40.971 16.97z`;
+        default:
+          return `M12 216c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h${width * 425}v46.059c0 21.382 25.851 32.09 40.971 16.971 l86.059 -86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z`;
+      }
+    },
+
     /**
+     * Get the width and height of the graph of nodes
      * @param {Object<string,Node2>} nodes
-     * @returns {Object}
+     * @returns {{w: number, h: number}}
      */
-    renderNodes: (nodes) => {
-      const g = [];
-      Object.values(nodes).forEach(() => {
-        //TODO
+    getBounds: (nodes) => {
+      const list = Object.values(nodes);
+      if (list.length === 0)
+        return {w: 0, h: 0}; //empty
+      let maxX = 0;
+      let maxY = 0;
+      list.forEach(n => {
+        maxX = Math.max(n.x, maxX);
+        maxY = Math.max(n.y, maxY);
       });
-      return {'g': g};
+      return {w: maxX + 1, h: maxY + 1};
+    },
+
+    /**
+     * @param {{g:Object[]}} data
+     * @param {Object<string,Node2>} nodes
+     */
+    renderNodes: (data, nodes) => {
+      Object.values(nodes).forEach(node => {
+        const icon = self.getIcon(node.icon);
+        if (icon) {
+          const scale = (node['scale'] || options['icons']['scale']) * DEFAULT_SCALE;
+          const group = {
+            '_attributes': {
+              'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`
+            },
+            'g': {
+              '_attributes': {
+                'transform': `scale(${scale / 512} ${scale / 512}) translate(${-icon.width / 2} ${-256})`
+              },
+              'path': {
+                '_attributes': {
+                  'd': icon.path,
+                }
+              }
+            }
+          };
+          data['g'].push(group);
+        }
+      });
+    },
+
+    /**
+     * @param {{g:Object[]}} data
+     * @param {Object<string,Node2>} nodes
+     * @param {Link2[]} links
+     */
+    renderLinks: (data, nodes, links) => {
+      links.forEach(link => {
+        const src = nodes[link.from];
+        const dst = nodes[link.to];
+
+        const posX = ((src.x + dst.x) / 2 + 0.5) * options['h-spacing'];
+        const posY = (src.y + dst.y) / 2 + 0.5;
+
+        const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
+
+        const size = Math.sqrt(Math.pow((dst.x - src.x) * options['h-spacing'], 2) + Math.pow(dst.y - src.y, 2));
+
+        const path = self.getLinkPath(link.type, link['size'] || size);
+
+        const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
+        const group = {
+          '_attributes': {
+            'transform': `translate(${posX} ${posY}) rotate(${angle})`
+          },
+          'g': {
+            '_attributes': {
+              'transform': `scale(${scale / 512} ${scale / 512}) translate(${(-256 * size)} ${-256})`
+            },
+            'path': {
+              '_attributes': {
+                'd': path
+              }
+            }
+          }
+        };
+        data['g'].push(group);
+      });
     },
 
     /**
      * Convert xml-js data into correct svg xml string
      * @param {Object} data
-     * @param {number} width
-     * @param {number} height
+     * @param {{w:number, h:number}} bounds
      * @returns {string}
      */
-    toXML: (data, width, height) => {
+    toXML: (data, bounds) => {
       const xml = {
         'svg': {
           '_attributes': {
             'xmlns': 'http://www.w3.org/2000/svg',
-            'viewBox': `0 0 ${width} ${height}`
+            'viewBox': `0 0 ${bounds.w * options['h-spacing']} ${bounds.h}`,
+            'width': bounds.w * options['h-spacing'] * options['scale'],
+            'height': bounds.h * options['scale'],
           }
         }
       };
@@ -98,9 +202,16 @@ module.exports = (options = DEFAULT_OPTIONS) => {
       });
     },
 
-    compute: (nodes) => {
-      const data = self.renderNodes(nodes);
-      return self.toXML(data, 0, 0); //TODO temporary
+    compute: (nodes, links) => {
+
+      const bounds = self.getBounds(nodes);
+
+      const data = {'g': []};
+
+      self.renderNodes(data, nodes);
+      self.renderLinks(data, nodes, links);
+
+      return self.toXML(data, bounds);
     }
   };
 
