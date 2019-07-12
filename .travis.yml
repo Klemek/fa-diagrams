@@ -6,6 +6,10 @@ cache:
   npm: true
   directories:
     - node_modules
+addons:
+  apt:
+    packages:
+      - subversion
 install:
   - npm install
   - node build.sh
