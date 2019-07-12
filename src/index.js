@@ -1,11 +1,5 @@
-//const xml = require('xml-js');
 const placing = require('./placing');
-let list = {};
-try {
-  list = require('../svg_list.json');
-} catch (err) {
-  console.error('fa-diagrams: SVG list could not be loaded', err);
-}
+const rendering = require('./rendering');
 
 /**
  * Merge resources by reading object keys and keeping reference value only if it's type is different from the source
@@ -30,11 +24,8 @@ const merge = (ref, src) => {
 };
 
 const DEFAULT_OPTIONS = {
-  'placing': {
-    'max-link-length': 2,
-    'diagonals': true,
-  },
-  'rendering': {}
+  'placing': placing().defaultOptions,
+  'rendering': rendering().defaultOptions
 };
 
 
@@ -57,8 +48,7 @@ const self = {
     if (!nodes)
       throw 'Failed to place nodes';
 
-    //console.log(JSON.stringify(nodes, null, 2));
-    console.log(Object.values(nodes).map(n => `${n.name} : [${n.x}, ${n.y}]`).join('\n'));
+    return rendering(options['rendering']).compute(nodes, links);
   },
 
 };

@@ -16,8 +16,15 @@ const newmap = (w, h, fill) => new Array(w).fill(0).map(() => new Array(h).fill(
  * @property {string|undefined} direction
  */
 
-module.exports = (options) => {
+const DEFAULT_OPTIONS = {
+  'max-link-length': 2,
+  'diagonals': true,
+};
+
+module.exports = (options = DEFAULT_OPTIONS) => {
+
   const self = {
+    defaultOptions: DEFAULT_OPTIONS,
 
     /**
      * Get the current bounds of the graph of nodes
