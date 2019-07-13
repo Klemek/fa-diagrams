@@ -30,8 +30,10 @@ const DEFAULT_OPTIONS = {
     'scale': 1
   },
   'links': {
-    'scale': 1
+    'scale': 1,
+    'size': 0
   },
+  'font': 'Arial' // https://websitesetup.org/web-safe-fonts-html-css/
 };
 
 const DEFAULT_SCALE = 0.4;
@@ -78,8 +80,16 @@ module.exports = (options = DEFAULT_OPTIONS) => {
       return null;
     },
 
+    /**
+     * Create the correct path from the type and width
+     * @param {string} type
+     * @param {number} width
+     * @return {string|null}
+     */
     getLinkPath: (type, width) => {
       switch (type) {
+        case 'none':
+          return null;
         case 'line':
           return `M12 216c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h${width * 512 - 24}c6.627 0 12 -5.373 12 -12v-56c0 -6.627 -5.373 -12 -12 -12z`;
         case 'double':
@@ -154,7 +164,10 @@ module.exports = (options = DEFAULT_OPTIONS) => {
 
         const size = Math.sqrt(Math.pow((dst.x - src.x) * options['h-spacing'], 2) + Math.pow(dst.y - src.y, 2));
 
-        const path = self.getLinkPath(link.type, link['size'] || size);
+        const path = self.getLinkPath(link.type, link['size'] || options['links']['size'] || size);
+
+        if (!path)
+          return;
 
         const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
         const group = {
@@ -188,8 +201,8 @@ module.exports = (options = DEFAULT_OPTIONS) => {
           '_attributes': {
             'xmlns': 'http://www.w3.org/2000/svg',
             'viewBox': `0 0 ${bounds.w * options['h-spacing']} ${bounds.h}`,
-            'width': bounds.w * options['h-spacing'] * options['scale'],
-            'height': bounds.h * options['scale'],
+            'width': bounds.w * options['h-spacing'] * options['scale'] / DEFAULT_SCALE,
+            'height': bounds.h * options['scale'] / DEFAULT_SCALE,
           }
         }
       };
