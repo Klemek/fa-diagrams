@@ -17,7 +17,7 @@ const newmap = (w, h, fill) => new Array(w).fill(0).map(() => new Array(h).fill(
  */
 
 const DEFAULT_OPTIONS = {
-  'max-link-length': 2,
+  'max-link-length': 3,
   'diagonals': true,
 };
 
@@ -179,9 +179,11 @@ module.exports = (options = DEFAULT_OPTIONS) => {
       //check overlapping
       const list = Object.values(nodes).filter(n => n.x !== undefined);
       for (let n1 = 0; n1 < list.length - 1; n1++)
-        for (let n2 = n1 + 1; n2 < list.length; n2++)
+        for (let n2 = n1 + 1; n2 < list.length; n2++) {
           if (list[n1].x === list[n2].x && list[n1].y === list[n2].y)
             return false;
+        }
+
 
       for (let li = 0; li < links.length; li++) {
         link = links[li];
@@ -189,6 +191,8 @@ module.exports = (options = DEFAULT_OPTIONS) => {
         dst = nodes[link.to];
         if (src.x !== undefined && dst.x !== undefined) {
           if (self.nodeBetween(nodes, link.from, link.to))
+            return false;
+          if (Math.pow(dst.x - src.x, 2) + Math.pow(dst.y - src.y, 2) > Math.pow(options['max-link-length'], 2))
             return false;
           switch (link.direction) {
             case 'up':

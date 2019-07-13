@@ -286,6 +286,14 @@ describe('isValid', () => {
     ]);
     expect(res).toBe(false);
   });
+  test('too far node', () => {
+    const res = placing({diagonals: true, 'max-link-length': 4}).isValid({
+      'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 4, y: 2}
+    }, [
+      {from: 'a', to: 'b'}
+    ]);
+    expect(res).toBe(false);
+  });
   test('invalid right link', () => {
     const res = placing({diagonals: true}).isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: -2, y: 2}
