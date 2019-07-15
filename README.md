@@ -222,6 +222,7 @@ You can define a relative icon with the following:
 | --- | --- | --- |  --- |
 | **`icon`** | string | **yes** | name of the Font-Awesome icon of the sub-element (see [Icon names](#icon-names)) |
 | `color` | string | no | redefined the color |
+| `scale` | number | no | redefine this icon scale |
 
 ## More info
 *[back to top](#top)*

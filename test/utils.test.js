@@ -36,6 +36,54 @@ describe('merge', () => {
   });
 });
 
+describe('isValid', () => {
+  test('valid number', () => {
+    expect(utils.isValid({a: 0}, {a: 'number'})).toBe(null);
+  });
+  test('invalid number', () => {
+    expect(utils.isValid({b: 'number'}, {b: 'number'})).toBe('b');
+  });
+  test('valid string', () => {
+    expect(utils.isValid({b: ''}, {b: 'string'})).toBe(null);
+  });
+  test('invalid string', () => {
+    expect(utils.isValid({b: 0}, {b: 'string'})).toBe('b');
+  });
+  test('valid array', () => {
+    expect(utils.isValid({c: [1, 2, 3]}, {c: 'array'})).toBe(null);
+  });
+  test('invalid array', () => {
+    expect(utils.isValid({c: {d: 5}}, {c: 'array'})).toBe('c');
+  });
+  test('undefined optional key', () => {
+    expect(utils.isValid({}, {a: 'number'})).toBe(null);
+  });
+  test('undefined required key', () => {
+    expect(utils.isValid({}, {a: '!number'})).toBe('a');
+  });
+  test('defined required key', () => {
+    expect(utils.isValid({a: 5}, {a: '!number'})).toBe(null);
+  });
+  test('invalid sub-object', () => {
+    expect(utils.isValid({a: 5}, {a: {b: 'number'}})).toBe('a');
+  });
+  test('undefined not required sub-object', () => {
+    expect(utils.isValid({}, {a: {b: 'number'}})).toBe(null);
+  });
+  test('undefined required sub-object', () => {
+    expect(utils.isValid({}, {a: {b: '!number'}})).toBe('a.b');
+  });
+  test('invalid sub-object', () => {
+    expect(utils.isValid({a: {b: 'hello'}}, {a: {b: 'number'}})).toBe('a.b');
+  });
+  test('defined required sub-object', () => {
+    expect(utils.isValid({a: {b: 5}}, {a: {b: '!number'}})).toBe(null);
+  });
+  test('ignored extra key', () => {
+    expect(utils.isValid({b: 5}, {a: 'number'})).toBe(null);
+  });
+});
+
 test('ezClone', () => {
   const a = {
     'a': 5,

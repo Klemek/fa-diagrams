@@ -23,6 +23,40 @@ try {
  * @property {string|undefined} type
  */
 
+const SUB_DEF = {
+  'text': 'string',
+  'icon': 'string',
+  'color': 'string',
+  'font': 'string',
+  'font-size': 'number',
+  'font-style': 'string',
+  'scale': 'number',
+};
+
+const NODE_DEF = {
+  'name': '!string',
+  'icon': '!string',
+  'x': '!number',
+  'y': '!number',
+  'color': 'string',
+  'scale': 'number',
+  'top': SUB_DEF,
+  'bottom': SUB_DEF,
+  'left': SUB_DEF,
+  'right': SUB_DEF
+};
+
+const LINK_DEF = {
+  'from': '!string',
+  'to': '!string',
+  'type': 'string',
+  'color': 'string',
+  'scale': 'number',
+  'size': 'number',
+  'top': SUB_DEF,
+  'bottom': SUB_DEF,
+};
+
 const DEFAULT_OPTIONS = {
   'beautify': false,
   'scale': 128,
@@ -230,7 +264,23 @@ module.exports = (options) => {
       });
     },
 
+    /**
+     * @param {Object<string,Node2>} nodes
+     * @param {Link2[]} links
+     */
     compute: (nodes, links) => {
+
+      Object.keys(nodes).forEach(key => {
+        const res = utils.isValid(nodes[key], NODE_DEF);
+        if (res)
+          throw `node '${key}' is invalid at key ${res}`;
+      });
+
+      links.forEach((link, i) => {
+        const res = utils.isValid(link, LINK_DEF);
+        if (res)
+          throw `link ${i} (${link.from}->${link.to}) is invalid at key ${res}`;
+      });
 
       const bounds = self.getBounds(nodes);
 

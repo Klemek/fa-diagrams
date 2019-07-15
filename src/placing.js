@@ -15,6 +15,18 @@ const utils = require('./utils');
  * @property {string|undefined} direction
  */
 
+const NODE_DEF = {
+  'name': '!string',
+  'x': 'number',
+  'y': 'number'
+};
+
+const LINK_DEF = {
+  'from': '!string',
+  'to': '!string',
+  'direction': 'string'
+};
+
 const DEFAULT_OPTIONS = {
   'max-link-length': 3,
   'diagonals': true,
@@ -307,6 +319,19 @@ module.exports = (options) => {
      * @returns {Object<string,Node1>|null}
      */
     compute: (nodes, links) => {
+
+      Object.keys(nodes).forEach(key => {
+        const res = utils.isValid(nodes[key], NODE_DEF);
+        if (res)
+          throw `node '${key}' is invalid at key ${res}`;
+      });
+
+      links.forEach((link, i) => {
+        const res = utils.isValid(link, LINK_DEF);
+        if (res)
+          throw `link ${i} (${link.from}->${link.to}) is invalid at key ${res}`;
+      });
+
       Object.values(nodes).forEach(node => {
         node.const = {
           beforeX: [],

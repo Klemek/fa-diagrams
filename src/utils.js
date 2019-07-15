@@ -22,6 +22,40 @@ const self = {
   },
 
   /**
+   * Verify if an object respect it's definition
+   * @param obj
+   * @param def
+   * @returns {null|string}
+   */
+  isValid: (obj, def) => {
+    const keys = Object.keys(def);
+    let key;
+    let type;
+    for (let i = 0; i < keys.length; i++) {
+      key = keys[i];
+      type = (typeof obj !== 'object' || obj[key] === undefined || obj[key] === null) ? null : typeof obj[key];
+      if (type === 'object' && obj[key].length > 0)
+        type = 'array';
+      if (typeof def[key] === 'object') {
+        if (type && type !== 'object')
+          return key;
+        const res = self.isValid(type ? obj[key] : undefined, def[key]);
+        if (res)
+          return key + '.' + res;
+      } else {
+        if (def[key][0] === '!') {
+          def[key] = def[key].substr(1);
+          if (!type)
+            return key;
+        }
+        if (type && type !== def[key])
+          return key;
+      }
+    }
+    return null;
+  },
+
+  /**
    * Clone any JS variable or object
    * @param {*} arg
    * @returns {any}
