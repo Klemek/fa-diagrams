@@ -16,7 +16,6 @@
 * [x] Colors
 * [ ] Sub-elements
 * [ ] More options
-* [ ] PNG output
 * [ ] Unit testing
 
 ## Summary
