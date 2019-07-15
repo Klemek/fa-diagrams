@@ -13,7 +13,7 @@
 * [x] Node's icon rendering
 * [x] Simple links rendering
 * [x] Dashed links rendering
-* [ ] Colors
+* [x] Colors
 * [ ] Sub-elements
 * [ ] More options
 * [ ] PNG output
@@ -165,20 +165,23 @@ Will produce the following diagram:
 
 ### `options`
 
-| Key (`.subkey`) | Default value | Info |
-| --- | --- |  --- |
-| `placing.max-link-length` | 3 | maximum stretching of links between nodes |
-| `placing.diagonals` | `true` | allow diagonal links to be made |
-| `rendering.beautify` | `false` | output a readable SVG file |
-| `rendering.scale` | 128 | (in pixels) final icons size |
-| `rendering.color` | `black` | color of all elements |
-| `rendering.h-spacing` | 1.3 | how width is stretched comparing to height |
-| `rendering.icons.scale` | 1 | default scaling of icons (might be redefined in node definition) |
-| `rendering.links.scale` | 1 | default scaling of links (might be redefined in link definition) |
-| `rendering.links.size` | 0 | forced size/length of the links (0 means it will be computed from the distance between the nodes) (might be redefined in link definition) |
-| `rendering.texts.font` | `'sans-serif'` | font family of the texts (might be redefined in sub-elements definition) |
-| `rendering.texts.font-size` | 20 | font size of the texts (might be redefined in sub-elements definition) |
-| `rendering.texts.font-style` | `'normal'` | font style of the texts (see [Font styles](#font-styles)) (might be redefined in sub-elements definition) |
+| Key (`.subkey`) | Default value | Info | Redefined |
+| --- | --- |  --- | --- |
+| `placing.max-link-length` | 3 | maximum stretching of links between nodes | no |
+| `placing.diagonals` | `true` | allow diagonal links to be made | no |
+| `rendering.beautify` | `false` | output a readable SVG file | no |
+| `rendering.scale` | 128 | (in pixels) final icons size | no |
+| `rendering.color` | `black` | color of all elements | no |
+| `rendering.h-spacing` | 1.3 | how width is stretched comparing to height | no |
+| `rendering.icons.scale` | 1 | default scaling of icons | in node or sub-icon |
+| `rendering.icons.color` | `''` | color of all icons | in node or sub-icon |
+| `rendering.links.scale` | 1 | default scaling of links | in link |
+| `rendering.links.color` | `''` | color of all links (might be redefined in link definition) | in link |
+| `rendering.links.size` | 0 | forced size/length of the links (0 means it will be computed from the distance between the nodes) | in link |
+| `rendering.texts.font` | `'sans-serif'` | font family of the texts (might be redefined in sub-elements definition) | in text |
+| `rendering.texts.font-size` | 20 | font size of the texts | in sub-text |
+| `rendering.texts.font-style` | `'normal'` | font style of the texts (see [Font styles](#font-styles)) | in sub-text |
+| `rendering.texts.color` | `''` | color of all texts | in sub-text |
 
 ### `nodes`
 

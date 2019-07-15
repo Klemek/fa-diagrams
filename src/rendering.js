@@ -61,14 +61,22 @@ const DEFAULT_OPTIONS = {
   'beautify': false,
   'scale': 128,
   'h-spacing': 1.3,
+  'color': 'black',
   'icons': {
-    'scale': 1
+    'scale': 1,
+    'color': ''
   },
   'links': {
     'scale': 1,
+    'color': '',
     'size': 0
   },
-  'font': 'sans-serif'
+  'texts': {
+    'font': 'sans-serif',
+    'font-size': '20',
+    'font-style': 'normal',
+    'color': ''
+  }
 };
 
 const DEFAULT_SCALE = 0.4;
@@ -189,11 +197,13 @@ module.exports = (options) => {
           const scale = (node['scale'] || options['icons']['scale']) * DEFAULT_SCALE;
           const group = {
             '_attributes': {
-              'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`
+              'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`,
             },
             'g': {
               '_attributes': {
-                'transform': `scale(${scale / 512} ${scale / 512}) translate(${-icon.width / 2} ${-256})`
+                'transform': `scale(${scale / 512} ${scale / 512}) translate(${-icon.width / 2} ${-256})`,
+                'stroke': (node['color'] || options['icons']['color'] || undefined),
+                'fill': (node['color'] || options['icons']['color'] || undefined)
               },
               'path': {
                 '_attributes': {
@@ -247,7 +257,9 @@ module.exports = (options) => {
           },
           'g': {
             '_attributes': {
-              'transform': `scale(${scale / 512} ${scale / 512}) translate(${(-256 * size)} ${-256})`
+              'transform': `scale(${scale / 512} ${scale / 512}) translate(${(-256 * size)} ${-256})`,
+              'stroke': (link['color'] || options['links']['color'] || undefined),
+              'fill': (link['color'] || options['links']['color'] || undefined)
             },
             'path': {
               '_attributes': {
@@ -274,6 +286,8 @@ module.exports = (options) => {
             'viewBox': `0 0 ${bounds.w * options['h-spacing']} ${bounds.h}`,
             'width': bounds.w * options['h-spacing'] * options['scale'] / DEFAULT_SCALE,
             'height': bounds.h * options['scale'] / DEFAULT_SCALE,
+            'stroke': options['color'],
+            'fill': options['color']
           }
         }
       };
