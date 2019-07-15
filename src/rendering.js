@@ -33,7 +33,7 @@ const DEFAULT_OPTIONS = {
     'scale': 1,
     'size': 0
   },
-  'font': 'Arial' // https://websitesetup.org/web-safe-fonts-html-css/
+  'font': 'sans-serif'
 };
 
 const DEFAULT_SCALE = 0.4;

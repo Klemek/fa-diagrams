@@ -122,7 +122,7 @@ const svg = faDiagrams.compute(data); // string containing xml data
 
 Will produce the following diagram:
 
-![sample](sample.png)
+![sample](preview/sample.png)
 
 ### Html script
 
@@ -155,20 +155,20 @@ Will produce the following diagram:
 
 ### `options`
 
-| Key (`/subkey`) | Default value | Info |
+| Key (`.subkey`) | Default value | Info |
 | --- | --- |  --- |
-| `placing/max-link-length` | 3 | maximum stretching of links between nodes |
-| `placing/diagonals` | `true` | allow diagonal links to be made |
-| `rendering/beautify` | `false` | output a readable SVG file |
-| `rendering/scale` | 128 | (in pixels) final icons size |
-| `rendering/color` | `black` | color of all elements |
-| `rendering/h-spacing` | 1.3 | how width is stretched comparing to height |
-| `rendering/icons/scale` | 1 | default scaling of icons (might be redefined in node definition) |
-| `rendering/links/scale` | 1 | default scaling of links (might be redefined in link definition) |
-| `rendering/links/size` | 0 | forced size/length of the links (0 means it will be computed from the distance between the nodes) (might be redefined in link definition) |
-| `rendering/texts/font` | `'Arial'` | font family of the texts (might be redefined in sub-elements definition) |
-| `rendering/texts/font-size` | 20 | font size of the texts (might be redefined in sub-elements definition) |
-| `rendering/texts/font-style` | `'normal'` | font style of the texts (see [Font styles](#font-styles)) (might be redefined in sub-elements definition) |
+| `placing.max-link-length` | 3 | maximum stretching of links between nodes |
+| `placing.diagonals` | `true` | allow diagonal links to be made |
+| `rendering.beautify` | `false` | output a readable SVG file |
+| `rendering.scale` | 128 | (in pixels) final icons size |
+| `rendering.color` | `black` | color of all elements |
+| `rendering.h-spacing` | 1.3 | how width is stretched comparing to height |
+| `rendering.icons.scale` | 1 | default scaling of icons (might be redefined in node definition) |
+| `rendering.links.scale` | 1 | default scaling of links (might be redefined in link definition) |
+| `rendering.links.size` | 0 | forced size/length of the links (0 means it will be computed from the distance between the nodes) (might be redefined in link definition) |
+| `rendering.texts.font` | `'sans-serif'` | font family of the texts (might be redefined in sub-elements definition) |
+| `rendering.texts.font-size` | 20 | font size of the texts (might be redefined in sub-elements definition) |
+| `rendering.texts.font-style` | `'normal'` | font style of the texts (see [Font styles](#font-styles)) (might be redefined in sub-elements definition) |
 
 ### `nodes`
 
@@ -218,7 +218,7 @@ You can **just enter a string** to be considered a text but you can define a tex
 
 You can define a relative icon with the following:
 
-| Key (`/subkey`) | Type | Required | Info |
+| Key | Type | Required | Info |
 | --- | --- | --- |  --- |
 | **`icon`** | string | **yes** | name of the Font-Awesome icon of the sub-element (see [Icon names](#icon-names)) |
 | `color` | string | no | redefined the color |
@@ -228,16 +228,52 @@ You can define a relative icon with the following:
 
 ### Icon names
 
-(soon)
+**Icons are fetched from [Font-Awesome free icons](https://fontawesome.com/icons?d=gallery&m=free).**  
+When you reference an icon, for example `circle`, it's searched in the `solid` folder then `regular` then `brands`. 
+If, in this case you want the hollow circle from the regular style, just enter `regular circle` or `circle regular` instead. 
+It's very flexible as you can copy-paste from an HTML page `far fa-circle` and it will also works.
 
 ### Link types
+
+Here are the accepted types and their preview :
+
+* **default**:
+
+![default](preview/link-default.svg)
+
+* **double**:
+
+![default](preview/link-double.svg)
+
+* **line**:
+
+![default](preview/link-line.svg)
+
+* **dashed**:
+
+(soon)
+
+* **dashed-line**:
+
+(soon)
+
+* **split-double**:
 
 (soon)
 
 ### Font styles
 
-(soon)
+First, you should use [web-safe fonts](https://websitesetup.org/web-safe-fonts-html-css/) to be sure your SVG will be rendered correctly
+
+Here are the available styles :
+
+* `normal`
+* **`bold`**
+* *`italic`*
+* __`underlined`__
+* ~~`striked`~~
 
 ## Examples
 *[back to top](#top)*
+
 (soon)
