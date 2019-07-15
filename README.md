@@ -193,7 +193,7 @@ Array of object as following:
 | **`to`** | string | **yes** | destination node name |
 | `type` | string | no | link's appearance (see [Link types](#link-types)) |
 | `top`, `bottom` | string or object | no | see [Sub-elements](#sub-elements) |
-| `color` | string | no | redefined the color |
+| `color` | string | no | redefine the color |
 | `scale` | number | no | redefine this link scale |
 | `size` | number | no | forced size/length of the link |
 
@@ -209,7 +209,7 @@ You can **just enter a string** to be considered a text but you can define a tex
 | Key | Type | Required | Info |
 | --- | --- | --- |  --- |
 | **`text`** | string | **yes** | value of your text  |
-| `color` | string | no | redefined the color |
+| `color` | string | no | redefine the color |
 | `font` | string | no | redefine the font family |
 | `font-size` | number | no | redefine the font size |
 | `font-style` | string | no | redefine the font style (see [Font styles](#font-styles)) |
@@ -221,7 +221,7 @@ You can define a relative icon with the following:
 | Key | Type | Required | Info |
 | --- | --- | --- |  --- |
 | **`icon`** | string | **yes** | name of the Font-Awesome icon of the sub-element (see [Icon names](#icon-names)) |
-| `color` | string | no | redefined the color |
+| `color` | string | no | redefine the color |
 | `scale` | number | no | redefine this icon scale |
 
 ## More info
