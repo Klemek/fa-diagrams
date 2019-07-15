@@ -1,7 +1,6 @@
 const fs = require('fs');
 
 const rendering = require('./src/rendering')({
-  'beautify': false,
   'scale': 0.05,
   'h-spacing': 1,
 });
