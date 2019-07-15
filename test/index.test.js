@@ -28,5 +28,5 @@ test('test fail placing', () => {
 
 test('no data', () => {
   const res = faDiagrams.compute({});
-  expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0"></svg>');
+  expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" stroke="black" fill="black"></svg>');
 });

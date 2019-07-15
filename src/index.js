@@ -3,7 +3,7 @@ const rendering = require('./rendering');
 
 const self = {
   /**
-   * @param {{options: Object, nodes: Object[], links: Object[]}} data
+   * @param {{options: Object|undefined, nodes: Object[]|undefined, links: Object[]|undefined}} data
    * @returns {string}
    */
   compute: (data) => {

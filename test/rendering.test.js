@@ -103,7 +103,7 @@ describe('getBounds', () => {
 describe('toXML', () => {
   test('no data', () => {
     const res = rendering({scale: 20, 'h-spacing': 1}).toXML({}, {w: 0, h: 0});
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0"/>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" stroke="black" fill="black"/>');
   });
   test('sample svg data', () => {
     const res = rendering({scale: 2, 'h-spacing': 1}).toXML({
@@ -115,14 +115,14 @@ describe('toXML', () => {
         }
       }
     }, {w: 100, h: 100});
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="500" height="500"><circle cx="50" cy="50" r="50"/></svg>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="500" height="500" stroke="black" fill="black"><circle cx="50" cy="50" r="50"/></svg>');
   });
 });
 
 describe('compute', () => {
   test('no nodes no links', () => {
     const res = rendering({beautify: true, 'h-spacing': 1.2, scale: 20}).compute({}, []);
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0">\n</svg>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" stroke="black" fill="black">\n</svg>');
   });
   test('invalid node', () => {
     try {
