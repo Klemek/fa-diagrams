@@ -397,8 +397,26 @@ describe('compute', () => {
   };
 
   test('no nodes', () => {
-    const nodes = placing({diagonals: false}).compute({}, []);
+    const nodes = placing().compute({}, []);
     expect(nodes).toEqual({});
+  });
+  test('invalid node', () => {
+    try {
+      placing().compute({
+        'a': {name: 'a', x: 'hello'}
+      }, []);
+      fail('no error thrown');
+    } catch (err) {
+      expect(err).toBe('node \'a\' is invalid at key x');
+    }
+  });
+  test('invalid link', () => {
+    try {
+      placing().compute({}, [{from: 'a', to: 5}]);
+      fail('no error thrown');
+    } catch (err) {
+      expect(err).toBe('link 0 (a->5) is invalid at key to');
+    }
   });
   test('3 nodes no link', () => {
     const nodes = placing({diagonals: false}).compute(createNodes(3), []);

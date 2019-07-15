@@ -124,4 +124,22 @@ describe('compute', () => {
     const res = rendering({beautify: true, 'h-spacing': 1.2, scale: 20}).compute({}, []);
     expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0">\n</svg>');
   });
+  test('invalid node', () => {
+    try {
+      rendering().compute({
+        'a': {name: 'a', icon: 5}
+      }, []);
+      fail('no error thrown');
+    } catch (err) {
+      expect(err).toBe('node \'a\' is invalid at key icon');
+    }
+  });
+  test('invalid link', () => {
+    try {
+      rendering().compute({}, [{from: 'a', to: 'b', type: 5}]);
+      fail('no error thrown');
+    } catch (err) {
+      expect(err).toBe('link 0 (a->b) is invalid at key type');
+    }
+  });
 });
