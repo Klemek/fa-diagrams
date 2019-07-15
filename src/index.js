@@ -1,8 +1,11 @@
 const placing = require('./placing');
 const rendering = require('./rendering');
 
-
 const self = {
+  /**
+   * @param {{options: Object, nodes: Object[], links: Object[]}} data
+   * @returns {string}
+   */
   compute: (data) => {
     const options = data['options'] || {};
 
@@ -22,7 +25,6 @@ const self = {
 
     return rendering(options['rendering']).compute(nodes, links);
   },
-
 };
 
 module.exports = self; // Node

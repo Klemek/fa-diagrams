@@ -125,16 +125,38 @@ module.exports = (options) => {
      * @return {string|null}
      */
     getLinkPath: (type, width) => {
+      const arrowHead = 'v46.059c0 21.382 25.851 32.09 40.971 16.971 l86.059 -86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971v46.059'; //134.059
+      const arrowHeadR = 'v-46.059c0-21.382-25.851-32.09-40.971-16.971l-86.059 86.059c-9.373 9.373-9.373 24.568 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971v-46.059'; //134.059
+      const lineEnd = 'c6.627 0 12 -5.373 12 -12v-56c0 -6.627 -5.373 -12 -12 -12'; // 12
+      const lineStart = 'c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12'; // 12
+      const dashedStep = `${lineStart}h56${lineEnd}`; // 80
       switch (type) {
         case 'none':
           return null;
-        case 'line':
-          return `M12 216c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h${width * 512 - 24}c6.627 0 12 -5.373 12 -12v-56c0 -6.627 -5.373 -12 -12 -12z`;
-        case 'double':
-          const size = width * 512 - 268.06;
-          return `M${134.059 + size} 216h-${size}v-46.059c0-21.382-25.851-32.09-40.971-16.971l-86.059 86.059c-9.373 9.373-9.373 24.568 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971v-46.059h${size}v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.568 0-33.941l-86.059-86.059c-15.119-15.12-40.971-4.412-40.971 16.97z`;
         default:
-          return `M12 216c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h${width * 512 - 146.03}v46.059c0 21.382 25.851 32.09 40.971 16.971 l86.059 -86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z`;
+          return `M12 216${lineStart}h${width * 512 - 146.059}${arrowHead}z`;
+        case 'line':
+          return `M12 216${lineStart}h${width * 512 - 24}${lineEnd}z`;
+        case 'double':
+          return `M134.059 216${arrowHeadR}h${width * 512 - 268.06}${arrowHead}z`;
+        case 'split-double':
+          return `M12 126${lineStart}h${width * 512 - 146.059}${arrowHead}M134.059 306${arrowHeadR}h${width * 512 - 146.059}${lineEnd}z`;
+        case 'dashed':
+          const n1 = Math.floor((width * 512 - 134.059) / (80 * 2.1));
+          const space1 = ((width * 512 - 134.059) - n1 * 56 - 24) / (n1);
+          return `M12 216${new Array(n1).fill(`${dashedStep}h${space1}`).join('')}v80${arrowHead}z`;
+        case 'dashed-line':
+          const n2 = Math.floor(width * 512 / (80 * 2.1));
+          const space2 = (width * 512 - n2 * 56 - 24) / (n2 - 1);
+          return `M12 216${new Array(n2).fill(dashedStep).join(`h${space2}`)}z`;
+        case 'dashed-double':
+          const n3 = Math.floor((width * 512 - 134.059 * 2) / (80 * 2.1));
+          const space3 = ((width * 512 - 134.059 * 2) - n3 * 56 - 24) / (n3 + 1);
+          return `M134.059 216${arrowHeadR}m${space3}-80${new Array(n3).fill(`${dashedStep}h${space3}`).join('')}v80${arrowHead}z`;
+        case 'dashed-split-double':
+          const n4 = Math.floor((width * 512 - 134.059) / (80 * 2.1));
+          const space4 = ((width * 512 - 134.059) - n4 * 56 - 24) / (n4);
+          return `M12 126${new Array(n4).fill(`${dashedStep}h${space4}`).join('')}v80${arrowHead}M134.059 306${arrowHeadR}m${space4} -80${new Array(n4).fill(`${dashedStep}`).join(`h${space4}`)}z`;
       }
     },
 
@@ -199,6 +221,7 @@ module.exports = (options) => {
         const posY = (src.y + dst.y) / 2 + 0.5;
 
         const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
+        const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
 
         let size = link['size'] || options['links']['size'];
 
@@ -210,7 +233,7 @@ module.exports = (options) => {
           if (dy > 0)
             dy -= LINK_MARGIN * 2;
 
-          size = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) / DEFAULT_SCALE;
+          size = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) / scale;
         }
 
         const path = self.getLinkPath(link.type, size);
@@ -218,7 +241,6 @@ module.exports = (options) => {
         if (!path)
           return;
 
-        const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
         const group = {
           '_attributes': {
             'transform': `translate(${posX} ${posY}) rotate(${angle})`

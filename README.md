@@ -12,7 +12,7 @@
 * [x] SVG output
 * [x] Node's icon rendering
 * [x] Simple links rendering
-* [ ] Dashed links rendering
+* [x] Dashed links rendering
 * [ ] Colors
 * [ ] Sub-elements
 * [ ] More options
@@ -118,6 +118,16 @@ const data = {
 };
 
 const svg = faDiagrams.compute(data); // string containing xml data
+
+//export as SVG with fs
+const fs = require('fs');
+fs.writeFileSync('diagram.svg', svg, {encoding:'utf-8'});
+
+//export as PNG with svg2img (npm i svg2img)
+const svg2img = require('svg2img');
+svg2img(svg, function(error, buffer) {
+    fs.writeFileSync('diagram.png', buffer);
+});
 ```
 
 Will produce the following diagram:
@@ -238,27 +248,7 @@ It's very flexible as you can copy-paste from an HTML page `far fa-circle` and i
 
 Here are the accepted types and their preview :
 
-* **default**:
-
-![default](preview/link-default.svg)
-
-* **double**:
-
-![default](preview/link-double.svg)
-
-* **line**:
-
-![default](preview/link-line.svg)
-
-* **dashed**:
-
-(soon)
-
-* **dashed-line**:
-
-(soon)
-
-* **split-double**:
+![](preview/links.svg)
 
 (soon)
 
