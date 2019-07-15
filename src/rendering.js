@@ -37,6 +37,7 @@ const DEFAULT_OPTIONS = {
 };
 
 const DEFAULT_SCALE = 0.4;
+const LINK_MARGIN = (1 - DEFAULT_SCALE) / 2;
 
 module.exports = (options = DEFAULT_OPTIONS) => {
   const self = {
@@ -162,9 +163,20 @@ module.exports = (options = DEFAULT_OPTIONS) => {
 
         const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
 
-        const size = Math.sqrt(Math.pow((dst.x - src.x) * options['h-spacing'], 2) + Math.pow(dst.y - src.y, 2));
+        let size = link['size'] || options['links']['size'];
 
-        const path = self.getLinkPath(link.type, link['size'] || options['links']['size'] || size);
+        if (!size) {
+          let dx = Math.abs(dst.x - src.x) * options['h-spacing'];
+          if (dx > 0)
+            dx -= LINK_MARGIN * 2;
+          let dy = Math.abs(dst.y - src.y);
+          if (dy > 0)
+            dy -= LINK_MARGIN * 2;
+
+          size = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) / DEFAULT_SCALE;
+        }
+
+        const path = self.getLinkPath(link.type, size);
 
         if (!path)
           return;
