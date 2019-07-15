@@ -1,5 +1,4 @@
-const ezclone = (a) => JSON.parse(JSON.stringify(a));
-const newmap = (w, h, fill) => new Array(w).fill(0).map(() => new Array(h).fill(fill));
+const utils = require('./utils');
 
 /**
  * @typedef Node1
@@ -21,10 +20,11 @@ const DEFAULT_OPTIONS = {
   'diagonals': true,
 };
 
-module.exports = (options = DEFAULT_OPTIONS) => {
+module.exports = (options) => {
+
+  options = utils.merge(DEFAULT_OPTIONS, options);
 
   const self = {
-    defaultOptions: DEFAULT_OPTIONS,
 
     /**
      * Get the current bounds of the graph of nodes
@@ -55,7 +55,7 @@ module.exports = (options = DEFAULT_OPTIONS) => {
      */
     getNewPos: (nodes) => {
       const b = self.getBounds(nodes);
-      const map = newmap(b.w, b.h, false);
+      const map = utils.newMap(b.w, b.h, false);
       const list = Object.values(nodes).filter(n => n.x !== undefined);
       list.forEach(n => {
         map[n.x - b.x][n.y - b.y] = true;
@@ -250,7 +250,7 @@ module.exports = (options = DEFAULT_OPTIONS) => {
       const free = [];
 
       const tryPos = (key, x, y) => {
-        const nodes2 = ezclone(nodes);
+        const nodes2 = utils.ezClone(nodes);
         nodes2[key].x = x;
         nodes2[key].y = y;
         return self.applyLinks(nodes2, links, depth + 1);

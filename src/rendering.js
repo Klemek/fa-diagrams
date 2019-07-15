@@ -1,4 +1,5 @@
 const convert = require('xml-js');
+const utils = require('./utils');
 
 let list = {};
 try {
@@ -39,9 +40,11 @@ const DEFAULT_OPTIONS = {
 const DEFAULT_SCALE = 0.4;
 const LINK_MARGIN = (1 - DEFAULT_SCALE) / 2;
 
-module.exports = (options = DEFAULT_OPTIONS) => {
+module.exports = (options) => {
+
+  options = utils.merge(DEFAULT_OPTIONS, options);
+
   const self = {
-    defaultOptions: DEFAULT_OPTIONS,
 
     /**
      * Find icon data from given name

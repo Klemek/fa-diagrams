@@ -83,17 +83,17 @@ describe('getIcon', () => {
 
 describe('getBounds', () => {
   test('no nodes', () => {
-    const res = rendering({beautify: false}).getBounds({});
+    const res = rendering().getBounds({});
     expect(res).toEqual({w: 0, h: 0});
   });
   test('1 node', () => {
-    const res = rendering({beautify: false}).getBounds({
+    const res = rendering().getBounds({
       '1': {x: 0, y: 0}
     });
     expect(res).toEqual({w: 1, h: 1});
   });
   test('3 nodes', () => {
-    const res = rendering({beautify: false}).getBounds({
+    const res = rendering().getBounds({
       '1': {x: 0, y: 0}, '2': {x: 5, y: 2}, '3': {x: 3, y: 8},
     });
     expect(res).toEqual({w: 6, h: 9});
@@ -102,11 +102,11 @@ describe('getBounds', () => {
 
 describe('toXML', () => {
   test('no data', () => {
-    const res = rendering({beautify: false, scale: 20, 'h-spacing': 1}).toXML({}, {w: 0, h: 0});
+    const res = rendering({scale: 20, 'h-spacing': 1}).toXML({}, {w: 0, h: 0});
     expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0"/>');
   });
   test('sample svg data', () => {
-    const res = rendering({beautify: false, scale: 2, 'h-spacing': 1}).toXML({
+    const res = rendering({scale: 2, 'h-spacing': 1}).toXML({
       'circle': {
         '_attributes': {
           'cx': 50,

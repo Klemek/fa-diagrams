@@ -3,35 +3,35 @@ const placing = require('../src/placing');
 
 describe('getBounds', () => {
   test('no nodes', () => {
-    const res = placing({}).getBounds({});
+    const res = placing().getBounds({});
     expect(res).toEqual({x: 0, y: 0, w: 0, h: 0});
   });
   test('no placed nodes', () => {
-    const res = placing({}).getBounds({
+    const res = placing().getBounds({
       'a': {}, 'b': {}
     });
     expect(res).toEqual({x: 0, y: 0, w: 0, h: 0});
   });
   test('first node', () => {
-    const res = placing({}).getBounds({
+    const res = placing().getBounds({
       'a': {x: 0, y: 0}, 'b': {}
     });
     expect(res).toEqual({x: 0, y: 0, w: 1, h: 1});
   });
   test('one node not 0,0', () => {
-    const res = placing({}).getBounds({
+    const res = placing().getBounds({
       'a': {x: 5, y: 6}, 'b': {}
     });
     expect(res).toEqual({x: 5, y: 6, w: 1, h: 1});
   });
   test('2 nodes', () => {
-    const res = placing({}).getBounds({
+    const res = placing().getBounds({
       'a': {x: 0, y: 0}, 'b': {x: 1, y: 1}, 'c': {}
     });
     expect(res).toEqual({x: 0, y: 0, w: 2, h: 2});
   });
   test('2 nodes special', () => {
-    const res = placing({}).getBounds({
+    const res = placing().getBounds({
       'a': {x: 1, y: 2}, 'b': {x: -5, y: 6}, 'c': {}
     });
     expect(res).toEqual({x: -5, y: 2, w: 7, h: 5});
@@ -40,29 +40,29 @@ describe('getBounds', () => {
 
 describe('getNewPos', () => {
   test('no nodes', () => {
-    const res = placing({}).getNewPos({});
+    const res = placing().getNewPos({});
     expect(res).toEqual({x: 0, y: 0});
   });
   test('no placed nodes', () => {
-    const res = placing({}).getNewPos({
+    const res = placing().getNewPos({
       'a': {}, 'b': {}
     });
     expect(res).toEqual({x: 0, y: 0});
   });
   test('one node', () => {
-    const res = placing({}).getNewPos({
+    const res = placing().getNewPos({
       'a': {x: 0, y: 0}, 'b': {}
     });
     expect(res).toEqual({x: 1, y: 0});
   });
   test('one node not 0,0', () => {
-    const res = placing({}).getNewPos({
+    const res = placing().getNewPos({
       'a': {x: 5, y: 6}, 'b': {}
     });
     expect(res).toEqual({x: 6, y: 6});
   });
   test('2 nodes', () => {
-    const res = placing({}).getNewPos({
+    const res = placing().getNewPos({
       'a': {x: 0, y: 0}, 'b': {x: 1, y: 1}
     });
     expect(res).toEqual({x: 1, y: 0});
@@ -71,43 +71,43 @@ describe('getNewPos', () => {
 
 describe('nodeBetween', () => {
   test('only 2 nodes', () => {
-    const res = placing({}).nodeBetween({
+    const res = placing().nodeBetween({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 1, y: 0}
     }, 'a', 'b');
     expect(res).toBe(false);
   });
   test('other node not between', () => {
-    const res = placing({}).nodeBetween({
+    const res = placing().nodeBetween({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 0, y: 1}, 'c': {name: 'c', x: 1, y: 0}
     }, 'a', 'b');
     expect(res).toBe(false);
   });
   test('between aligned h', () => {
-    const res = placing({}).nodeBetween({
+    const res = placing().nodeBetween({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 0}, 'c': {name: 'c', x: 1, y: 0}
     }, 'a', 'b');
     expect(res).toBe(true);
   });
   test('between aligned v', () => {
-    const res = placing({}).nodeBetween({
+    const res = placing().nodeBetween({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 0, y: 2}, 'c': {name: 'c', x: 0, y: 1}
     }, 'a', 'b');
     expect(res).toBe(true);
   });
   test('between diagonal', () => {
-    const res = placing({}).nodeBetween({
+    const res = placing().nodeBetween({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}, 'c': {name: 'c', x: 1, y: 1}
     }, 'a', 'b');
     expect(res).toBe(true);
   });
   test('between diagonal 2', () => {
-    const res = placing({}).nodeBetween({
+    const res = placing().nodeBetween({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 1}, 'c': {name: 'c', x: 1, y: 1}
     }, 'a', 'b');
     expect(res).toBe(true);
   });
   test('between diagonal 3', () => {
-    const res = placing({}).nodeBetween({
+    const res = placing().nodeBetween({
       '1': {'name': '1', 'x': 1, 'y': 0},
       '2': {'name': '2', 'x': 2, 'y': 0},
       '3': {'name': '3', 'x': 1, 'y': 1},
@@ -121,7 +121,7 @@ describe('nodeBetween', () => {
 
 describe('getPosition', () => {
   test('free node', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -135,7 +135,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: null, y: null, free: true});
   });
   test('constrained to another not placed', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -149,7 +149,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: null, y: null, free: true});
   });
   test('constrained to another left', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -163,7 +163,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: 1, y: 0, free: false});
   });
   test('constrained to another right', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: ['b'],
@@ -177,7 +177,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: -1, y: 0, free: false});
   });
   test('constrained to another up', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -191,7 +191,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: 0, y: 1, free: false});
   });
   test('constrained to another down', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -205,7 +205,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: 0, y: -1, free: false});
   });
   test('double constrained diagonal', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -220,7 +220,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: 1, y: 0, free: false});
   });
   test('double constrained no diagonal', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -235,7 +235,7 @@ describe('getPosition', () => {
     expect(res).toEqual({x: 2, y: 0, free: false});
   });
   test('double constrained impossible', () => {
-    const res = placing({'max-link-length': 2}).getPosition({
+    const res = placing().getPosition({
       'a': {
         const: {
           afterX: [],
@@ -253,11 +253,11 @@ describe('getPosition', () => {
 
 describe('isValid', () => {
   test('no nodes', () => {
-    const res = placing({diagonals: true}).isValid({}, []);
+    const res = placing().isValid({}, []);
     expect(res).toBe(true);
   });
   test('no placed nodes', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {}, 'b': {}
     }, [
       {from: 'a', to: 'b'}
@@ -265,7 +265,7 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('one nodes', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {}
     }, [
       {from: 'a', to: 'b'}
@@ -273,13 +273,13 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('overlapping nodes', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 0, y: 0}
     }, []);
     expect(res).toBe(false);
   });
   test('in between node', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 0}, 'c': {name: 'c', x: 1, y: 0}
     }, [
       {from: 'a', to: 'b'}
@@ -295,7 +295,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid right link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: -2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'right'}
@@ -303,7 +303,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid left link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'left'}
@@ -311,7 +311,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid up link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'up'}
@@ -319,7 +319,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('invalid down link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: -2}
     }, [
       {from: 'a', to: 'b', direction: 'down'}
@@ -327,7 +327,7 @@ describe('isValid', () => {
     expect(res).toBe(false);
   });
   test('valid right link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'right'}
@@ -335,7 +335,7 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('valid left link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: -2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'left'}
@@ -343,7 +343,7 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('valid up link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: -2}
     }, [
       {from: 'a', to: 'b', direction: 'up'}
@@ -351,7 +351,7 @@ describe('isValid', () => {
     expect(res).toBe(true);
   });
   test('valid down link', () => {
-    const res = placing({diagonals: true}).isValid({
+    const res = placing().isValid({
       'a': {name: 'a', x: 0, y: 0}, 'b': {name: 'b', x: 2, y: 2}
     }, [
       {from: 'a', to: 'b', direction: 'down'}
@@ -371,7 +371,7 @@ describe('isValid', () => {
 describe('correctPlacing', () => {
   test('no nodes', () => {
     const nodes = {};
-    placing({}).correctPlacing(nodes);
+    placing().correctPlacing(nodes);
     expect(nodes).toEqual({});
   });
   test('several nodes', () => {
@@ -380,7 +380,7 @@ describe('correctPlacing', () => {
       'b': {x: -2, y: 5},
       'c': {x: -4, y: 3}
     };
-    placing({}).correctPlacing(nodes);
+    placing().correctPlacing(nodes);
     expect(nodes).toEqual({
       'a': {x: 7, y: 0},
       'b': {x: 2, y: 3},
@@ -397,11 +397,11 @@ describe('compute', () => {
   };
 
   test('no nodes', () => {
-    const nodes = placing({'max-link-length': 2, diagonals: false}).compute({}, []);
+    const nodes = placing({diagonals: false}).compute({}, []);
     expect(nodes).toEqual({});
   });
   test('3 nodes no link', () => {
-    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(3), []);
+    const nodes = placing({diagonals: false}).compute(createNodes(3), []);
     expect(nodes).toEqual({
       '1': {name: '1', x: 0, y: 0},
       '2': {name: '2', x: 1, y: 0},
@@ -409,7 +409,7 @@ describe('compute', () => {
     });
   });
   test('6 nodes 6 links with directions', () => {
-    const nodes = placing({'max-link-length': 2, diagonals: true}).compute(createNodes(6), [
+    const nodes = placing().compute(createNodes(6), [
       {from: '1', to: '2', direction: 'right'},
       {from: '1', to: '3', direction: 'down'},
       {from: '3', to: '4', direction: 'right'},
@@ -426,7 +426,7 @@ describe('compute', () => {
     });
   });
   test('6 nodes 6 links with directions no diagonals', () => {
-    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(6), [
+    const nodes = placing({diagonals: false}).compute(createNodes(6), [
       {from: '1', to: '2', direction: 'right'},
       {from: '1', to: '3', direction: 'down'},
       {from: '3', to: '4', direction: 'right'},
@@ -443,7 +443,7 @@ describe('compute', () => {
     });
   });
   test('6 nodes 6 links no directions', () => {
-    const nodes = placing({'max-link-length': 2, diagonals: true}).compute(createNodes(6), [
+    const nodes = placing().compute(createNodes(6), [
       {from: '1', to: '2'},
       {from: '1', to: '3'},
       {from: '3', to: '4'},
@@ -460,7 +460,7 @@ describe('compute', () => {
     });
   });
   test('6 nodes 6 links no directions no diagonals', () => {
-    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(6), [
+    const nodes = placing({diagonals: false}).compute(createNodes(6), [
       {from: '1', to: '2'},
       {from: '1', to: '3'},
       {from: '3', to: '4'},
@@ -477,7 +477,7 @@ describe('compute', () => {
     });
   });
   test('3 nodes impossible', () => {
-    const nodes = placing({'max-link-length': 2, diagonals: false}).compute(createNodes(3), [
+    const nodes = placing({diagonals: false}).compute(createNodes(3), [
       {from: '1', to: '2', direction: 'left'},
       {from: '1', to: '3', direction: 'left'},
     ]);

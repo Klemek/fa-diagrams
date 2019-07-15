@@ -1,38 +1,10 @@
 const placing = require('./placing');
 const rendering = require('./rendering');
 
-/**
- * Merge resources by reading object keys and keeping reference value only if it's type is different from the source
- * @param ref - reference object/value
- * @param src - source object/value
- * @returns {*}
- */
-const merge = (ref, src) => {
-  if (typeof ref !== typeof src) {
-    return ref;
-  } else if (ref.length && !src.length) {
-    return ref;
-  } else if (ref.length && src.length) {
-    return src;
-  } else if (typeof ref === 'object') {
-    const out = {};
-    Object.keys(ref).forEach((key) => out[key] = merge(ref[key], src[key]));
-    return out;
-  } else {
-    return src;
-  }
-};
-
-const DEFAULT_OPTIONS = {
-  'placing': placing().defaultOptions,
-  'rendering': rendering().defaultOptions
-};
-
 
 const self = {
-  options: DEFAULT_OPTIONS,
   compute: (data) => {
-    const options = merge(DEFAULT_OPTIONS, data['options']);
+    const options = data['options'] || {};
 
     let nodes = {};
     const nodeList = (data['nodes'] || []).filter(n => typeof n.name === 'string');
