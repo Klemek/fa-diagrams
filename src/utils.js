@@ -28,7 +28,7 @@ const self = {
    * @returns {null|string}
    */
   isValid: (obj, def) => {
-    const keys = Object.keys(def);
+    const keys = Object.keys(def).filter(k => k !== '_');
     let key;
     let type;
     for (let i = 0; i < keys.length; i++) {
@@ -37,7 +37,7 @@ const self = {
       if (type === 'object' && obj[key].length > 0)
         type = 'array';
       if (typeof def[key] === 'object') {
-        if (type && type !== 'object')
+        if (type && type !== 'object' && type !== def[key]['_'])
           return key;
         const res = self.isValid(type ? obj[key] : undefined, def[key]);
         if (res)

@@ -92,29 +92,31 @@ node build.sh
 const faDiagrams = require('fa-diagrams');
 
 const data = {
-    options: {
-        font: 'Courier New'
+  options: {
+    rendering:{
+      icons:{
+        color:'#4E342E'
+      }
+    }
+  },
+  nodes: [
+    {
+      name: 'node1',
+      icon: 'server',
     },
-    nodes: [
-        {
-            name: 'node1',
-            icon: 'server',
-            bottom: {text: 'myserver' },
-            top: {icon: 'node'}
-        },
-        {
-            name: 'node2',
-            icon: 'globe',
-            bottom: {text: 'world'}
-        }
-    ],
-    links: [
-        {
-            from: 'node1',
-            to: 'node2',
-            bottom: {text: 'Hello World!'}
-        }
-    ]
+    {
+      name: 'node2',
+      icon: 'globe',
+      color:'#455A64',
+    }
+  ],
+  links: [
+    {
+      from: 'node1',
+      to: 'node2',
+      color:'#333333',
+    }
+  ]
 };
 
 const svg = faDiagrams.compute(data); // string containing xml data
@@ -132,7 +134,7 @@ svg2img(svg, function(error, buffer) {
 
 Will produce the following diagram:
 
-![sample](preview/sample.png)
+![sample](preview/sample.svg)
 
 ### Html script
 

@@ -71,6 +71,12 @@ describe('isValid', () => {
   test('invalid sub-object', () => {
     expect(utils.isValid({a: 5}, {a: {b: 'number'}})).toBe('a');
   });
+  test('valid alternative sub-object', () => {
+    expect(utils.isValid({a: 5}, {a: {b: 'number', '_': 'number'}})).toBe(null);
+  });
+  test('invalid alternative sub-object', () => {
+    expect(utils.isValid({a: 'hello'}, {a: {b: 'number', '_': 'number'}})).toBe('a');
+  });
   test('undefined not required sub-object', () => {
     expect(utils.isValid({}, {a: {b: 'number'}})).toBe(null);
   });

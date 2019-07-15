@@ -24,6 +24,7 @@ try {
  */
 
 const SUB_DEF = {
+  '_': 'string',
   'text': 'string',
   'icon': 'string',
   'color': 'string',

@@ -34,3 +34,35 @@ const g = [];
 });
 
 fs.writeFileSync(`preview/links.svg`, rendering.toXML({'g': g}, {w: 1536 * 2, h: 4 * 712 + 100}), {encoding: 'utf-8'});
+
+const faDiagrams = require('./src/index');
+
+const data = {
+  options: {
+    rendering: {
+      icons: {
+        color: '#4E342E'
+      }
+    }
+  },
+  nodes: [
+    {
+      name: 'node1',
+      icon: 'server',
+    },
+    {
+      name: 'node2',
+      icon: 'globe',
+      color: '#455A64',
+    }
+  ],
+  links: [
+    {
+      from: 'node1',
+      to: 'node2',
+      color: '#333333',
+    }
+  ]
+};
+
+fs.writeFileSync('preview/sample.svg', faDiagrams.compute(data), {encoding: 'utf-8'});
