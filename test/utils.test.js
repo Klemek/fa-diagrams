@@ -14,6 +14,10 @@ describe('merge', () => {
     const res = utils.merge({'a': 'hello'}, {'a': 2});
     expect(res).toEqual({'a': 'hello'});
   });
+  test('wrong type array', () => {
+    const res = utils.merge({'a': [1, 2, 3]}, {'a': {b: 5}});
+    expect(res).toEqual({'a': [1, 2, 3]});
+  });
   test('array redefine', () => {
     const res = utils.merge({'a': [1, 2, 3]}, {'a': [4, 5, 6]});
     expect(res).toEqual({'a': [4, 5, 6]});
