@@ -61,15 +61,15 @@ svn.commands.checkout(FA_SVG_FOLDER_URL, svgDir, (err) => {
 
   console.log('\tReading SVGs...');
 
-  getFileTree(svgDir, (err, list) => {
+  getFileTree(svgDir, (err, files) => {
     if (err)
       throw err;
 
-    const svgs = {};
+    const list = {};
 
     let count = 0;
 
-    list.filter(x => /\.svg$/.test(x)).forEach(svgFile => {
+    files.filter(x => /\.svg$/.test(x)).forEach(svgFile => {
       const data = fs.readFileSync(svgFile, {encoding: 'utf8'});
       const match1 = data.match(/viewBox="0 0 (\d+) 512"/);
       if (!match1)
@@ -81,10 +81,10 @@ svn.commands.checkout(FA_SVG_FOLDER_URL, svgDir, (err) => {
       const type = path.basename(path.dirname(svgFile));
       const name = path.basename(svgFile, '.svg');
 
-      if (!svgs[type])
-        svgs[type] = {};
+      if (!list[type])
+        list[type] = {};
 
-      svgs[type][name] = {
+      list[type][name] = {
         path: match2[1],
         width: parseInt(match1[1])
       };
@@ -93,14 +93,21 @@ svn.commands.checkout(FA_SVG_FOLDER_URL, svgDir, (err) => {
     });
 
     console.log(`\t${count} SVGs loaded`);
-    Object.keys(svgs).forEach(type => {
-      console.log(`\t\t${type}: ${Object.keys(svgs[type]).length} SVGs`);
+    Object.keys(list).forEach(type => {
+      console.log(`\t\t${type}: ${Object.keys(list[type]).length} SVGs`);
     });
 
-    const output = path.join(__dirname, 'svg_list.json');
+    const out = {
+      name: 'font-awesome',
+      height: 512,
+      index: ['solid', 'regular', 'brands'],
+      icons: list
+    };
 
-    fs.writeFileSync(output, JSON.stringify(svgs, null, 4), {encoding: 'utf8'});
-    console.log(`\tSVG list saved at "${output}"`);
+    const outputFile = path.join(__dirname, 'resources.json');
+
+    fs.writeFileSync(outputFile, JSON.stringify(out, null, 4), {encoding: 'utf8'});
+    console.log(`\tSVG resources saved at "${outputFile}"`);
 
   });
 });

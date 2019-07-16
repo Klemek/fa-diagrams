@@ -6,12 +6,12 @@
   "files": [
     "/src",
     "/dist",
-    "/svg_list.json",
+    "/resources.json",
     "/build.js"
   ],
   "scripts": {
     "test": "jest --silent",
-    "prepublishOnly": "browserify --require ./svg_list.json:../svg_list.json -o dist/fa-diagrams-data.js && browserify --exclude ../svg_list.json src/index.js -o dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams.min.js -- dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams-data.min.js -- dist/fa-diagrams-data.js"
+    "prepublishOnly": "browserify --require ./resources.json:../resources.json -o dist/fa-diagrams-data.js && browserify --exclude ../resources.json src/index.js -o dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams.min.js -- dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams-data.min.js -- dist/fa-diagrams-data.js"
   },
   "repository": {
     "type": "git",

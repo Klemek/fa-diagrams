@@ -1,11 +1,23 @@
 const convert = require('xml-js');
 const utils = require('./utils');
 
-let list = {};
+let resources = {
+  name: 'error',
+  height: 512,
+  index: [],
+  links: {
+    'arrow-head': {},
+    'arrow-head-reverse': {},
+    'line-start': {},
+    'line-end': {},
+    'dashed-step': {}
+  },
+  icons: {}
+};
 try {
-  list = require('../svg_list.json');
+  resources = require('../resources.json');
 } catch (err) {
-  console.error('fa-diagrams: SVG list could not be loaded', err);
+  console.error('fa-diagrams: SVG resources could not be loaded', err);
 }
 
 /**
@@ -80,6 +92,14 @@ const DEFAULT_OPTIONS = {
   }
 };
 
+const SUBSTITUTES = {
+  'font-awesome': {
+    'fas': 'solid',
+    'far': 'regular',
+    'fab': 'brands'
+  }
+};
+
 const DEFAULT_SCALE = 0.4;
 const LINK_MARGIN = (1 - DEFAULT_SCALE) / 2;
 
@@ -98,29 +118,24 @@ module.exports = (options) => {
       if (!name || !name.trim())
         return null;
 
-      let search = ['solid', 'regular', 'brands'];
+      let search = utils.ezClone(resources.index);
       const spl = name.trim().split(' ').map(t => t.indexOf('fa-') === 0 ? t.substr(3) : t);
 
-      const checkType = (type, keywords) => {
-        if (search.length > 1) // else it's already found
-          keywords.forEach(kw => {
-            const i = spl.indexOf(kw);
-            if (i >= 0) {
-              spl.splice(i, 1);
-              search = [type];
-            }
-          });
-      };
-
-      checkType('solid', ['fas', 'solid']);
-      checkType('regular', ['far', 'regular']);
-      checkType('brands', ['fab', 'brands']);
+      for (let i = 0; i < spl.length; i++) {
+        //replace fas by regular for example
+        if (Object.keys(SUBSTITUTES[resources.name] || {}).includes(spl[i])) {
+          spl[i] = SUBSTITUTES[resources.name][spl[i]];
+        }
+        if (resources.index.includes(spl[i])) {
+          search = [spl.splice(i, 1)];
+        }
+      }
 
       name = spl[0];
 
       for (let i = 0; i < search.length; i++) {
-        if (list[search[i]] && list[search[i]][name]) {
-          return list[search[i]][name];
+        if (resources.icons[search[i]] && resources.icons[search[i]][name]) {
+          return resources.icons[search[i]][name];
         }
       }
 
@@ -143,7 +158,7 @@ module.exports = (options) => {
         case 'none':
           return null;
         default:
-          return `M12 216${lineStart}h${width * 512 - 146.059}${arrowHead}z`;
+          return `M12 216${resources.links['arrow-head'].path}h${width * 512 - 146.059}${arrowHead}z`;
         case 'line':
           return `M12 216${lineStart}h${width * 512 - 24}${lineEnd}z`;
         case 'double':

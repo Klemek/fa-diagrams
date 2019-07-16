@@ -62,7 +62,7 @@ describe('getIcon', () => {
   test('double type', () => {
     const res = rendering().getIcon('circle far solid');
     expect(res).toEqual({
-      path: solidCirclePath,
+      path: regularCirclePath,
       width: 512
     });
   });
