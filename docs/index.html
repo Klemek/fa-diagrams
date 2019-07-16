@@ -50,7 +50,7 @@
 <div id="right"></div>
 <script>
     $(document).ready(() => {
-      $.getJSON('sample.yml', (data) => {
+      $.get('sample.yml', (data) => {
         $('#input').val(data).trigger('paste');
       });
 
