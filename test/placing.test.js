@@ -407,7 +407,7 @@ describe('compute', () => {
       }, []);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('node \'a\' is invalid at key x');
+      expect(err).toBe('Node \'a\' is invalid at key x');
     }
   });
   test('invalid link', () => {
@@ -415,7 +415,7 @@ describe('compute', () => {
       placing().compute({}, [{from: 'a', to: 5}]);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('link 0 (a->5) is invalid at key to');
+      expect(err).toBe('Link 0 (a->5) is invalid at key to');
     }
   });
   test('3 nodes no link', () => {

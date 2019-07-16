@@ -149,7 +149,7 @@ describe('compute', () => {
       }, []);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('node \'a\' is invalid at key icon');
+      expect(err).toBe('Node \'a\' is invalid at key icon');
     }
   });
   test('invalid link', () => {
@@ -157,7 +157,7 @@ describe('compute', () => {
       rendering().compute({}, [{from: 'a', to: 'b', type: 5}]);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('link 0 (a->b) is invalid at key type');
+      expect(err).toBe('Link 0 (a->b) is invalid at key type');
     }
   });
 });
