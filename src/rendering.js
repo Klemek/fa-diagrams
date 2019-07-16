@@ -25,7 +25,7 @@ try {
  * @property {string} name
  * @property {number} x
  * @property {number} y
- * @property {string} icon
+ * @property {string|{path:string,width:number:height:number}} icon
  */
 
 /**
@@ -38,7 +38,12 @@ try {
 const SUB_DEF = {
   '_': 'string',
   'text': 'string',
-  'icon': 'string',
+  'icon': {
+    '_': 'string',
+    'path': 'string',
+    'width': 'number',
+    'height': 'number'
+  },
   'color': 'string',
   'font': 'string',
   'font-size': 'number',
@@ -48,7 +53,12 @@ const SUB_DEF = {
 
 const NODE_DEF = {
   'name': '!string',
-  'icon': '!string',
+  'icon': {
+    '_': 'string',
+    'path': 'string',
+    'width': 'number',
+    'height': 'number'
+  },
   'x': '!number',
   'y': '!number',
   'color': 'string',
@@ -110,16 +120,25 @@ module.exports = (options) => {
   const self = {
 
     /**
-     * Find icon data from given name
-     * @param {string} name
-     * @returns {null|{path: string, width: number}}
+     * Find icon data from given name or data
+     * @param {string|{path: string, width: number, height: number}} icon
+     * @returns {null|{path: string, width: number, height: number}}
      */
-    getIcon: (name) => {
-      if (!name || !name.trim())
+    getIcon: (icon) => {
+      if (!icon)
+        return null;
+
+      if (typeof icon === 'object') {
+        icon.height = icon.height || icon.width || resources.height;
+        icon.width = icon.width || icon.height;
+        return icon;
+      }
+
+      if (!icon.trim())
         return null;
 
       let search = utils.ezClone(resources.index);
-      const spl = name.trim().split(' ').map(t => t.indexOf('fa-') === 0 ? t.substr(3) : t);
+      const spl = icon.trim().split(' ').map(t => t.indexOf('fa-') === 0 ? t.substr(3) : t);
 
       for (let i = 0; i < spl.length; i++) {
         //replace fas by regular for example
@@ -131,11 +150,12 @@ module.exports = (options) => {
         }
       }
 
-      name = spl[0];
+      icon = spl[0];
 
       for (let i = 0; i < search.length; i++) {
-        if (resources.icons[search[i]] && resources.icons[search[i]][name]) {
-          return resources.icons[search[i]][name];
+        if (resources.icons[search[i]] && resources.icons[search[i]][icon]) {
+          resources.icons[search[i]][icon].height = resources.height;
+          return resources.icons[search[i]][icon];
         }
       }
 
@@ -216,7 +236,7 @@ module.exports = (options) => {
         },
         'g': {
           '_attributes': {
-            'transform': `scale(${scale / resources.height} ${scale / resources.height}) translate(${-icon.width / 2} ${-resources.height / 2})`,
+            'transform': `scale(${scale / icon.height} ${scale / icon.height}) translate(${-icon.width / 2} ${-icon.height / 2})`,
             'stroke': (node['color'] || options['icons']['color'] || undefined),
             'fill': (node['color'] || options['icons']['color'] || undefined)
           },

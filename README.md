@@ -193,7 +193,7 @@ Array of object as following:
 | Key | Type | Required | Info |
 | --- | --- | --- |  --- |
 | **`name`** | string | **yes** | used in links to reference nodes |
-| **`icon`** | string | **yes** | name of the Font-Awesome icon of the node (see [Icon names](#icon-names)) |
+| **`icon`** | string/object | **yes** | name of the Font-Awesome icon of the node (see [Icon names](#icon-names)) |
 | `top`, `bottom`, `left`, `right` | string or object | no | see [Sub-elements](#sub-elements) |
 | `color` | string | no | redefined the color |
 | `scale` | number | no | redefine this node icon scale |
@@ -236,7 +236,7 @@ You can define a relative icon with the following:
 
 | Key | Type | Required | Info |
 | --- | --- | --- |  --- |
-| **`icon`** | string | **yes** | name of the Font-Awesome icon of the sub-element (see [Icon names](#icon-names)) |
+| **`icon`** | string/object | **yes** | name of the Font-Awesome icon of the sub-element (see [Icon names](#icon-names)) |
 | `color` | string | no | redefine the color |
 | `scale` | number | no | redefine this icon scale |
 
@@ -249,6 +249,15 @@ You can define a relative icon with the following:
 When you reference an icon, for example `circle`, it's searched in the `solid` folder then `regular` then `brands`. 
 If, in this case you want the hollow circle from the regular style, just enter `regular circle` or `circle regular` instead. 
 It's very flexible as you can copy-paste from an HTML page `far fa-circle` and it will also works.
+
+
+You can also specify a custom icon by entering the following object instead of a string:
+
+| Key | Type | Required | Info |
+| --- | --- | --- |  --- |
+| **`path`** | string | **yes** | the SVG path of your icon |
+| `width` | string | no | the custom width of the path (if blank, height is taken, then the height of all icons: 512) |
+| `height` | string | no | the custom height of the path (if blank, width is taken) |
 
 ### Link types
 

@@ -61,56 +61,64 @@ describe('getIcon', () => {
     const res = rendering().getIcon('circle');
     expect(res).toEqual({
       path: solidCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('valid circle alt name', () => {
     const res = rendering().getIcon('fa-circle');
     expect(res).toEqual({
       path: solidCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('ignored other name', () => {
     const res = rendering().getIcon('circle server');
     expect(res).toEqual({
       path: solidCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('forcing regular', () => {
     const res = rendering().getIcon('far circle');
     expect(res).toEqual({
       path: regularCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('forcing regular 2', () => {
     const res = rendering().getIcon('regular circle');
     expect(res).toEqual({
       path: regularCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('forcing regular 3', () => {
     const res = rendering().getIcon('circle far');
     expect(res).toEqual({
       path: regularCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('double type', () => {
     const res = rendering().getIcon('circle far solid');
     expect(res).toEqual({
       path: regularCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('double type 2', () => {
     const res = rendering().getIcon('circle solid far');
     expect(res).toEqual({
       path: solidCirclePath,
-      width: 512
+      width: 512,
+      height: 512
     });
   });
   test('forcing solid on brands icon', () => {
@@ -118,6 +126,50 @@ describe('getIcon', () => {
     expect(res).not.toBeNull();
     const res2 = rendering().getIcon('fas usb');
     expect(res2).toBeNull();
+  });
+  test('custom icon 1', () => {
+    const res = rendering().getIcon({
+      path: 'hello',
+      width: 80,
+      height: 160
+    });
+    expect(res).toEqual({
+      path: 'hello',
+      width: 80,
+      height: 160
+    });
+  });
+  test('custom icon 2', () => {
+    const res = rendering().getIcon({
+      path: 'hello',
+      width: 80
+    });
+    expect(res).toEqual({
+      path: 'hello',
+      width: 80,
+      height: 80
+    });
+  });
+  test('custom icon 3', () => {
+    const res = rendering().getIcon({
+      path: 'hello',
+      height: 160
+    });
+    expect(res).toEqual({
+      path: 'hello',
+      width: 160,
+      height: 160
+    });
+  });
+  test('custom icon 4', () => {
+    const res = rendering().getIcon({
+      path: 'hello'
+    });
+    expect(res).toEqual({
+      path: 'hello',
+      width: 512,
+      height: 512
+    });
   });
 });
 
