@@ -130,7 +130,6 @@ describe('getLinkPath (non-regression)', () => {
       });
     });
   });
-
   test('none', () => {
     expect(rendering().getLinkPath('none', 1)).toEqual(null);
   });
@@ -156,7 +155,118 @@ describe('getBounds', () => {
 });
 
 describe('renderNode', () => {
-
+  test('no icon', () => {
+    const res = rendering({'h-spacing': 1}).renderNode({
+      icon: '',
+      x: 2,
+      y: 1
+    });
+    expect(res).toBe(null);
+  });
+  test('simple icon', () => {
+    const res = rendering({'h-spacing': 1}).renderNode({
+      icon: 'circle',
+      x: 2,
+      y: 1
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(2.5 1.5)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': solidCirclePath}}
+      }
+    });
+  });
+  test('icon recolor global', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'icons': {'color': 'green'}
+    }).renderNode({
+      icon: 'circle',
+      x: 2,
+      y: 1
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(2.5 1.5)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': 'green',
+          'fill': 'green'
+        },
+        'path': {'_attributes': {'d': solidCirclePath}}
+      }
+    });
+  });
+  test('icon recolor local', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'icons': {'color': 'green'}
+    }).renderNode({
+      icon: 'circle',
+      x: 2,
+      y: 1,
+      color: 'red'
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(2.5 1.5)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': 'red',
+          'fill': 'red'
+        },
+        'path': {'_attributes': {'d': solidCirclePath}}
+      }
+    });
+  });
+  test('icon scale global', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'icons': {'scale': 512 / 0.4}
+    }).renderNode({
+      icon: 'circle',
+      x: 2,
+      y: 1
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(2.5 1.5)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(1 1) translate(-256 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': solidCirclePath}}
+      }
+    });
+  });
+  test('icon scale local', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'icons': {'scale': 512 / 0.4}
+    }).renderNode({
+      icon: 'circle',
+      x: 2,
+      y: 1,
+      scale: 1024 / 0.4
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(2.5 1.5)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(2 2) translate(-256 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': solidCirclePath}}
+      }
+    });
+  });
 });
 
 describe('toXML', () => {

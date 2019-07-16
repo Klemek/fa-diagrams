@@ -216,7 +216,7 @@ module.exports = (options) => {
         },
         'g': {
           '_attributes': {
-            'transform': `scale(${scale / resources.height} ${scale / resources.height}) translate(${-icon.width / 2} ${-256})`,
+            'transform': `scale(${scale / resources.height} ${scale / resources.height}) translate(${-icon.width / 2} ${-resources.height / 2})`,
             'stroke': (node['color'] || options['icons']['color'] || undefined),
             'fill': (node['color'] || options['icons']['color'] || undefined)
           },
@@ -234,50 +234,50 @@ module.exports = (options) => {
      * @param {Link2} link
      */
     renderLink: (nodes, link) => {
-        const src = nodes[link.from];
-        const dst = nodes[link.to];
+      const src = nodes[link.from];
+      const dst = nodes[link.to];
 
-        const posX = ((src.x + dst.x) / 2 + 0.5) * options['h-spacing'];
-        const posY = (src.y + dst.y) / 2 + 0.5;
+      const posX = ((src.x + dst.x) / 2 + 0.5) * options['h-spacing'];
+      const posY = (src.y + dst.y) / 2 + 0.5;
 
-        const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
-        const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
+      const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
+      const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
 
-        let size = link['size'] || options['links']['size'];
+      let size = link['size'] || options['links']['size'];
 
-        if (!size) {
-          let dx = Math.abs(dst.x - src.x) * options['h-spacing'];
-          if (dx > 0)
-            dx -= LINK_MARGIN * 2;
-          let dy = Math.abs(dst.y - src.y);
-          if (dy > 0)
-            dy -= LINK_MARGIN * 2;
+      if (!size) {
+        let dx = Math.abs(dst.x - src.x) * options['h-spacing'];
+        if (dx > 0)
+          dx -= LINK_MARGIN * 2;
+        let dy = Math.abs(dst.y - src.y);
+        if (dy > 0)
+          dy -= LINK_MARGIN * 2;
 
-          size = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) / scale;
-        }
+        size = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) / scale;
+      }
 
-        const path = self.getLinkPath(link.type, size);
+      const path = self.getLinkPath(link.type, size);
 
-        if (!path)
-          return null;
+      if (!path)
+        return null;
 
       return {
+        '_attributes': {
+          'transform': `translate(${posX} ${posY}) rotate(${angle})`
+        },
+        'g': {
           '_attributes': {
-            'transform': `translate(${posX} ${posY}) rotate(${angle})`
+            'transform': `scale(${scale / 512} ${scale / 512}) translate(${(-256 * size)} ${-256})`,
+            'stroke': (link['color'] || options['links']['color'] || undefined),
+            'fill': (link['color'] || options['links']['color'] || undefined)
           },
-          'g': {
+          'path': {
             '_attributes': {
-              'transform': `scale(${scale / 512} ${scale / 512}) translate(${(-256 * size)} ${-256})`,
-              'stroke': (link['color'] || options['links']['color'] || undefined),
-              'fill': (link['color'] || options['links']['color'] || undefined)
-            },
-            'path': {
-              '_attributes': {
-                'd': path
-              }
+              'd': path
             }
           }
-        };
+        }
+      };
     },
 
     /**
