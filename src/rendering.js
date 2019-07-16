@@ -203,43 +203,37 @@ module.exports = (options) => {
     },
 
     /**
-     * @param {{g:Object[]}} data
-     * @param {Object<string,Node2>} nodes
+     * @param {Node2} node
      */
-    renderNodes: (data, nodes) => {
-      Object.values(nodes).forEach(node => {
-        const icon = self.getIcon(node.icon);
-        if (icon) {
-          const scale = (node['scale'] || options['icons']['scale']) * DEFAULT_SCALE;
-          const group = {
+    renderNode: (node) => {
+      const icon = self.getIcon(node.icon);
+      if (!icon)
+        return null;
+      const scale = (node['scale'] || options['icons']['scale']) * DEFAULT_SCALE;
+      return {
+        '_attributes': {
+          'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`,
+        },
+        'g': {
+          '_attributes': {
+            'transform': `scale(${scale / resources.height} ${scale / resources.height}) translate(${-icon.width / 2} ${-256})`,
+            'stroke': (node['color'] || options['icons']['color'] || undefined),
+            'fill': (node['color'] || options['icons']['color'] || undefined)
+          },
+          'path': {
             '_attributes': {
-              'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`,
-            },
-            'g': {
-              '_attributes': {
-                'transform': `scale(${scale / resources.height} ${scale / resources.height}) translate(${-icon.width / 2} ${-256})`,
-                'stroke': (node['color'] || options['icons']['color'] || undefined),
-                'fill': (node['color'] || options['icons']['color'] || undefined)
-              },
-              'path': {
-                '_attributes': {
-                  'd': icon.path,
-                }
-              }
+              'd': icon.path,
             }
-          };
-          data['g'].push(group);
+          }
         }
-      });
+      };
     },
 
     /**
-     * @param {{g:Object[]}} data
      * @param {Object<string,Node2>} nodes
-     * @param {Link2[]} links
+     * @param {Link2} link
      */
-    renderLinks: (data, nodes, links) => {
-      links.forEach(link => {
+    renderLink: (nodes, link) => {
         const src = nodes[link.from];
         const dst = nodes[link.to];
 
@@ -265,9 +259,9 @@ module.exports = (options) => {
         const path = self.getLinkPath(link.type, size);
 
         if (!path)
-          return;
+          return null;
 
-        const group = {
+      return {
           '_attributes': {
             'transform': `translate(${posX} ${posY}) rotate(${angle})`
           },
@@ -284,8 +278,6 @@ module.exports = (options) => {
             }
           }
         };
-        data['g'].push(group);
-      });
     },
 
     /**
@@ -322,24 +314,27 @@ module.exports = (options) => {
      */
     compute: (nodes, links) => {
 
+      const data = {'g': []};
+
       Object.keys(nodes).forEach(key => {
         const res = utils.isValid(nodes[key], NODE_DEF);
         if (res)
           throw `Node '${key}' is invalid at key '${res}'`;
+        const group = self.renderNode(nodes[key]);
+        if (group)
+          data['g'].push(group);
       });
 
       links.forEach((link, i) => {
         const res = utils.isValid(link, LINK_DEF);
         if (res)
           throw `Link ${i} (${link.from}->${link.to}) is invalid at key '${res}'`;
+        const group = self.renderLink(nodes, link);
+        if (group)
+          data['g'].push(group);
       });
 
       const bounds = self.getBounds(nodes);
-
-      const data = {'g': []};
-
-      self.renderNodes(data, nodes);
-      self.renderLinks(data, nodes, links);
 
       return self.toXML(data, bounds);
     }

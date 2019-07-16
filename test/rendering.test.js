@@ -5,6 +5,28 @@ const fs = require('fs');
 const solidCirclePath = 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z';
 const regularCirclePath = 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z';
 
+let linkPaths = {};
+
+/*test('write data', () => {
+  const data = {};
+  ['default', 'line', 'double', 'split-double', 'dashed', 'dashed-line', 'dashed-double', 'dashed-split-double'].forEach(type => {
+    data[type] = {};
+    [1, 1.5, 2].forEach(width => {
+      data[type][width] = rendering().getLinkPath(type, width);
+    });
+  });
+  fs.writeFileSync('test/link_paths.json', JSON.stringify(data), {encoding: 'utf-8'});
+});*/
+
+beforeAll((done) => {
+
+  fs.readFile('test/link_paths.json', {encoding: 'utf-8'}, (err, fileData) => {
+    if (!err)
+      linkPaths = JSON.parse(fileData);
+    done();
+  });
+});
+
 describe('resources fail', () => {
   beforeAll(() => {
     fs.renameSync('resources.json', 'resources.tmp.json');
@@ -99,29 +121,12 @@ describe('getIcon', () => {
   });
 });
 
-/*test('write data', () => {
-  const data = {};
-  ['default', 'line', 'double', 'split-double', 'dashed', 'dashed-line', 'dashed-double', 'dashed-split-double'].forEach(type => {
-    data[type] = {};
-    [1, 1.5, 2].forEach(width => {
-      data[type][width] = rendering().getLinkPath(type, width);
-    });
-  });
-  fs.writeFileSync('test/link_path_data.json', JSON.stringify(data), {encoding: 'utf-8'});
-});*/
-
 describe('getLinkPath (non-regression)', () => {
-  let data = {};
-
-  beforeAll(() => {
-    data = JSON.parse(fs.readFileSync('test/link_path_data.json', {encoding: 'utf-8'}));
-  });
-
   ['default', 'line', 'double', 'split-double', 'dashed', 'dashed-line', 'dashed-double', 'dashed-split-double'].forEach(type => {
     data[type] = {};
     [1, 1.5, 2].forEach(width => {
       test(type + ' ' + width, () => {
-        expect(rendering().getLinkPath(type, width)).toEqual(data[type][width]);
+        expect(rendering().getLinkPath(type, width)).toEqual(linkPaths[type][width]);
       });
     });
   });
@@ -150,6 +155,10 @@ describe('getBounds', () => {
   });
 });
 
+describe('renderNode', () => {
+
+});
+
 describe('toXML', () => {
   test('no data', () => {
     const res = rendering({scale: 20, 'h-spacing': 1}).toXML({}, {w: 0, h: 0});
@@ -174,6 +183,19 @@ describe('compute', () => {
     const res = rendering({beautify: true, 'h-spacing': 1.2, scale: 20}).compute({}, []);
     expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" stroke="black" fill="black">\n</svg>');
   });
+  test('only invisible things', () => {
+    const res = rendering({beautify: true, 'h-spacing': 1, scale: 20}).compute({'a': {name: 'a', icon: '', x: 0, y: 0}, 'b': {name: 'b', icon: '', x: 1, y: 0}}, [{from: 'a', to: 'b', type: 'none'}]);
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" stroke="black" fill="black">\n</svg>');
+  });
+  test('simple output', () => {
+    const res = rendering({beautify: true, 'h-spacing': 1, scale: 20}).compute({'a': {name: 'a', icon: 'circle', x: 0, y: 0}, 'b': {name: 'b', icon: 'circle', x: 1, y: 0}}, [{from: 'a', to: 'b'}]);
+
+    expect(res.split(solidCirclePath).length).toBe(3); //2 times circle path
+    expect(res.includes(linkPaths['default'][1])).toBe(true); // contains simple arrow of width 1
+    expect(res.split('</g>').length).toBe(7); //6 groups definitions
+
+    expect(res.indexOf('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" stroke="black" fill="black">')).toBe(0);
+  });
   test('invalid node', () => {
     try {
       rendering().compute({
@@ -186,7 +208,7 @@ describe('compute', () => {
   });
   test('invalid link', () => {
     try {
-      rendering().compute({}, [{from: 'a', to: 'b'}, {from: 'a', to: 'b', type: 5}]);
+      rendering().compute({'a': {name: 'a', icon: '', x: 0, y: 0}, 'b': {name: 'b', icon: '', x: 0, y: 0}}, [{from: 'a', to: 'b'}, {from: 'a', to: 'b', type: 5}]);
       fail('no error thrown');
     } catch (err) {
       expect(err).toBe('Link 1 (a->b) is invalid at key \'type\'');
