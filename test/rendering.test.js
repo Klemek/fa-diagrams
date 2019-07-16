@@ -1,8 +1,26 @@
 /* jshint -W117 */
-const rendering = require('../src/rendering');
+let rendering = require('../src/rendering');
+const fs = require('fs');
 
 const solidCirclePath = 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z';
 const regularCirclePath = 'M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200z';
+
+describe('resources fail', () => {
+  beforeAll(() => {
+    fs.renameSync('resources.json', 'resources.tmp.json');
+    jest.resetModules();
+    rendering = require('../src/rendering');
+  });
+  afterAll(() => {
+    fs.renameSync('resources.tmp.json', 'resources.json');
+    jest.resetModules();
+    rendering = require('../src/rendering');
+  });
+  test('getIcon no resources', () => {
+    const res = rendering().getIcon('regular circle');
+    expect(res).toBeNull();
+  });
+});
 
 describe('getIcon', () => {
   test('no name', () => {

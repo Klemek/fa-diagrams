@@ -17,7 +17,7 @@ let resources = {
 try {
   resources = require('../resources.json');
 } catch (err) {
-  console.error('fa-diagrams: SVG resources could not be loaded', err);
+  console.error('fa-diagrams: SVG resources could not be loaded: ' + err);
 }
 
 /**
