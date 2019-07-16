@@ -238,19 +238,20 @@ module.exports = (options) => {
     /**
      * @param {string} text
      * @param {number} lineHeight
+     * @param {number} x
      * @param {string} anchor
      * @return {Object}
      */
-    getSvgText: (text, lineHeight, anchor) => {
+    getSvgText: (text, lineHeight, x, anchor) => {
       text = text.trim();
       if (!text.includes('\n'))
         return {'_text': text};
       const list = [];
-      text.split('\n').map(t => t.trim()).forEach((line,i) => {
+      text.split('\n').map(t => t.trim()).forEach((line, i) => {
         list.push({
           '_attributes': {
-            'x': 0,
-            'dy': `${i*lineHeight}em`,
+            'x': x,
+            'dy': i === 0 ? '0' : `${lineHeight}em`,
             'text-anchor': anchor
           },
           '_text': line
@@ -311,16 +312,18 @@ module.exports = (options) => {
               break;
           }
 
-          const text = self.getSvgText(subE.text, subE['line-height'] || options['texts']['line-height'], anchor);
+          const lineHeight = subE['line-height'] || options['texts']['line-height'];
 
-          const textHeight = text['tspan'] ? text['tspan'].length : 0;
+          const text = self.getSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
+
+          const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
 
           text['_attributes'] = {
             'font-family': subE['font'] || options['texts']['font'],
             'font-size': fontSize,
             'text-anchor': anchor,
-            'x': pos.x * fontSize,
-            'y': (pos.y + 0.25) * fontSize - textHeight * fontSize / 2
+            'x': pos.x * fontSize / 2,
+            'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
           };
 
           g['g'].push({
@@ -412,8 +415,8 @@ module.exports = (options) => {
       });
       return convert.js2xml(xml, {
         compact: true,
-        spaces: options['beautify'] ? '\t' : 0
-      });
+        spaces: options['beautify'] ? 4 : 0
+      }).replace(/<\/tspan>(\s*)<tspan/gm, '<\/tspan><tspan'); //fix text rendering
     },
 
     /**

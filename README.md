@@ -95,29 +95,26 @@ node build.sh
 const faDiagrams = require('fa-diagrams');
 
 const data = {
-  options: {
-    rendering:{
-      icons:{
-        color:'#4E342E'
-      }
-    }
-  },
   nodes: [
     {
       name: 'node1',
-      icon: 'server',
+      icon: 'laptop-code',
+      color: '#4E342E',
+      bottom: 'my app',
     },
     {
       name: 'node2',
       icon: 'globe',
-      color:'#455A64',
+      color: '#455A64',
+      bottom: 'world'
     }
   ],
   links: [
     {
       from: 'node1',
       to: 'node2',
-      color:'#333333',
+      color: '#333333',
+      bottom: 'hello'
     }
   ]
 };

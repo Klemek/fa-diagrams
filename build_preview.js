@@ -38,21 +38,12 @@ fs.writeFileSync(`preview/links.svg`, rendering.toXML({'g': g}, {w: 1536 * 2, h:
 const faDiagrams = require('./src/index');
 
 const data = {
-  options: {
-    rendering: {
-      beautify: true,
-      icons: {
-        color: '#4E342E'
-      }
-    }
-  },
   nodes: [
     {
       name: 'node1',
       icon: 'laptop-code',
-      bottom: 'my\napp',
-      top:'my app',
-      left:'my\napp'
+      color: '#4E342E',
+      bottom: 'my app',
     },
     {
       name: 'node2',
