@@ -99,6 +99,34 @@ describe('getIcon', () => {
   });
 });
 
+/*test('write data', () => {
+  const data = {};
+  ['default', 'line', 'double', 'split-double', 'dashed', 'dashed-line', 'dashed-double', 'dashed-split-double'].forEach(type => {
+    data[type] = {};
+    [1, 1.5, 2].forEach(width => {
+      data[type][width] = rendering().getLinkPath(type, width);
+    });
+  });
+  fs.writeFileSync('test/link_path_data.json', JSON.stringify(data), {encoding: 'utf-8'});
+});*/
+
+describe('getLinkPath (non-regression)', () => {
+  let data = {};
+
+  beforeAll(() => {
+    data = JSON.parse(fs.readFileSync('test/link_path_data.json', {encoding: 'utf-8'}));
+  });
+
+  ['default', 'line', 'double', 'split-double', 'dashed', 'dashed-line', 'dashed-double', 'dashed-split-double'].forEach(type => {
+    data[type] = {};
+    [1, 1.5, 2].forEach(width => {
+      test(type + ' ' + width, () => {
+        expect(rendering().getLinkPath(type, width)).toEqual(data[type][width]);
+      });
+    });
+  });
+});
+
 describe('getBounds', () => {
   test('no nodes', () => {
     const res = rendering().getBounds({});
