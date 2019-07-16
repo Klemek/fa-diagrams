@@ -177,19 +177,19 @@ describe('compute', () => {
   test('invalid node', () => {
     try {
       rendering().compute({
-        'a': {name: 'a', icon: 5}
+        'a': {name: 'a', icon: '', x: 0, y: 0}, 'b': {name: 'b', icon: 5}
       }, []);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('Node \'a\' is invalid at key icon');
+      expect(err).toBe('Node \'b\' is invalid at key \'icon\'');
     }
   });
   test('invalid link', () => {
     try {
-      rendering().compute({}, [{from: 'a', to: 'b', type: 5}]);
+      rendering().compute({}, [{from: 'a', to: 'b'}, {from: 'a', to: 'b', type: 5}]);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('Link 0 (a->b) is invalid at key type');
+      expect(err).toBe('Link 1 (a->b) is invalid at key \'type\'');
     }
   });
 });

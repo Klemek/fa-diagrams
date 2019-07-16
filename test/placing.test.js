@@ -403,19 +403,19 @@ describe('compute', () => {
   test('invalid node', () => {
     try {
       placing().compute({
-        'a': {name: 'a', x: 'hello'}
+        'a': {name: 'a'}, 'b': {name: 'b', x: 'hello'}
       }, []);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('Node \'a\' is invalid at key x');
+      expect(err).toBe('Node \'b\' is invalid at key \'x\'');
     }
   });
   test('invalid link', () => {
     try {
-      placing().compute({}, [{from: 'a', to: 5}]);
+      placing().compute({}, [{from: 'a', to: 'b'}, {from: 'a', to: 5}]);
       fail('no error thrown');
     } catch (err) {
-      expect(err).toBe('Link 0 (a->5) is invalid at key to');
+      expect(err).toBe('Link 1 (a->5) is invalid at key \'to\'');
     }
   });
   test('3 nodes no link', () => {
