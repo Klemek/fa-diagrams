@@ -408,6 +408,51 @@ describe('renderLink', () => {
       }
     });
   });
+  test('size global', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'links': {'size': 1}
+    }).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 2, y: 1}
+    }, {
+      from: 'a',
+      to: 'b'
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1.5 1.5) rotate(0)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }
+    });
+  });
+  test('size local', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'links': {'size': 1}
+    }).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 2, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      size: 2
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1.5 1.5) rotate(0)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-512 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][2]}}
+      }
+    });
+  });
 });
 
 describe('toXML', () => {
