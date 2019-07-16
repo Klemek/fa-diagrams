@@ -246,11 +246,11 @@ module.exports = (options) => {
       if (!text.includes('\n'))
         return {'_text': text};
       const list = [];
-      text.split('\n').map(t => t.trim()).forEach(line => {
+      text.split('\n').map(t => t.trim()).forEach((line,i) => {
         list.push({
           '_attributes': {
             'x': 0,
-            'dy': `${lineHeight}em`,
+            'dy': `${i*lineHeight}em`,
             'text-anchor': anchor
           },
           '_text': line
@@ -320,7 +320,7 @@ module.exports = (options) => {
             'font-size': fontSize,
             'text-anchor': anchor,
             'x': pos.x * fontSize,
-            'y': (pos.y + 0.25) * fontSize - textHeight * fontSize
+            'y': (pos.y + 0.25) * fontSize - textHeight * fontSize / 2
           };
 
           g['g'].push({

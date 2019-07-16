@@ -50,7 +50,7 @@ const data = {
     {
       name: 'node1',
       icon: 'laptop-code',
-      bottom: 'my app',
+      bottom: 'my\napp',
       top:'my app',
       left:'my\napp'
     },
