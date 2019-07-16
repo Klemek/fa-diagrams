@@ -256,6 +256,8 @@ Here are the accepted types and their preview :
 
 ![](preview/links.svg)
 
+You can use **`none`** to make an invisible link.
+
 (soon)
 
 ### Font styles

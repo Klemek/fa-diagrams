@@ -125,6 +125,10 @@ describe('getLinkPath (non-regression)', () => {
       });
     });
   });
+
+  test('none', () => {
+    expect(rendering().getLinkPath('none', 1)).toEqual(null);
+  });
 });
 
 describe('getBounds', () => {
