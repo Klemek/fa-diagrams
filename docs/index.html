@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>fa-diagrams example</title>
     <script src="jquery-3.4.1.min.js"></script>
+	<script src="yaml.min.js"></script>
     <script src="fa-diagrams-data.min.js"></script>
     <script src="fa-diagrams.min.js"></script>
     <style>
@@ -44,13 +45,13 @@
 </head>
 <body>
 <div id="left">
-    <textarea id="input"></textarea>
+    <textarea id="input" autocomplete="false" spellcheck="false"></textarea>
 </div>
 <div id="right"></div>
 <script>
     $(document).ready(() => {
-      $.getJSON('sample.json', (data) => {
-        $('#input').val(JSON.stringify(data, null, 4)).trigger('paste');
+      $.getJSON('sample.yml', (data) => {
+        $('#input').val(YAML.stringify(data, null, 4)).trigger('paste');
       });
 
       let timeout;
@@ -58,7 +59,7 @@
           clearTimeout(timeout);
           timeout = setTimeout(() => {
             try{
-              let data = JSON.parse($('#input').val());
+              let data = YAML.parse($('#input').val());
               $('#right').html(faDiagrams.compute(data));
             }catch(err){
               $('#right').html(`<h2>${err.toString().replace(/\n/gm, '<br>')}</h2>`);
