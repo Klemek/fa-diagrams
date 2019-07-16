@@ -36,6 +36,8 @@
 * [More info](#more-info)
   * [Icon names](#icon-names)
   * [Link types](#link-types)
+  * [Thrown errors](#thrown-errors)
+  * [Change icons](#change-icons)
 * [Examples](#examples)
   
 ## Install  
@@ -267,6 +269,44 @@ Here are the available styles :
 * *`italic`*
 * __`underlined`__
 * ~~`striked`~~
+
+### Thrown errors
+
+Errors can be thrown in these 2 cases :
+
+* Nodes could not be placed based on the constraints:
+  * `Failed to place nodes`
+* A node or a link have an invalid property
+  * `Node 'name' is invalid at key ...`
+
+### Change icons
+
+If you want to change the icons you can edit/build your own `resources.json` as following:
+
+```javascript
+{
+    "name": "squares",
+    "height": 60, //height of all icons
+    "index": [ // which categories are there and in which order it should be searched
+        "solid",
+        "hollow"
+    ],
+    "icons": {
+      "solid": {
+        "square":{
+          "path":"M10 10v-40h40v40z",
+          "width":60
+        }
+      },
+      "hollow": {
+        "square":{
+          "path":"M10 10v-40h40v40h-40m10 10v-20h20v20h-20z",
+          "width":60
+        }
+      }
+    }
+}
+```
 
 ## Examples
 *[back to top](#top)*

@@ -323,13 +323,13 @@ module.exports = (options) => {
       Object.keys(nodes).forEach(key => {
         const res = utils.isValid(nodes[key], NODE_DEF);
         if (res)
-          throw `node '${key}' is invalid at key ${res}`;
+          throw `Node '${key}' is invalid at key ${res}`;
       });
 
       links.forEach((link, i) => {
         const res = utils.isValid(link, LINK_DEF);
         if (res)
-          throw `link ${i} (${link.from}->${link.to}) is invalid at key ${res}`;
+          throw `Link ${i} (${link.from}->${link.to}) is invalid at key ${res}`;
       });
 
       Object.values(nodes).forEach(node => {
