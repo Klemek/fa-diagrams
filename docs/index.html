@@ -51,7 +51,7 @@
 <script>
     $(document).ready(() => {
       $.getJSON('sample.yml', (data) => {
-        $('#input').val(YAML.stringify(data, null, 4)).trigger('paste');
+        $('#input').val(data).trigger('paste');
       });
 
       let timeout;
