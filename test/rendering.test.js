@@ -123,7 +123,7 @@ describe('getIcon', () => {
 
 describe('getLinkPath (non-regression)', () => {
   ['default', 'line', 'double', 'split-double', 'dashed', 'dashed-line', 'dashed-double', 'dashed-split-double'].forEach(type => {
-    data[type] = {};
+    linkPaths[type] = {};
     [1, 1.5, 2].forEach(width => {
       test(type + ' ' + width, () => {
         expect(rendering().getLinkPath(type, width)).toEqual(linkPaths[type][width]);
