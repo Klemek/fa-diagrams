@@ -48,11 +48,11 @@
 </div>
 <div id="right"></div>
 <script>
-    $.getJSON('sample.json',(data) => {
-      $('#input').val(JSON.stringify(data, null, 4)).trigger('paste');
-    });
-
     $(document).ready(() => {
+      $.getJSON('sample.json', (data) => {
+        $('#input').val(JSON.stringify(data, null, 4)).trigger('paste');
+      });
+
       let timeout;
         $('#input').on('change keyup paste', () => {
           clearTimeout(timeout);
@@ -61,7 +61,7 @@
               let data = JSON.parse($('#input').val());
               $('#right').html(faDiagrams.compute(data));
             }catch(err){
-              $('#right').html(`<h2>${err.replaceAll('\n','<br>')}</h2>`);
+              $('#right').html(`<h2>${err.toString().replace(/\n/gm, '<br>')}</h2>`);
             }
 
           }, 500);

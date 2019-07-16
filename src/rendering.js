@@ -90,7 +90,7 @@ const LINK_DEF = {
 
 const DEFAULT_OPTIONS = {
   'beautify': false,
-  'scale': 256,
+  'scale': 128,
   'h-spacing': 1.3,
   'color': 'black',
   'icons': {
@@ -103,8 +103,8 @@ const DEFAULT_OPTIONS = {
     'size': 0
   },
   'texts': {
-    'font': 'sans-serif',
-    'font-size': 12,
+    'font': 'Arial',
+    'font-size': 15,
     'font-style': 'normal',
     'color': '',
     'margin': 0.2,
@@ -313,9 +313,7 @@ module.exports = (options) => {
           }
 
           const lineHeight = subE['line-height'] || options['texts']['line-height'];
-
           const text = self.getSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
-
           const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
 
           text['_attributes'] = {
@@ -328,7 +326,7 @@ module.exports = (options) => {
 
           g['g'].push({
             '_attributes': {
-              'transform': `translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / (options['scale'] * DEFAULT_SCALE)} ${1 / (options['scale'] * DEFAULT_SCALE)})`,
+              'transform': `translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
               'stroke': (subE['color'] || node['color'] || options['texts']['color'] || options['icons']['color'] || undefined),
               'fill': (subE['color'] || node['color'] || options['texts']['color'] || options['icons']['color'] || undefined)
             },

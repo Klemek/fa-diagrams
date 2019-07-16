@@ -180,11 +180,11 @@ Will produce the following diagram:
 | `rendering.links.scale` | 1 | default scaling of links | in link |
 | `rendering.links.color` | `''` | color of all links (might be redefined in link definition) | in link |
 | `rendering.links.size` | 0 | forced size/length of the links (0 means it will be computed from the distance between the nodes) | in link |
-| `rendering.texts.font` | `'sans-serif'` | font family of the texts (might be redefined in sub-elements definition) | in text |
-| `rendering.texts.font-size` | 12 | font size of the texts | in sub-text |
+| `rendering.texts.font` | `'Arial'` | font family of the texts (might be redefined in sub-elements definition) | in text |
+| `rendering.texts.font-size` | 15 | font size of the texts | in sub-text |
 | `rendering.texts.font-style` | `'normal'` | font style of the texts (see [Font styles](#font-styles)) | in sub-text |
 | `rendering.texts.color` | `''` | color of all texts | in sub-text |
-| `rendering.texts.margin` | 0.35 | margin between texts and elements | in sub-text |
+| `rendering.texts.margin` | 0.2 | margin between texts and elements | in sub-text |
 | `rendering.texts.line-height` | 1.2 | height of each line in font size | in sub-text |
 
 ### `nodes`
