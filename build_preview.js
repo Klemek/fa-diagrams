@@ -65,4 +65,6 @@ const data = {
   ]
 };
 
+fs.writeFileSync('docs/sample.json', JSON.stringify(data), {encoding: 'utf-8'});
+
 fs.writeFileSync('preview/sample.svg', faDiagrams.compute(data), {encoding: 'utf-8'});

@@ -5,6 +5,8 @@
 # (WIP) fa-diagrams
 ## SVG diagrams built from Font-Awesome icons
 
+**[Demo](https://klemek.github.io/fa-diagrams)**
+
 ## RoadMap to v1
 
 * [x] Font-Awesome paths scrapping in build
@@ -48,8 +50,8 @@
 Get the scripts from this repository `dist` folder
 
 ```html
-<script src="fa-diagrams-data.min.js"></script>
-<script src="fa-diagrams.min.js"></script>
+<script src="fa-diagrams-data.min.js"></script> <!-- 1.04 MB -->
+<script src="fa-diagrams.min.js"></script> <!-- 107.93 KB -->
 ```
 
 ### CDN (soon)
