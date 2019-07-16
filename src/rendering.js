@@ -158,7 +158,7 @@ module.exports = (options) => {
         case 'none':
           return null;
         default:
-          return `M12 216${resources.links['arrow-head'].path}h${width * 512 - 146.059}${arrowHead}z`;
+          return `M12 216${lineStart}h${width * 512 - 146.059}${arrowHead}z`;
         case 'line':
           return `M12 216${lineStart}h${width * 512 - 24}${lineEnd}z`;
         case 'double':
@@ -168,19 +168,19 @@ module.exports = (options) => {
         case 'dashed':
           const n1 = Math.floor((width * 512 - 134.059) / (80 * 2.1));
           const space1 = ((width * 512 - 134.059) - n1 * 56 - 24) / (n1);
-          return `M12 216${new Array(n1).fill(`${dashedStep}h${space1}`).join('')}v80${arrowHead}z`;
+          return `M12 216${new Array(n1).fill(`${dashedStep}m${space1} 0`).join('')}v80${arrowHead}z`;
         case 'dashed-line':
           const n2 = Math.floor(width * 512 / (80 * 2.1));
           const space2 = (width * 512 - n2 * 56 - 24) / (n2 - 1);
-          return `M12 216${new Array(n2).fill(dashedStep).join(`h${space2}`)}z`;
+          return `M12 216${new Array(n2).fill(dashedStep).join(`m${space2} 0`)}z`;
         case 'dashed-double':
           const n3 = Math.floor((width * 512 - 134.059 * 2) / (80 * 2.1));
           const space3 = ((width * 512 - 134.059 * 2) - n3 * 56 - 24) / (n3 + 1);
-          return `M134.059 216${arrowHeadR}m${space3}-80${new Array(n3).fill(`${dashedStep}h${space3}`).join('')}v80${arrowHead}z`;
+          return `M134.059 216${arrowHeadR}m${space3}-80${new Array(n3).fill(`${dashedStep}m${space3} 0`).join('')}v80${arrowHead}z`;
         case 'dashed-split-double':
           const n4 = Math.floor((width * 512 - 134.059) / (80 * 2.1));
           const space4 = ((width * 512 - 134.059) - n4 * 56 - 24) / (n4);
-          return `M12 126${new Array(n4).fill(`${dashedStep}h${space4}`).join('')}v80${arrowHead}M134.059 306${arrowHeadR}m${space4} -80${new Array(n4).fill(`${dashedStep}`).join(`h${space4}`)}z`;
+          return `M12 126${new Array(n4).fill(`${dashedStep}m${space4} 0`).join('')}v80${arrowHead}M134.059 306${arrowHeadR}m${space4} -80${new Array(n4).fill(`${dashedStep}`).join(`m${space4} 0`)}z`;
       }
     },
 
@@ -217,7 +217,7 @@ module.exports = (options) => {
             },
             'g': {
               '_attributes': {
-                'transform': `scale(${scale / 512} ${scale / 512}) translate(${-icon.width / 2} ${-256})`,
+                'transform': `scale(${scale / resources.height} ${scale / resources.height}) translate(${-icon.width / 2} ${-256})`,
                 'stroke': (node['color'] || options['icons']['color'] || undefined),
                 'fill': (node['color'] || options['icons']['color'] || undefined)
               },
@@ -325,13 +325,13 @@ module.exports = (options) => {
       Object.keys(nodes).forEach(key => {
         const res = utils.isValid(nodes[key], NODE_DEF);
         if (res)
-          throw `node '${key}' is invalid at key ${res}`;
+          throw `Node '${key}' is invalid at key ${res}`;
       });
 
       links.forEach((link, i) => {
         const res = utils.isValid(link, LINK_DEF);
         if (res)
-          throw `link ${i} (${link.from}->${link.to}) is invalid at key ${res}`;
+          throw `Link ${i} (${link.from}->${link.to}) is invalid at key ${res}`;
       });
 
       const bounds = self.getBounds(nodes);
