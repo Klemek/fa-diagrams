@@ -40,6 +40,7 @@ const faDiagrams = require('./src/index');
 const data = {
   options: {
     rendering: {
+      beautify: true,
       icons: {
         color: '#4E342E'
       }
@@ -48,12 +49,16 @@ const data = {
   nodes: [
     {
       name: 'node1',
-      icon: 'server',
+      icon: 'laptop-code',
+      bottom: 'my app',
+      top:'my app',
+      left:'my\napp'
     },
     {
       name: 'node2',
       icon: 'globe',
       color: '#455A64',
+      bottom: 'world'
     }
   ],
   links: [
@@ -61,10 +66,11 @@ const data = {
       from: 'node1',
       to: 'node2',
       color: '#333333',
+      bottom: 'hello'
     }
   ]
 };
 
-fs.writeFileSync('docs/sample.json', JSON.stringify(data), {encoding: 'utf-8'});
+fs.writeFileSync('docs/sample.json', JSON.stringify(data, null, 4), {encoding: 'utf-8'});
 
 fs.writeFileSync('preview/sample.svg', faDiagrams.compute(data), {encoding: 'utf-8'});

@@ -26,6 +26,10 @@ try {
  * @property {number} x
  * @property {number} y
  * @property {string|{path:string,width:number:height:number}} icon
+ * @property {Object|undefined} bottom
+ * @property {Object|undefined} top
+ * @property {Object|undefined} left
+ * @property {Object|undefined} right
  */
 
 /**
@@ -33,6 +37,8 @@ try {
  * @property {string} from
  * @property {string} to
  * @property {string|undefined} type
+ * @property {Object|undefined} bottom
+ * @property {Object|undefined} top
  */
 
 const SUB_DEF = {
@@ -48,7 +54,9 @@ const SUB_DEF = {
   'font': 'string',
   'font-size': 'number',
   'font-style': 'string',
-  'scale': 'number',
+  'margin': 'number',
+  'line-height': 'number',
+  'scale': 'number'
 };
 
 const NODE_DEF = {
@@ -82,7 +90,7 @@ const LINK_DEF = {
 
 const DEFAULT_OPTIONS = {
   'beautify': false,
-  'scale': 128,
+  'scale': 256,
   'h-spacing': 1.3,
   'color': 'black',
   'icons': {
@@ -96,9 +104,11 @@ const DEFAULT_OPTIONS = {
   },
   'texts': {
     'font': 'sans-serif',
-    'font-size': '20',
+    'font-size': 12,
     'font-style': 'normal',
-    'color': ''
+    'color': '',
+    'margin': 0.2,
+    'line-height': 1.2
   }
 };
 
@@ -226,6 +236,30 @@ module.exports = (options) => {
     },
 
     /**
+     * @param {string} text
+     * @param {number} lineHeight
+     * @param {string} anchor
+     * @return {Object}
+     */
+    getSvgText: (text, lineHeight, anchor) => {
+      text = text.trim();
+      if (!text.includes('\n'))
+        return {'_text': text};
+      const list = [];
+      text.split('\n').map(t => t.trim()).forEach(line => {
+        list.push({
+          '_attributes': {
+            'x': 0,
+            'dy': `${lineHeight}em`,
+            'text-anchor': anchor
+          },
+          '_text': line
+        });
+      });
+      return {'tspan': list};
+    },
+
+    /**
      * @param {Node2} node
      */
     renderNode: (node) => {
@@ -233,11 +267,11 @@ module.exports = (options) => {
       if (!icon)
         return null;
       const scale = (node['scale'] || options['icons']['scale']) * DEFAULT_SCALE;
-      return {
+      const g = {
         '_attributes': {
           'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`,
         },
-        'g': {
+        'g': [{
           '_attributes': {
             'transform': `scale(${scale / icon.height} ${scale / icon.height}) translate(${-icon.width / 2} ${-icon.height / 2})`,
             'stroke': (node['color'] || options['icons']['color'] || undefined),
@@ -248,8 +282,59 @@ module.exports = (options) => {
               'd': icon.path,
             }
           }
-        }
+        }]
       };
+
+      ['bottom', 'top', 'left', 'right'].forEach(side => {
+        const subE = node[side];
+        if (subE && subE.text) {
+          const fontSize = subE['font-size'] || options['texts']['font-size'];
+          const margin = subE['margin'] || options['texts']['margin'];
+          let pos;
+          let anchor;
+          switch (side) {
+            case 'bottom':
+              pos = {x: 0, y: 1};
+              anchor = 'middle';
+              break;
+            case 'top':
+              pos = {x: 0, y: -1};
+              anchor = 'middle';
+              break;
+            case 'left':
+              pos = {x: -1, y: 0};
+              anchor = 'end';
+              break;
+            case 'right':
+              pos = {x: 1, y: 0};
+              anchor = 'start';
+              break;
+          }
+
+          const text = self.getSvgText(subE.text, subE['line-height'] || options['texts']['line-height'], anchor);
+
+          const textHeight = text['tspan'] ? text['tspan'].length : 0;
+
+          text['_attributes'] = {
+            'font-family': subE['font'] || options['texts']['font'],
+            'font-size': fontSize,
+            'text-anchor': anchor,
+            'x': pos.x * fontSize,
+            'y': (pos.y + 0.25) * fontSize - textHeight * fontSize
+          };
+
+          g['g'].push({
+            '_attributes': {
+              'transform': `translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / (options['scale'] * DEFAULT_SCALE)} ${1 / (options['scale'] * DEFAULT_SCALE)})`,
+              'stroke': (subE['color'] || node['color'] || options['texts']['color'] || options['icons']['color'] || undefined),
+              'fill': (subE['color'] || node['color'] || options['texts']['color'] || options['icons']['color'] || undefined)
+            },
+            'text': text
+          });
+        }
+      });
+
+      return g;
     },
 
     /**
@@ -343,6 +428,12 @@ module.exports = (options) => {
         const res = utils.isValid(nodes[key], NODE_DEF);
         if (res)
           throw `Node '${key}' is invalid at key '${res}'`;
+
+        ['bottom', 'top', 'left', 'right'].forEach(sub => {
+          if (typeof nodes[key][sub] === 'string')
+            nodes[key][sub] = {text: nodes[key][sub]};
+        });
+
         const group = self.renderNode(nodes[key]);
         if (group)
           data['g'].push(group);
@@ -352,6 +443,12 @@ module.exports = (options) => {
         const res = utils.isValid(link, LINK_DEF);
         if (res)
           throw `Link ${i} (${link.from}->${link.to}) is invalid at key '${res}'`;
+
+        ['bottom', 'top'].forEach(sub => {
+          if (typeof link[sub] === 'string')
+            link[sub] = {text: link[sub]};
+        });
+
         const group = self.renderLink(nodes, link);
         if (group)
           data['g'].push(group);

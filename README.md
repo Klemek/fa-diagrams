@@ -175,7 +175,7 @@ Will produce the following diagram:
 | `placing.max-link-length` | 3 | maximum stretching of links between nodes | no |
 | `placing.diagonals` | `true` | allow diagonal links to be made | no |
 | `rendering.beautify` | `false` | output a readable SVG file | no |
-| `rendering.scale` | 128 | (in pixels) final icons size | no |
+| `rendering.scale` | 256 | (in pixels) final icons size | no |
 | `rendering.color` | `black` | color of all elements | no |
 | `rendering.h-spacing` | 1.3 | how width is stretched comparing to height | no |
 | `rendering.icons.scale` | 1 | default scaling of icons | in node or sub-icon |
@@ -184,9 +184,11 @@ Will produce the following diagram:
 | `rendering.links.color` | `''` | color of all links (might be redefined in link definition) | in link |
 | `rendering.links.size` | 0 | forced size/length of the links (0 means it will be computed from the distance between the nodes) | in link |
 | `rendering.texts.font` | `'sans-serif'` | font family of the texts (might be redefined in sub-elements definition) | in text |
-| `rendering.texts.font-size` | 20 | font size of the texts | in sub-text |
+| `rendering.texts.font-size` | 12 | font size of the texts | in sub-text |
 | `rendering.texts.font-style` | `'normal'` | font style of the texts (see [Font styles](#font-styles)) | in sub-text |
 | `rendering.texts.color` | `''` | color of all texts | in sub-text |
+| `rendering.texts.margin` | 0.35 | margin between texts and elements | in sub-text |
+| `rendering.texts.line-height` | 1.2 | height of each line in font size | in sub-text |
 
 ### `nodes`
 
@@ -231,6 +233,8 @@ You can **just enter a string** to be considered a text but you can define a tex
 | `font` | string | no | redefine the font family |
 | `font-size` | number | no | redefine the font size |
 | `font-style` | string | no | redefine the font style (see [Font styles](#font-styles)) |
+| `margin` | number | no | redefine the margin with the parent element |
+| `line-height` | number | no | height of each line in font size |
 
 ### Icons
 
