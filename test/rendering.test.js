@@ -171,6 +171,22 @@ describe('getIcon', () => {
       height: 512
     });
   });
+  test('custom invalid icon', () => {
+    const res = rendering().getIcon({
+      paht: 'hello',
+      width: 80,
+      height: 160
+    });
+    expect(res).toBe(null);
+  });
+  test('custom invalid icon 2', () => {
+    const res = rendering().getIcon({
+      path: '',
+      width: 80,
+      height: 160
+    });
+    expect(res).toBe(null);
+  });
 });
 
 describe('getLinkPath (non-regression)', () => {

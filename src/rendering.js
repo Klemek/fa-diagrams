@@ -129,6 +129,9 @@ module.exports = (options) => {
         return null;
 
       if (typeof icon === 'object') {
+        if (!icon.path || !icon.path.trim())
+          return null;
+
         icon.height = icon.height || icon.width || resources.height;
         icon.width = icon.width || icon.height;
         return icon;
