@@ -163,7 +163,7 @@ describe('renderNode', () => {
     });
     expect(res).toBe(null);
   });
-  test('simple icon', () => {
+  test('simple', () => {
     const res = rendering({'h-spacing': 1}).renderNode({
       icon: 'circle',
       x: 2,
@@ -181,7 +181,7 @@ describe('renderNode', () => {
       }
     });
   });
-  test('icon recolor global', () => {
+  test('recolor global', () => {
     const res = rendering({
       'h-spacing': 1,
       'icons': {'color': 'green'}
@@ -202,7 +202,7 @@ describe('renderNode', () => {
       }
     });
   });
-  test('icon recolor local', () => {
+  test('recolor local', () => {
     const res = rendering({
       'h-spacing': 1,
       'icons': {'color': 'green'}
@@ -224,7 +224,7 @@ describe('renderNode', () => {
       }
     });
   });
-  test('icon scale global', () => {
+  test('scale global', () => {
     const res = rendering({
       'h-spacing': 1,
       'icons': {'scale': 512 / 0.4}
@@ -245,7 +245,7 @@ describe('renderNode', () => {
       }
     });
   });
-  test('icon scale local', () => {
+  test('scale local', () => {
     const res = rendering({
       'h-spacing': 1,
       'icons': {'scale': 512 / 0.4}
@@ -264,6 +264,147 @@ describe('renderNode', () => {
           'fill': undefined
         },
         'path': {'_attributes': {'d': solidCirclePath}}
+      }
+    });
+  });
+});
+
+describe('renderLink', () => {
+  test('no link', () => {
+    const res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 0, y: 0}, 'b': {x: 1, y: 0}
+    }, {
+      from: 'a',
+      to: 'b',
+      type: 'none'
+    });
+    expect(res).toBe(null);
+  });
+  test('simple', () => {
+    const res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b'
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }
+    });
+  });
+  test('simple vertical', () => {
+    const res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 1, y: 0}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b'
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1.5 1) rotate(90)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }
+    });
+  });
+  test('recolor global', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'links': {'color': 'green'}
+    }).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b'
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': 'green',
+          'fill': 'green'
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }
+    });
+  });
+  test('recolor local', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'links': {'color': 'green'}
+    }).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      color: 'red'
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'stroke': 'red',
+          'fill': 'red'
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }
+    });
+  });
+  test('scale global', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'links': {'scale': 0.5}
+    }).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.000390625 0.000390625) translate(-512 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][2]}}
+      }
+    });
+  });
+  test('scale local', () => {
+    const res = rendering({
+      'h-spacing': 1,
+      'links': {'scale': 0.5}
+    }).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      scale: 1 / 1.5
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
+      'g': {
+        '_attributes': {
+          'transform': 'scale(0.0005208333333333333 0.0005208333333333333) translate(-384 -256)',
+          'stroke': undefined,
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1.5]}}
       }
     });
   });
