@@ -59,7 +59,16 @@
           clearTimeout(timeout);
           timeout = setTimeout(() => {
             try{
+              const findLineBreaks = (data) => {
+                Object.keys(data).forEach(key => {
+                  if(typeof data[key] === 'object')
+                    findLineBreaks(data[key]);
+                  else if(typeof data[key] === 'string')
+                    data[key] = data[key].replace(/\\n/gm,'\n');
+                });
+              };
               let data = YAML.parse($('#input').val());
+              findLineBreaks(data);
               $('#right').html(faDiagrams.compute(data));
             }catch(err){
               $('#right').html(`<h2>${err.toString().replace(/\n/gm, '<br>')}</h2>`);
