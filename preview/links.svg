@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3072 2948" width="384.00000000000006" height="368.5" stroke="black" fill="black">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3072 2948" width="384.00000000000006" height="368.5"
+     font-family="Arial" font-size="15" fill="black" stroke-width="0">
     <g>
         <g transform="translate(256 150)">
             <path d="M12 216c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h877.941v46.059c0 21.382 25.851 32.09 40.971 16.971 l86.059 -86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971v46.059z"/>

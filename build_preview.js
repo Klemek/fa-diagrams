@@ -58,7 +58,7 @@ const data = {
       from: 'node1',
       to: 'node2',
       color: '#333333',
-      bottom: 'hello'
+      bottom: '"hello"'
     }
   ]
 };

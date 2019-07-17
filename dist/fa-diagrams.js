@@ -8257,7 +8257,7 @@ const rendering = require('./rendering');
 
 const self = {
   /**
-   * @param {{options: Object|undefined, nodes: Object[]|undefined, links: Object[]|undefined}} data
+   * @param {{options: Object?, nodes: Object[]?, links: Object[]?}} data
    * @returns {string}
    */
   compute: (data) => {
@@ -8692,27 +8692,19 @@ try {
   console.error('fa-diagrams: SVG resources could not be loaded: ' + err);
 }
 
-/**
- * @typedef Node2
- * @property {string} name
- * @property {number} x
- * @property {number} y
- * @property {string|{path:string,width:number:height:number}} icon
- * @property {Object|undefined} bottom
- * @property {Object|undefined} top
- * @property {Object|undefined} left
- * @property {Object|undefined} right
- */
 
 /**
- * @typedef Link2
- * @property {string} from
- * @property {string} to
- * @property {string|undefined} type
- * @property {Object|undefined} bottom
- * @property {Object|undefined} top
+ * @typedef SubElement2
+ * @property {string|undefined} text
+ * @property {string|{path:string,width:number:height:number}|undefined} icon
+ * @property {string|undefined} color
+ * @property {string|undefined} font
+ * @property {string|undefined} font-size
+ * @property {string|undefined} font-style
+ * @property {number|undefined} margin
+ * @property {number|undefined} line-height
+ * @property {number|undefined} scale
  */
-
 const SUB_DEF = {
   '_': 'string',
   'text': 'string',
@@ -8731,6 +8723,17 @@ const SUB_DEF = {
   'scale': 'number'
 };
 
+/**
+ * @typedef Node2
+ * @property {string} name
+ * @property {number} x
+ * @property {number} y
+ * @property {string|{path:string,width:number:height:number}} icon
+ * @property {SubElement2|undefined} bottom
+ * @property {SubElement2|undefined} top
+ * @property {SubElement2|undefined} left
+ * @property {SubElement2|undefined} right
+ */
 const NODE_DEF = {
   'name': '!string',
   'icon': {
@@ -8749,6 +8752,16 @@ const NODE_DEF = {
   'right': SUB_DEF
 };
 
+/**
+ * @typedef Link2
+ * @property {string} from
+ * @property {string} to
+ * @property {string|undefined} type
+ * @property {SubElement2|undefined} bottom
+ * @property {SubElement2|undefined} top
+ * @property {SubElement2|undefined} left
+ * @property {SubElement2|undefined} right
+ */
 const LINK_DEF = {
   'from': '!string',
   'to': '!string',
@@ -8912,7 +8925,7 @@ module.exports = (options) => {
      * @param {number} lineHeight
      * @param {number} x
      * @param {string} anchor
-     * @return {Object}
+     * @return {Object} svg text
      */
     getSvgText: (text, lineHeight, x, anchor) => {
       text = text.trim();
@@ -8933,21 +8946,70 @@ module.exports = (options) => {
     },
 
     /**
+     * @param {Node2|Link2} element
+     * @param {string} side
+     * @param {SubElement2} subE
+     * @param {boolean?} reverse
+     * @param {boolean?} link
+     * @returns {Object} svg group
+     */
+    renderSubText: (element, side, subE, reverse, link) => {
+      const fontSize = subE['font-size'] || options['texts']['font-size'];
+      const margin = (subE['margin'] || options['texts']['margin']) / (link ? 4 : 1);
+      let pos;
+      let anchor;
+      switch (side) {
+        case 'bottom':
+          pos = {x: 0, y: 1};
+          anchor = 'middle';
+          break;
+        case 'top':
+          pos = {x: 0, y: -1};
+          anchor = 'middle';
+          break;
+        case 'left':
+          pos = {x: -1, y: 0};
+          anchor = 'end';
+          break;
+        case 'right':
+          pos = {x: 1, y: 0};
+          break;
+      }
+
+      const lineHeight = subE['line-height'] || options['texts']['line-height'];
+      const text = self.getSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
+      const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
+
+      text['_attributes'] = {
+        'font-family': subE['font'],
+        'font-size': subE['font-size'],
+        'text-anchor': anchor,
+        'x': pos.x * fontSize / 2,
+        'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
+      };
+
+      return {
+        '_attributes': {
+          'transform': `${reverse?'rotate(180) ':''}translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
+          'fill': (subE['color'] || element['color'] || options['texts']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
+        },
+        'text': text
+      };
+    },
+
+    /**
      * @param {Node2} node
+     * @return {Object} svg group
      */
     renderNode: (node) => {
+      const groups = [];
+
       const icon = self.getIcon(node.icon);
-      if (!icon)
-        return null;
-      const scale = (node['scale'] || options['icons']['scale']) * DEFAULT_SCALE;
-      const g = {
-        '_attributes': {
-          'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`,
-        },
-        'g': [{
+      if (icon) {
+        const scale = (node['scale'] || options['icons']['scale']) * DEFAULT_SCALE;
+        groups.push({
           '_attributes': {
             'transform': `scale(${scale / icon.height} ${scale / icon.height}) translate(${-icon.width / 2} ${-icon.height / 2})`,
-            'stroke': (node['color'] || options['icons']['color'] || undefined),
             'fill': (node['color'] || options['icons']['color'] || undefined)
           },
           'path': {
@@ -8955,64 +9017,27 @@ module.exports = (options) => {
               'd': icon.path,
             }
           }
-        }]
-      };
+        });
+      }
 
       ['bottom', 'top', 'left', 'right'].forEach(side => {
         const subE = node[side];
-        if (subE && subE.text) {
-          const fontSize = subE['font-size'] || options['texts']['font-size'];
-          const margin = subE['margin'] || options['texts']['margin'];
-          let pos;
-          let anchor;
-          switch (side) {
-            case 'bottom':
-              pos = {x: 0, y: 1};
-              anchor = 'middle';
-              break;
-            case 'top':
-              pos = {x: 0, y: -1};
-              anchor = 'middle';
-              break;
-            case 'left':
-              pos = {x: -1, y: 0};
-              anchor = 'end';
-              break;
-            case 'right':
-              pos = {x: 1, y: 0};
-              anchor = 'start';
-              break;
-          }
-
-          const lineHeight = subE['line-height'] || options['texts']['line-height'];
-          const text = self.getSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
-          const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
-
-          text['_attributes'] = {
-            'font-family': subE['font'] || options['texts']['font'],
-            'font-size': fontSize,
-            'text-anchor': anchor,
-            'x': pos.x * fontSize / 2,
-            'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
-          };
-
-          g['g'].push({
-            '_attributes': {
-              'transform': `translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
-              'stroke': (subE['color'] || node['color'] || options['texts']['color'] || options['icons']['color'] || undefined),
-              'fill': (subE['color'] || node['color'] || options['texts']['color'] || options['icons']['color'] || undefined)
-            },
-            'text': text
-          });
-        }
+        if (subE && subE.text)
+          groups.push(self.renderSubText(node, side, subE));
       });
 
-      return g;
+      return !groups.length ? null : {
+        '_attributes': {
+          'transform': `translate(${(node.x + 0.5) * options['h-spacing']} ${node.y + 0.5})`,
+        },
+        'g': groups
+      };
     },
 
     /**
      * @param {Object<string,Node2>} nodes
      * @param {Link2} link
+     * @return {Object} svg group
      */
     renderLink: (nodes, link) => {
       const src = nodes[link.from];
@@ -9022,8 +9047,12 @@ module.exports = (options) => {
       const posY = (src.y + dst.y) / 2 + 0.5;
 
       const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
-      const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
 
+      console.log(angle);
+
+      const groups = [];
+
+      const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;
       let size = link['size'] || options['links']['size'];
 
       if (!size) {
@@ -9039,17 +9068,10 @@ module.exports = (options) => {
 
       const path = self.getLinkPath(link.type, size);
 
-      if (!path)
-        return null;
-
-      return {
-        '_attributes': {
-          'transform': `translate(${posX} ${posY}) rotate(${angle})`
-        },
-        'g': {
+      if (path) {
+        groups.push({
           '_attributes': {
             'transform': `scale(${scale / 512} ${scale / 512}) translate(${(-256 * size)} ${-256})`,
-            'stroke': (link['color'] || options['links']['color'] || undefined),
             'fill': (link['color'] || options['links']['color'] || undefined)
           },
           'path': {
@@ -9057,7 +9079,30 @@ module.exports = (options) => {
               'd': path
             }
           }
-        }
+        });
+      }
+
+      const reverse = Math.abs(angle) > 90;
+      if (!reverse) {
+        link.top = link.top || link.left;
+        link.bottom = link.bottom || link.right;
+      } else {
+        link.top = link.top || link.right;
+        link.bottom = link.bottom || link.left;
+      }
+
+      ['bottom', 'top'].forEach(side => {
+        const subE = link[side];
+        if (subE && subE.text)
+          groups.push(self.renderSubText(link, side, subE, reverse, true));
+      });
+
+
+      return !groups.length ? null : {
+        '_attributes': {
+          'transform': `translate(${posX} ${posY}) rotate(${angle})`
+        },
+        'g': groups
       };
     },
 
@@ -9065,7 +9110,7 @@ module.exports = (options) => {
      * Convert xml-js data into correct svg xml string
      * @param {Object} data
      * @param {{w:number, h:number}} bounds
-     * @returns {string}
+     * @returns {string} SVG data
      */
     toXML: (data, bounds) => {
       const xml = {
@@ -9075,8 +9120,10 @@ module.exports = (options) => {
             'viewBox': `0 0 ${bounds.w * options['h-spacing']} ${bounds.h}`,
             'width': bounds.w * options['h-spacing'] * options['scale'] / DEFAULT_SCALE,
             'height': bounds.h * options['scale'] / DEFAULT_SCALE,
-            'stroke': options['color'],
-            'fill': options['color']
+            'font-family': options['texts']['font'],
+            'font-size': options['texts']['font-size'],
+            'fill': options['color'],
+            'stroke-width': 0
           }
         }
       };
@@ -9092,25 +9139,11 @@ module.exports = (options) => {
     /**
      * @param {Object<string,Node2>} nodes
      * @param {Link2[]} links
+     * @returns {string} SVG data
      */
     compute: (nodes, links) => {
 
       const data = {'g': []};
-
-      Object.keys(nodes).forEach(key => {
-        const res = utils.isValid(nodes[key], NODE_DEF);
-        if (res)
-          throw `Node '${key}' is invalid at key '${res}'`;
-
-        ['bottom', 'top', 'left', 'right'].forEach(sub => {
-          if (typeof nodes[key][sub] === 'string')
-            nodes[key][sub] = {text: nodes[key][sub]};
-        });
-
-        const group = self.renderNode(nodes[key]);
-        if (group)
-          data['g'].push(group);
-      });
 
       links.forEach((link, i) => {
         const res = utils.isValid(link, LINK_DEF);
@@ -9123,6 +9156,21 @@ module.exports = (options) => {
         });
 
         const group = self.renderLink(nodes, link);
+        if (group)
+          data['g'].push(group);
+      });
+
+      Object.keys(nodes).forEach(key => {
+        const res = utils.isValid(nodes[key], NODE_DEF);
+        if (res)
+          throw `Node '${key}' is invalid at key '${res}'`;
+
+        ['bottom', 'top', 'left', 'right'].forEach(sub => {
+          if (typeof nodes[key][sub] === 'string')
+            nodes[key][sub] = {text: nodes[key][sub]};
+        });
+
+        const group = self.renderNode(nodes[key]);
         if (group)
           data['g'].push(group);
       });
