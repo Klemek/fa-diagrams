@@ -284,11 +284,21 @@ describe('font style', () => {
   });
 });
 
-describe('renderSubText', () => {
+describe('renderSubElement/text', () => {
+  test('no sub element', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      top: {
+        text: 'test'
+      }
+    }, 'bottom');
+    expect(res).toBe(null);
+  });
   test('simple text bottom', () => {
-    const res = rendering({scale: 1}).renderSubText({}, 'bottom', {
-      text: 'test'
-    });
+    const res = rendering({scale: 1}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -310,9 +320,11 @@ describe('renderSubText', () => {
     });
   });
   test('simple text top', () => {
-    const res = rendering({scale: 1}).renderSubText({}, 'top', {
-      text: 'test'
-    });
+    const res = rendering({scale: 1}).renderSubElement({
+      top: {
+        text: 'test'
+      }
+    }, 'top');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 -0.2) scale(1 1)`,
@@ -334,9 +346,11 @@ describe('renderSubText', () => {
     });
   });
   test('simple text left', () => {
-    const res = rendering({scale: 1}).renderSubText({}, 'left', {
-      text: 'test'
-    });
+    const res = rendering({scale: 1}).renderSubElement({
+      left: {
+        text: 'test'
+      }
+    }, 'left');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(-0.2 0) scale(1 1)`,
@@ -358,9 +372,11 @@ describe('renderSubText', () => {
     });
   });
   test('simple text right', () => {
-    const res = rendering({scale: 1}).renderSubText({}, 'right', {
-      text: 'test'
-    });
+    const res = rendering({scale: 1}).renderSubElement({
+      right: {
+        text: 'test'
+      }
+    }, 'right');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0.2 0) scale(1 1)`,
@@ -382,9 +398,11 @@ describe('renderSubText', () => {
     });
   });
   test('link text', () => {
-    const res = rendering({scale: 1}).renderSubText({}, 'bottom', {
-      text: 'test'
-    }, false, true);
+    const res = rendering({scale: 1}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom', false, true);
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.05) scale(1 1)`,
@@ -406,9 +424,11 @@ describe('renderSubText', () => {
     });
   });
   test('multi-line text', () => {
-    const res = rendering({scale: 1}).renderSubText({}, 'left', {
-      text: 'test1\ntest2\ntest3'
-    });
+    const res = rendering({scale: 1}).renderSubElement({
+      left: {
+        text: 'test1\ntest2\ntest3'
+      }
+    }, 'left');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(-0.2 0) scale(1 1)`,
@@ -451,9 +471,11 @@ describe('renderSubText', () => {
     });
   });
   test('link text reversed', () => {
-    const res = rendering({scale: 1}).renderSubText({}, 'bottom', {
-      text: 'test'
-    }, true, true);
+    const res = rendering({scale: 1}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom', true, true);
     expect(res).toEqual({
       '_attributes': {
         'transform': `rotate(180) translate(0 0.05) scale(1 1)`,
@@ -475,10 +497,12 @@ describe('renderSubText', () => {
     });
   });
   test('local font size', () => {
-    const res = rendering({scale: 1, texts: {'font-size': 20}}).renderSubText({}, 'bottom', {
-      text: 'test',
-      'font-size': 10
-    });
+    const res = rendering({scale: 1, texts: {'font-size': 20}}).renderSubElement({
+      bottom: {
+        text: 'test',
+        'font-size': 10
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -500,9 +524,11 @@ describe('renderSubText', () => {
     });
   });
   test('global font size', () => {
-    const res = rendering({scale: 1, texts: {'font-size': 20}}).renderSubText({}, 'bottom', {
-      text: 'test'
-    });
+    const res = rendering({scale: 1, texts: {'font-size': 20}}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -523,11 +549,13 @@ describe('renderSubText', () => {
       }
     });
   });
-  test('local margin', () => {
-    const res = rendering({scale: 1, texts: {margin: 0.1}}).renderSubText({}, 'bottom', {
-      text: 'test',
-      margin: 0.3
-    });
+  test('local text margin', () => {
+    const res = rendering({scale: 1, texts: {margin: 0.1}}).renderSubElement({
+      bottom: {
+        text: 'test',
+        margin: 0.3
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.3) scale(1 1)`,
@@ -548,10 +576,12 @@ describe('renderSubText', () => {
       }
     });
   });
-  test('global margin', () => {
-    const res = rendering({scale: 1, texts: {margin: 0.1}}).renderSubText({}, 'bottom', {
-      text: 'test'
-    });
+  test('global text margin', () => {
+    const res = rendering({scale: 1, texts: {margin: 0.1}}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.1) scale(1 1)`,
@@ -572,11 +602,13 @@ describe('renderSubText', () => {
       }
     });
   });
-  test('local style', () => {
-    const res = rendering({scale: 1, texts: {'font-style': 'italic underlined'}}).renderSubText({}, 'bottom', {
-      text: 'test',
-      'font-style': 'bold'
-    });
+  test('local text style', () => {
+    const res = rendering({scale: 1, texts: {'font-style': 'italic underlined'}}).renderSubElement({
+      bottom: {
+        text: 'test',
+        'font-style': 'bold'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -597,10 +629,12 @@ describe('renderSubText', () => {
       }
     });
   });
-  test('global style', () => {
-    const res = rendering({scale: 1, texts: {'font-style': 'bold italic underlined'}}).renderSubText({}, 'bottom', {
-      text: 'test'
-    });
+  test('global text style', () => {
+    const res = rendering({scale: 1, texts: {'font-style': 'bold italic underlined'}}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -622,10 +656,12 @@ describe('renderSubText', () => {
     });
   });
   test('local color', () => {
-    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubText({color: 'green'}, 'bottom', {
-      text: 'test',
-      color: 'blue'
-    });
+    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubElement({
+      color: 'green', bottom: {
+        text: 'test',
+        color: 'blue'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -647,9 +683,11 @@ describe('renderSubText', () => {
     });
   });
   test('node/link color', () => {
-    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubText({color: 'green'}, 'bottom', {
-      text: 'test'
-    });
+    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubElement({
+      color: 'green', bottom: {
+        text: 'test'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -671,9 +709,11 @@ describe('renderSubText', () => {
     });
   });
   test('global texts color', () => {
-    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubText({}, 'bottom', {
-      text: 'test'
-    });
+    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -694,10 +734,12 @@ describe('renderSubText', () => {
       }
     });
   });
-  test('global node color', () => {
-    const res = rendering({scale: 1, icons: {color: 'red'}}).renderSubText({}, 'bottom', {
-      text: 'test'
-    });
+  test('global icons color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.2) scale(1 1)`,
@@ -719,9 +761,11 @@ describe('renderSubText', () => {
     });
   });
   test('global link color', () => {
-    const res = rendering({scale: 1, links: {color: 'red'}}).renderSubText({}, 'bottom', {
-      text: 'test'
-    }, false, true);
+    const res = rendering({scale: 1, links: {color: 'red'}}).renderSubElement({
+      bottom: {
+        text: 'test'
+      }
+    }, 'bottom', false, true);
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(0 0.05) scale(1 1)`,
@@ -743,10 +787,12 @@ describe('renderSubText', () => {
     });
   });
   test('local line-height', () => {
-    const res = rendering({scale: 1, texts: {'line-height': 1}}).renderSubText({}, 'left', {
-      text: 'test1\ntest2',
-      'line-height': 1.1
-    });
+    const res = rendering({scale: 1, texts: {'line-height': 1}}).renderSubElement({
+      left: {
+        text: 'test1\ntest2',
+        'line-height': 1.1
+      }
+    }, 'left');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(-0.2 0) scale(1 1)`,
@@ -782,9 +828,11 @@ describe('renderSubText', () => {
     });
   });
   test('global line-height', () => {
-    const res = rendering({scale: 1, texts: {'line-height': 1}}).renderSubText({}, 'left', {
-      text: 'test1\ntest2'
-    });
+    const res = rendering({scale: 1, texts: {'line-height': 1}}).renderSubElement({
+      left: {
+        text: 'test1\ntest2'
+      }
+    }, 'left');
     expect(res).toEqual({
       '_attributes': {
         'transform': `translate(-0.2 0) scale(1 1)`,
@@ -816,6 +864,292 @@ describe('renderSubText', () => {
           },
           '_text': 'test2'
         }]
+      }
+    });
+  });
+});
+
+describe('renderSubElement/icon', () => {
+  test('no icon', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      bottom: {
+        icon: 'dqzfqzf'
+      }
+    }, 'bottom');
+    expect(res).toBe(null);
+  });
+  test('simple icon bottom', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('simple icon top', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      top: {
+        icon: 'circle'
+      }
+    }, 'top');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 -0.3) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('simple icon left', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      left: {
+        icon: 'circle'
+      }
+    }, 'left');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(-0.3 0) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('simple icon right', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      right: {
+        icon: 'circle'
+      }
+    }, 'right');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0.3 0) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('link icon', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom', false, true);
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.15) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('link icon reversed', () => {
+    const res = rendering({scale: 1}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom', true, true);
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `rotate(180) translate(0 0.15) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('local color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}, 'sub-icons': {color: 'green'}}).renderSubElement({
+      color: 'grey',
+      bottom: {
+        icon: 'circle',
+        color: 'black'
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': 'black',
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('node/link color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}, 'sub-icons': {color: 'green'}}).renderSubElement({
+      color: 'grey',
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': 'grey',
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('global sub-icons color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}, 'sub-icons': {color: 'green'}}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': 'green',
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('global icons color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': 'red',
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('global link color', () => {
+    const res = rendering({scale: 1, links: {color: 'red'}}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom', false, true);
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.15) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': 'red',
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('global scale', () => {
+    const res = rendering({scale: 1, 'sub-icons': {scale: 512 / 0.4}}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(1 1) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('local scale', () => {
+    const res = rendering({scale: 1, 'sub-icons': {scale: 512 / 0.4}}).renderSubElement({
+      bottom: {
+        icon: 'circle',
+        scale: 2 * 512 / 0.4
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(2 2) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('local margin', () => {
+    const res = rendering({scale: 1, 'sub-icons': {margin: 0.5}}).renderSubElement({
+      bottom: {
+        icon: 'circle',
+        margin: 0.1
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.1) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
+      }
+    });
+  });
+  test('global margin', () => {
+    const res = rendering({scale: 1, 'sub-icons': {margin: 0.5}}).renderSubElement({
+      bottom: {
+        icon: 'circle'
+      }
+    }, 'bottom');
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.5) scale(0.00031250000000000006 0.00031250000000000006) translate(-256 -256)`,
+        'fill': undefined,
+      },
+      'path': {
+        '_attributes': {
+          'd': solidCirclePath,
+        }
       }
     });
   });

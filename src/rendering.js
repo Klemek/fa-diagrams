@@ -110,6 +110,11 @@ const DEFAULT_OPTIONS = {
     'scale': 1,
     'color': ''
   },
+  'sub-icons': {
+    'scale': 0.4,
+    'color': '',
+    'margin': 0.3
+  },
   'links': {
     'scale': 1,
     'color': '',
@@ -329,14 +334,14 @@ module.exports = (options) => {
      * Generate a svg group from the given sub-element
      * @param {Node2|Link2} element
      * @param {string} side
-     * @param {SubElement2} subE
      * @param {boolean?} reverse
      * @param {boolean?} link
-     * @returns {Object} svg group
+     * @returns {Object|null} svg group
      */
-    renderSubText: (element, side, subE, reverse = false, link = false) => {
-      const fontSize = subE['font-size'] || options['texts']['font-size'];
-      const margin = (subE['margin'] || options['texts']['margin']) / (link ? 4 : 1);
+    renderSubElement: (element, side, reverse = false, link = false) => {
+      if (!element[side])
+        return null;
+      const subE = element[side];
       let pos;
       let anchor;
       switch (side) {
@@ -357,28 +362,50 @@ module.exports = (options) => {
           break;
       }
 
-      const lineHeight = subE['line-height'] || options['texts']['line-height'];
-      const text = self.renderSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
-      const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
+      if (subE.text) {
+        const margin = (subE['margin'] || options['texts']['margin']) / (link ? 4 : 1);
+        const fontSize = subE['font-size'] || options['texts']['font-size'];
+        const lineHeight = subE['line-height'] || options['texts']['line-height'];
+        const text = self.renderSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
+        const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
 
-      text['_attributes'] = {
-        'font-family': subE['font'],
-        'font-size': subE['font-size'],
-        'font-weight': self.getFontWeight(subE['font-style'], true),
-        'font-style': self.getFontStyle(subE['font-style'], true),
-        'text-decoration': self.getTextDecoration(subE['font-style'] || options['texts']['font-style']),
-        'text-anchor': anchor,
-        'x': pos.x * fontSize / 2,
-        'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
-      };
+        text['_attributes'] = {
+          'font-family': subE['font'],
+          'font-size': subE['font-size'],
+          'font-weight': self.getFontWeight(subE['font-style'], true),
+          'font-style': self.getFontStyle(subE['font-style'], true),
+          'text-decoration': self.getTextDecoration(subE['font-style'] || options['texts']['font-style']),
+          'text-anchor': anchor,
+          'x': pos.x * fontSize / 2,
+          'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
+        };
 
-      return {
-        '_attributes': {
-          'transform': `${reverse ? 'rotate(180) ' : ''}translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
-          'fill': (subE['color'] || element['color'] || options['texts']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
-        },
-        'text': text
-      };
+        return {
+          '_attributes': {
+            'transform': `${reverse ? 'rotate(180) ' : ''}translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
+            'fill': (subE['color'] || element['color'] || options['texts']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
+          },
+          'text': text
+        };
+      } else {
+        const margin = (subE['margin'] || options['sub-icons']['margin']) / (link ? 2 : 1);
+        const icon = self.getIcon(subE.icon);
+        if (!icon)
+          return null;
+        const scale = (subE['scale'] || options['sub-icons']['scale']) * DEFAULT_SCALE;
+        return {
+          '_attributes': {
+            'transform': `${reverse ? 'rotate(180) ' : ''}translate(${pos.x * margin} ${pos.y * margin}) scale(${scale / icon.height} ${scale / icon.height}) translate(${-icon.width / 2} ${-icon.height / 2})`,
+            'fill': (subE['color'] || element['color'] || options['sub-icons']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
+          },
+          'path': {
+            '_attributes': {
+              'd': icon.path,
+            }
+          }
+        };
+      }
+
     },
 
     /**
@@ -406,9 +433,9 @@ module.exports = (options) => {
       }
 
       ['bottom', 'top', 'left', 'right'].forEach(side => {
-        const subE = node[side];
-        if (subE && subE.text)
-          groups.push(self.renderSubText(node, side, subE));
+        const group = self.renderSubElement(node, side);
+        if (group)
+          groups.push(group);
       });
 
       return !groups.length ? null : {
@@ -476,9 +503,9 @@ module.exports = (options) => {
       }
 
       ['bottom', 'top'].forEach(side => {
-        const subE = link[side];
-        if (subE && subE.text)
-          groups.push(self.renderSubText(link, side, subE, reverse, true));
+        const group = self.renderSubElement(link, side, reverse, true);
+        if (group)
+          groups.push(group);
       });
 
 
