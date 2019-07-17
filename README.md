@@ -19,8 +19,9 @@
 * [x] Sub-texts
 * [x] Font styles
 * [x] Sub-icons
-* [ ] More options
-* [ ] Unit testing
+* [x] Unit testing
+* [ ] Examples
+
 
 ## Summary
 
