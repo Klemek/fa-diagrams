@@ -376,8 +376,6 @@ module.exports = (options) => {
 
       const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
 
-      console.log(angle);
-
       const groups = [];
 
       const scale = (link['scale'] || options['links']['scale']) * DEFAULT_SCALE;

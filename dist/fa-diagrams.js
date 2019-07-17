@@ -8990,7 +8990,7 @@ module.exports = (options) => {
 
       return {
         '_attributes': {
-          'transform': `${reverse?'rotate(180) ':''}translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
+          'transform': `${reverse ? 'rotate(180) ' : ''}translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
           'fill': (subE['color'] || element['color'] || options['texts']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
         },
         'text': text
@@ -9047,8 +9047,6 @@ module.exports = (options) => {
       const posY = (src.y + dst.y) / 2 + 0.5;
 
       const angle = Math.atan2(dst.y - src.y, (dst.x - src.x) * options['h-spacing']) * 180 / Math.PI;
-
-      console.log(angle);
 
       const groups = [];
 

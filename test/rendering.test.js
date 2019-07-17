@@ -239,14 +239,14 @@ describe('renderNode', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(2.5 1.5)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
           'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': solidCirclePath}}
-      }
+      }]
     });
   });
   test('recolor global', () => {
@@ -260,14 +260,13 @@ describe('renderNode', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(2.5 1.5)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': 'green',
           'fill': 'green'
         },
         'path': {'_attributes': {'d': solidCirclePath}}
-      }
+      }]
     });
   });
   test('recolor local', () => {
@@ -282,14 +281,13 @@ describe('renderNode', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(2.5 1.5)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': 'red',
           'fill': 'red'
         },
         'path': {'_attributes': {'d': solidCirclePath}}
-      }
+      }]
     });
   });
   test('scale global', () => {
@@ -303,14 +301,13 @@ describe('renderNode', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(2.5 1.5)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(1 1) translate(-256 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': solidCirclePath}}
-      }
+      }]
     });
   });
   test('scale local', () => {
@@ -325,14 +322,13 @@ describe('renderNode', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(2.5 1.5)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(2 2) translate(-256 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': solidCirclePath}}
-      }
+      }]
     });
   });
 });
@@ -357,14 +353,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': linkPaths['default'][1]}}
-      }
+      }]
     });
   });
   test('simple vertical', () => {
@@ -376,14 +371,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1.5 1) rotate(90)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': linkPaths['default'][1]}}
-      }
+      }]
     });
   });
   test('recolor global', () => {
@@ -398,14 +392,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': 'green',
           'fill': 'green'
         },
         'path': {'_attributes': {'d': linkPaths['default'][1]}}
-      }
+      }]
     });
   });
   test('recolor local', () => {
@@ -421,14 +414,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': 'red',
           'fill': 'red'
         },
         'path': {'_attributes': {'d': linkPaths['default'][1]}}
-      }
+      }]
     });
   });
   test('scale global', () => {
@@ -443,14 +435,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.000390625 0.000390625) translate(-512 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': linkPaths['default'][2]}}
-      }
+      }]
     });
   });
   test('scale local', () => {
@@ -466,14 +457,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.0005208333333333333 0.0005208333333333333) translate(-384 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': linkPaths['default'][1.5]}}
-      }
+      }]
     });
   });
   test('size global', () => {
@@ -488,14 +478,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1.5 1.5) rotate(0)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': linkPaths['default'][1]}}
-      }
+      }]
     });
   });
   test('size local', () => {
@@ -511,14 +500,13 @@ describe('renderLink', () => {
     });
     expect(res).toEqual({
       '_attributes': {'transform': 'translate(1.5 1.5) rotate(0)'},
-      'g': {
+      'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-512 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': linkPaths['default'][2]}}
-      }
+      }]
     });
   });
 });
@@ -526,7 +514,7 @@ describe('renderLink', () => {
 describe('toXML', () => {
   test('no data', () => {
     const res = rendering({scale: 20, 'h-spacing': 1}).toXML({}, {w: 0, h: 0});
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" stroke="black" fill="black"/>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" font-family="Arial" font-size="15" fill="black" stroke-width="0"/>');
   });
   test('sample svg data', () => {
     const res = rendering({scale: 2, 'h-spacing': 1}).toXML({
@@ -538,18 +526,18 @@ describe('toXML', () => {
         }
       }
     }, {w: 100, h: 100});
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="500" height="500" stroke="black" fill="black"><circle cx="50" cy="50" r="50"/></svg>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="500" height="500" font-family="Arial" font-size="15" fill="black" stroke-width="0"><circle cx="50" cy="50" r="50"/></svg>');
   });
 });
 
 describe('compute', () => {
   test('no nodes no links', () => {
     const res = rendering({beautify: true, 'h-spacing': 1.2, scale: 20}).compute({}, []);
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" stroke="black" fill="black">\n</svg>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" font-family="Arial" font-size="15" fill="black" stroke-width="0">\n</svg>');
   });
   test('only invisible things', () => {
     const res = rendering({beautify: true, 'h-spacing': 1, scale: 20}).compute({'a': {name: 'a', icon: '', x: 0, y: 0}, 'b': {name: 'b', icon: '', x: 1, y: 0}}, [{from: 'a', to: 'b', type: 'none'}]);
-    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" stroke="black" fill="black">\n</svg>');
+    expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" font-family="Arial" font-size="15" fill="black" stroke-width="0">\n</svg>');
   });
   test('simple output', () => {
     const res = rendering({beautify: true, 'h-spacing': 1, scale: 20}).compute({'a': {name: 'a', icon: 'circle', x: 0, y: 0}, 'b': {name: 'b', icon: 'circle', x: 1, y: 0}}, [{from: 'a', to: 'b'}]);
@@ -558,7 +546,7 @@ describe('compute', () => {
     expect(res.includes(linkPaths['default'][1])).toBe(true); // contains simple arrow of width 1
     expect(res.split('</g>').length).toBe(7); //6 groups definitions
 
-    expect(res.indexOf('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" stroke="black" fill="black">')).toBe(0);
+    expect(res.indexOf('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" font-family="Arial" font-size="15" fill="black" stroke-width="0">')).toBe(0);
   });
   test('invalid node', () => {
     try {
