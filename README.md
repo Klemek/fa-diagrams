@@ -54,7 +54,7 @@ Get the scripts from this repository `dist` folder
 
 ```html
 <script src="fa-diagrams-data.min.js"></script> <!-- 1.04 MB -->
-<script src="fa-diagrams.min.js"></script> <!-- 107.93 KB -->
+<script src="fa-diagrams.min.js"></script> <!-- 110.40 KB -->
 ```
 
 ### CDN (soon)
