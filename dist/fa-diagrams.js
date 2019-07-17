@@ -8782,6 +8782,11 @@ const DEFAULT_OPTIONS = {
     'scale': 1,
     'color': ''
   },
+  'sub-icons': {
+    'scale': 0.4,
+    'color': '',
+    'margin': 0.3
+  },
   'links': {
     'scale': 1,
     'color': '',
@@ -8921,13 +8926,14 @@ module.exports = (options) => {
     },
 
     /**
+     * Generate the correct svg text with possible tspan in case of multi-line
      * @param {string} text
      * @param {number} lineHeight
      * @param {number} x
      * @param {string} anchor
      * @return {Object} svg text
      */
-    getSvgText: (text, lineHeight, x, anchor) => {
+    renderSvgText: (text, lineHeight, x, anchor) => {
       text = text.trim();
       if (!text.includes('\n'))
         return {'_text': text};
@@ -8936,7 +8942,7 @@ module.exports = (options) => {
         list.push({
           '_attributes': {
             'x': x,
-            'dy': i === 0 ? '0' : `${lineHeight}em`,
+            'dy': i === 0 ? 0 : `${lineHeight}em`,
             'text-anchor': anchor
           },
           '_text': line
@@ -8946,16 +8952,68 @@ module.exports = (options) => {
     },
 
     /**
+     * Get the svg font-weight property from defined style
+     * @param {string} style
+     * @param {boolean} force
+     * @returns {string|undefined}
+     */
+    getFontWeight: (style, force = false) => {
+      if (!style)
+        return undefined;
+      const spl = style.split(' ');
+      if (spl.includes('bold'))
+        return 'bold';
+      return force ? 'normal' : undefined;
+    },
+
+    /**
+     * Get the svg font-style property from defined style
+     * @param {string} style
+     * @param {boolean} force
+     * @returns {string|undefined}
+     */
+    getFontStyle: (style, force = false) => {
+      if (!style)
+        return undefined;
+      const spl = style.split(' ');
+      if (spl.includes('italic'))
+        return 'italic';
+      if (spl.includes('oblique'))
+        return 'oblique';
+      return force ? 'normal' : undefined;
+    },
+
+    /**
+     * Get the svg text-decoration property from defined style
+     * @param {string} style
+     * @returns {string|undefined}
+     */
+    getTextDecoration: (style) => {
+      if (!style)
+        return undefined;
+      const out = [];
+      const spl = style.split(' ');
+      if (spl.includes('underlined'))
+        out.push('underline');
+      if (spl.includes('overlined'))
+        out.push('overline');
+      if (spl.includes('striked'))
+        out.push('line-through');
+      return out.length ? out.join(',') : undefined;
+    },
+
+    /**
+     * Generate a svg group from the given sub-element
      * @param {Node2|Link2} element
      * @param {string} side
-     * @param {SubElement2} subE
      * @param {boolean?} reverse
      * @param {boolean?} link
-     * @returns {Object} svg group
+     * @returns {Object|null} svg group
      */
-    renderSubText: (element, side, subE, reverse, link) => {
-      const fontSize = subE['font-size'] || options['texts']['font-size'];
-      const margin = (subE['margin'] || options['texts']['margin']) / (link ? 4 : 1);
+    renderSubElement: (element, side, reverse = false, link = false) => {
+      if (!element[side])
+        return null;
+      const subE = element[side];
       let pos;
       let anchor;
       switch (side) {
@@ -8976,28 +9034,54 @@ module.exports = (options) => {
           break;
       }
 
-      const lineHeight = subE['line-height'] || options['texts']['line-height'];
-      const text = self.getSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
-      const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
+      if (subE.text) {
+        const margin = (subE['margin'] || options['texts']['margin']) / (link ? 4 : 1);
+        const fontSize = subE['font-size'] || options['texts']['font-size'];
+        const lineHeight = subE['line-height'] || options['texts']['line-height'];
+        const text = self.renderSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
+        const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
 
-      text['_attributes'] = {
-        'font-family': subE['font'],
-        'font-size': subE['font-size'],
-        'text-anchor': anchor,
-        'x': pos.x * fontSize / 2,
-        'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
-      };
+        text['_attributes'] = {
+          'font-family': subE['font'],
+          'font-size': subE['font-size'],
+          'font-weight': self.getFontWeight(subE['font-style'], true),
+          'font-style': self.getFontStyle(subE['font-style'], true),
+          'text-decoration': self.getTextDecoration(subE['font-style'] || options['texts']['font-style']),
+          'text-anchor': anchor,
+          'x': pos.x * fontSize / 2,
+          'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
+        };
 
-      return {
-        '_attributes': {
-          'transform': `${reverse ? 'rotate(180) ' : ''}translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
-          'fill': (subE['color'] || element['color'] || options['texts']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
-        },
-        'text': text
-      };
+        return {
+          '_attributes': {
+            'transform': `${reverse ? 'rotate(180) ' : ''}translate(${pos.x * margin} ${pos.y * margin}) scale(${1 / options['scale']} ${1 / options['scale']})`,
+            'fill': (subE['color'] || element['color'] || options['texts']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
+          },
+          'text': text
+        };
+      } else {
+        const margin = (subE['margin'] || options['sub-icons']['margin']) / (link ? 2 : 1);
+        const icon = self.getIcon(subE.icon);
+        if (!icon)
+          return null;
+        const scale = (subE['scale'] || options['sub-icons']['scale']) * DEFAULT_SCALE;
+        return {
+          '_attributes': {
+            'transform': `${reverse ? 'rotate(180) ' : ''}translate(${pos.x * margin} ${pos.y * margin}) scale(${scale / icon.height} ${scale / icon.height}) translate(${-icon.width / 2} ${-icon.height / 2})`,
+            'fill': (subE['color'] || element['color'] || options['sub-icons']['color'] || options[link ? 'links' : 'icons']['color'] || undefined),
+          },
+          'path': {
+            '_attributes': {
+              'd': icon.path,
+            }
+          }
+        };
+      }
+
     },
 
     /**
+     * Generate the svg group from a given node
      * @param {Node2} node
      * @return {Object} svg group
      */
@@ -9021,9 +9105,9 @@ module.exports = (options) => {
       }
 
       ['bottom', 'top', 'left', 'right'].forEach(side => {
-        const subE = node[side];
-        if (subE && subE.text)
-          groups.push(self.renderSubText(node, side, subE));
+        const group = self.renderSubElement(node, side);
+        if (group)
+          groups.push(group);
       });
 
       return !groups.length ? null : {
@@ -9035,6 +9119,7 @@ module.exports = (options) => {
     },
 
     /**
+     * Generate a svg group from the given link
      * @param {Object<string,Node2>} nodes
      * @param {Link2} link
      * @return {Object} svg group
@@ -9090,9 +9175,9 @@ module.exports = (options) => {
       }
 
       ['bottom', 'top'].forEach(side => {
-        const subE = link[side];
-        if (subE && subE.text)
-          groups.push(self.renderSubText(link, side, subE, reverse, true));
+        const group = self.renderSubElement(link, side, reverse, true);
+        if (group)
+          groups.push(group);
       });
 
 
@@ -9120,6 +9205,9 @@ module.exports = (options) => {
             'height': bounds.h * options['scale'] / DEFAULT_SCALE,
             'font-family': options['texts']['font'],
             'font-size': options['texts']['font-size'],
+            'font-weight': self.getFontWeight(options['texts']['font-style']),
+            'font-style': self.getFontStyle(options['texts']['font-style']),
+            'text-decoration': self.getTextDecoration(options['texts']['font-style']),
             'fill': options['color'],
             'stroke-width': 0
           }
@@ -9150,7 +9238,7 @@ module.exports = (options) => {
 
         ['bottom', 'top'].forEach(sub => {
           if (typeof link[sub] === 'string')
-            link[sub] = {text: link[sub]};
+            link[sub] = {text: link[sub].trim()};
         });
 
         const group = self.renderLink(nodes, link);
@@ -9165,7 +9253,7 @@ module.exports = (options) => {
 
         ['bottom', 'top', 'left', 'right'].forEach(sub => {
           if (typeof nodes[key][sub] === 'string')
-            nodes[key][sub] = {text: nodes[key][sub]};
+            nodes[key][sub] = {text: nodes[key][sub].trim()};
         });
 
         const group = self.renderNode(nodes[key]);

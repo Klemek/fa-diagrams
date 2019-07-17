@@ -18,7 +18,7 @@
 * [x] Colors
 * [x] Sub-texts
 * [x] Font styles
-* [ ] Sub-icons
+* [x] Sub-icons
 * [ ] More options
 * [ ] Unit testing
 
@@ -116,6 +116,7 @@ const data = {
       from: 'node1',
       to: 'node2',
       color: '#333333',
+      top: {icon: 'envelope'},
       bottom: '"hello"'
     }
   ]
@@ -177,8 +178,11 @@ Will produce the following diagram:
 | `rendering.scale` | 256 | (in pixels) final icons size | no |
 | `rendering.color` | `black` | color of all elements | no |
 | `rendering.h-spacing` | 1.3 | how width is stretched comparing to height | no |
-| `rendering.icons.scale` | 1 | default scaling of icons | in node or sub-icon |
-| `rendering.icons.color` | `''` | color of all icons | in node or sub-icon |
+| `rendering.icons.scale` | 1 | default scaling of icons | in node |
+| `rendering.icons.color` | `''` | color of all icons | in node |
+| `rendering.sub-icons.scale` | 0.4 | default scaling of sub-icons | in sub-icon |
+| `rendering.sub-icons.color` | `''` | color of all sub-icons | in sub-icon |
+| `rendering.sub-icons.margin` | 0.3 | margin between sub-icons and elements | in sub-icon |
 | `rendering.links.scale` | 1 | default scaling of links | in link |
 | `rendering.links.color` | `''` | color of all links (might be redefined in link definition) | in link |
 | `rendering.links.size` | 0 | forced size/length of the links (0 means it will be computed from the distance between the nodes) | in link |
@@ -243,7 +247,8 @@ You can define a relative icon with the following:
 | --- | --- | --- |  --- |
 | **`icon`** | string/object | **yes** | name of the Font-Awesome icon of the sub-element (see [Icon names](#icon-names)) |
 | `color` | string | no | redefine the color |
-| `scale` | number | no | redefine this icon scale |
+| `scale` | number | no | redefine this sub-icon scale |
+| `margin` | number | no | redefine the margin with the parent element |
 
 ## More info
 *[back to top](#top)*

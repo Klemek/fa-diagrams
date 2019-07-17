@@ -11,4 +11,6 @@ links:
   - from: node1
     to: node2
     color: "#333333"
+    top:
+      icon: envelope
     bottom: '"hello"'

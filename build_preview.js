@@ -44,7 +44,7 @@ const data = {
       name: 'node1',
       icon: 'laptop-code',
       color: '#4E342E',
-      bottom: 'my app',
+      bottom: 'my app'
     },
     {
       name: 'node2',
@@ -58,6 +58,7 @@ const data = {
       from: 'node1',
       to: 'node2',
       color: '#333333',
+      top: {icon: 'envelope'},
       bottom: '"hello"'
     }
   ]
