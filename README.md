@@ -2,8 +2,8 @@
 [![Build Status](https://img.shields.io/travis/Klemek/fa-diagrams.svg?branch=master)](https://travis-ci.org/Klemek/fa-diagrams)
 [![Coverage Status](https://img.shields.io/coveralls/github/Klemek/fa-diagrams.svg?branch=master)](https://coveralls.io/github/Klemek/fa-diagrams?branch=master)
 
-# (WIP) fa-diagrams
-## SVG diagrams built from Font-Awesome icons
+# fa-diagrams
+**SVG diagrams built from Font-Awesome icons**
 
 **[Demo](https://klemek.github.io/fa-diagrams)**
 
@@ -69,6 +69,13 @@ or
 ```html
 <script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams-data.min.js"></script>
 <script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams.min.js"></script>
+```
+
+or
+
+```html
+<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams-data.min.js"></script>
+<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams.min.js"></script>
 ```
 
 
@@ -277,8 +284,6 @@ Here are the accepted types and their preview :
 ![](preview/links.svg)
 
 You can use **`none`** to make an invisible link.
-
-(soon)
 
 ### Font styles
 
