@@ -16,7 +16,9 @@
 * [x] Simple links rendering
 * [x] Dashed links rendering
 * [x] Colors
-* [ ] Sub-elements
+* [x] Sub-texts
+* [x] Font styles
+* [ ] Sub-icons
 * [ ] More options
 * [ ] Unit testing
 
