@@ -273,6 +273,40 @@ module.exports = (options) => {
       return {'tspan': list};
     },
 
+    getFontWeight: (style, force = false) => {
+      if (!style)
+        return undefined;
+      const spl = style.split(' ');
+      if (spl.includes('bold'))
+        return 'bold';
+      return force ? 'normal' : undefined;
+    },
+
+    getFontStyle: (style, force = false) => {
+      if (!style)
+        return undefined;
+      const spl = style.split(' ');
+      if (spl.includes('italic'))
+        return 'italic';
+      if (spl.includes('oblique'))
+        return 'oblique';
+      return force ? 'normal' : undefined;
+    },
+
+    getTextDecoration: (style) => {
+      if (!style)
+        return undefined;
+      const out = [];
+      const spl = style.split(' ');
+      if (spl.includes('underlined'))
+        out.push('underline');
+      if (spl.includes('overlined'))
+        out.push('overline');
+      if (spl.includes('striked'))
+        out.push('line-through');
+      return out.length ? out.join(',') : undefined;
+    },
+
     /**
      * @param {Node2|Link2} element
      * @param {string} side
@@ -281,7 +315,7 @@ module.exports = (options) => {
      * @param {boolean?} link
      * @returns {Object} svg group
      */
-    renderSubText: (element, side, subE, reverse, link) => {
+    renderSubText: (element, side, subE, reverse = false, link = false) => {
       const fontSize = subE['font-size'] || options['texts']['font-size'];
       const margin = (subE['margin'] || options['texts']['margin']) / (link ? 4 : 1);
       let pos;
@@ -311,6 +345,9 @@ module.exports = (options) => {
       text['_attributes'] = {
         'font-family': subE['font'],
         'font-size': subE['font-size'],
+        'font-weight': self.getFontWeight(subE['font-style'], true),
+        'font-style': self.getFontStyle(subE['font-style'], true),
+        'text-decoration': self.getTextDecoration(subE['font-style'] || options['texts']['font-style']),
         'text-anchor': anchor,
         'x': pos.x * fontSize / 2,
         'y': (pos.y + 0.25) * fontSize - (1 - pos.y) * textHeight * fontSize * lineHeight / 2
@@ -448,6 +485,9 @@ module.exports = (options) => {
             'height': bounds.h * options['scale'] / DEFAULT_SCALE,
             'font-family': options['texts']['font'],
             'font-size': options['texts']['font-size'],
+            'font-weight': self.getFontWeight(options['texts']['font-style']),
+            'font-style': self.getFontStyle(options['texts']['font-style']),
+            'text-decoration': self.getTextDecoration(options['texts']['font-style']),
             'fill': options['color'],
             'stroke-width': 0
           }

@@ -281,8 +281,12 @@ Here are the available styles :
 * `normal`
 * **`bold`**
 * *`italic`*
+* `oblique`
 * __`underlined`__
+* `overlined`
 * ~~`striked`~~
+
+The style can also be a compound like `bold italic`.
 
 ### Thrown errors
 
