@@ -280,6 +280,7 @@ describe('font style', () => {
     expect(rendering().getTextDecoration('bold italic')).toBe(undefined);
     expect(rendering().getTextDecoration('italic striked bold')).toBe('line-through');
     expect(rendering().getTextDecoration('italic striked underlined bold')).toBe('underline,line-through');
+    expect(rendering().getTextDecoration('overlined underlined')).toBe('underline,overline');
   });
 });
 
@@ -840,10 +841,47 @@ describe('renderNode', () => {
       'g': [{
         '_attributes': {
           'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
-          'stroke': undefined,
           'fill': undefined
         },
         'path': {'_attributes': {'d': solidCirclePath}}
+      }]
+    });
+  });
+  test('sub-text', () => {
+    const res = rendering({'h-spacing': 1}).renderNode({
+      icon: 'circle',
+      x: 2,
+      y: 1,
+      bottom: {
+        text: 'hello'
+      }
+    });
+    expect(res).toEqual({
+      '_attributes': {'transform': 'translate(2.5 1.5)'},
+      'g': [{
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': solidCirclePath}}
+      }, {
+        '_attributes': {
+          'transform': `translate(0 0.2) scale(0.0078125 0.0078125)`,
+          'fill': undefined,
+        },
+        'text': {
+          '_attributes': {
+            'font-family': undefined,
+            'font-size': undefined,
+            'font-weight': undefined,
+            'font-style': undefined,
+            'text-decoration': undefined,
+            'text-anchor': 'middle',
+            'x': 0,
+            'y': 18.75
+          },
+          '_text': 'hello'
+        }
       }]
     });
   });
@@ -959,6 +997,156 @@ describe('renderLink', () => {
         'path': {'_attributes': {'d': linkPaths['default'][1]}}
       }]
     });
+  });
+  test('sub-text bottom/right', () => {
+    const exp = {
+      '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
+      'g': [{
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }, {
+        '_attributes': {
+          'transform': `translate(0 0.05) scale(0.0078125 0.0078125)`,
+          'fill': undefined,
+        },
+        'text': {
+          '_attributes': {
+            'font-family': undefined,
+            'font-size': undefined,
+            'font-weight': undefined,
+            'font-style': undefined,
+            'text-decoration': undefined,
+            'text-anchor': 'middle',
+            'x': 0,
+            'y': 18.75
+          },
+          '_text': 'hello'
+        }
+      }]
+    };
+    let res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      bottom: {
+        text: 'hello'
+      }
+    });
+    expect(res).toEqual(exp);
+    res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      right: {
+        text: 'hello'
+      }
+    });
+    expect(res).toEqual(exp);
+  });
+  test('sub-text top/left', () => {
+    const exp = {
+      '_attributes': {'transform': 'translate(1 1.5) rotate(0)'},
+      'g': [{
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }, {
+        '_attributes': {
+          'transform': `translate(0 -0.05) scale(0.0078125 0.0078125)`,
+          'fill': undefined,
+        },
+        'text': {
+          '_attributes': {
+            'font-family': undefined,
+            'font-size': undefined,
+            'font-weight': undefined,
+            'font-style': undefined,
+            'text-decoration': undefined,
+            'text-anchor': 'middle',
+            'x': 0,
+            'y': -11.25
+          },
+          '_text': 'hello'
+        }
+      }]
+    };
+    let res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      top: {
+        text: 'hello'
+      }
+    });
+    expect(res).toEqual(exp);
+    res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 0, y: 1}, 'b': {x: 1, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      left: {
+        text: 'hello'
+      }
+    });
+    expect(res).toEqual(exp);
+  });
+  test('sub-text reverse bottom/left', () => {
+    const exp = {
+      '_attributes': {'transform': 'translate(1 1.5) rotate(180)'},
+      'g': [{
+        '_attributes': {
+          'transform': 'scale(0.00078125 0.00078125) translate(-256 -256)',
+          'fill': undefined
+        },
+        'path': {'_attributes': {'d': linkPaths['default'][1]}}
+      }, {
+        '_attributes': {
+          'transform': `rotate(180) translate(0 0.05) scale(0.0078125 0.0078125)`,
+          'fill': undefined,
+        },
+        'text': {
+          '_attributes': {
+            'font-family': undefined,
+            'font-size': undefined,
+            'font-weight': undefined,
+            'font-style': undefined,
+            'text-decoration': undefined,
+            'text-anchor': 'middle',
+            'x': 0,
+            'y': 18.75
+          },
+          '_text': 'hello'
+        }
+      }]
+    };
+    let res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 1, y: 1}, 'b': {x: 0, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      bottom: {
+        text: 'hello'
+      }
+    });
+    expect(res).toEqual(exp);
+    res = rendering({'h-spacing': 1}).renderLink({
+      'a': {x: 1, y: 1}, 'b': {x: 0, y: 1}
+    }, {
+      from: 'a',
+      to: 'b',
+      left: {
+        text: 'hello'
+      }
+    });
+    expect(res).toEqual(exp);
   });
   test('simple vertical', () => {
     const res = rendering({'h-spacing': 1}).renderLink({
@@ -1138,12 +1326,17 @@ describe('compute', () => {
     expect(res).toEqual('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" font-family="Arial" font-size="15" fill="black" stroke-width="0">\n</svg>');
   });
   test('simple output', () => {
-    const res = rendering({beautify: true, 'h-spacing': 1, scale: 20}).compute({'a': {name: 'a', icon: 'circle', x: 0, y: 0}, 'b': {name: 'b', icon: 'circle', x: 1, y: 0}}, [{from: 'a', to: 'b'}]);
-
+    const res = rendering({beautify: true, 'h-spacing': 1, scale: 20}).compute({
+      'a': {name: 'a', icon: 'circle', x: 0, y: 0, bottom: 'bottom'},
+      'b': {name: 'b', icon: 'circle', x: 1, y: 0}
+    }, [
+      {from: 'a', to: 'b', top: 'top'}
+    ]);
     expect(res.split(solidCirclePath).length).toBe(3); //2 times circle path
     expect(res.includes(linkPaths['default'][1])).toBe(true); // contains simple arrow of width 1
-    expect(res.split('</g>').length).toBe(7); //6 groups definitions
-
+    expect(res.includes('bottom</text>')).toBe(true); // contains bottom text
+    expect(res.includes('top</text>')).toBe(true); // contains bottom text
+    expect(res.split('</g>').length).toBe(9); //8 groups definitions (2 nodes (x2) + 1 link (x2) + 2 texts)
     expect(res.indexOf('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 1" width="100" height="50" font-family="Arial" font-size="15" fill="black" stroke-width="0">')).toBe(0);
   });
   test('invalid node', () => {
