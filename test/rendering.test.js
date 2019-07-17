@@ -222,6 +222,604 @@ describe('getBounds', () => {
   });
 });
 
+describe('renderSvgText', () => {
+  test('single line', () => {
+    const res = rendering().renderSvgText('hello', 1.2, 7.5, 'middle');
+    expect(res).toEqual({
+      '_text': 'hello'
+    });
+  });
+  test('multi-line', () => {
+    const res = rendering().renderSvgText('hello \n there \n general kenobi', 1.2, -7.5, 'end');
+    expect(res).toEqual({
+      'tspan': [{
+        '_attributes': {
+          'x': -7.5,
+          'dy': 0,
+          'text-anchor': 'end'
+        },
+        '_text': 'hello'
+      }, {
+        '_attributes': {
+          'x': -7.5,
+          'dy': '1.2em',
+          'text-anchor': 'end'
+        },
+        '_text': 'there'
+      }, {
+        '_attributes': {
+          'x': -7.5,
+          'dy': '1.2em',
+          'text-anchor': 'end'
+        },
+        '_text': 'general kenobi'
+      }]
+    });
+  });
+});
+
+describe('font style', () => {
+  test('getFontWeight', () => {
+    expect(rendering().getFontWeight(undefined)).toBe(undefined);
+    expect(rendering().getFontWeight('italic striked')).toBe(undefined);
+    expect(rendering().getFontWeight(undefined, true)).toBe(undefined);
+    expect(rendering().getFontWeight('italic striked', true)).toBe('normal');
+    expect(rendering().getFontWeight('italic striked bold')).toBe('bold');
+  });
+  test('getFontStyle', () => {
+    expect(rendering().getFontStyle(undefined)).toBe(undefined);
+    expect(rendering().getFontStyle('bold striked')).toBe(undefined);
+    expect(rendering().getFontStyle(undefined, true)).toBe(undefined);
+    expect(rendering().getFontStyle('bold striked', true)).toBe('normal');
+    expect(rendering().getFontStyle('italic striked bold')).toBe('italic');
+    expect(rendering().getFontStyle('italic striked bold oblique')).toBe('italic');
+    expect(rendering().getFontStyle('striked bold oblique')).toBe('oblique');
+  });
+  test('getTextDecoration', () => {
+    expect(rendering().getTextDecoration(undefined)).toBe(undefined);
+    expect(rendering().getTextDecoration('bold italic')).toBe(undefined);
+    expect(rendering().getTextDecoration('italic striked bold')).toBe('line-through');
+    expect(rendering().getTextDecoration('italic striked underlined bold')).toBe('underline,line-through');
+  });
+});
+
+describe('renderSubText', () => {
+  test('simple text bottom', () => {
+    const res = rendering({scale: 1}).renderSubText({}, 'bottom', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('simple text top', () => {
+    const res = rendering({scale: 1}).renderSubText({}, 'top', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 -0.2) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': -11.25
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('simple text left', () => {
+    const res = rendering({scale: 1}).renderSubText({}, 'left', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(-0.2 0) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'end',
+          'x': -7.5,
+          'y': 3.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('simple text right', () => {
+    const res = rendering({scale: 1}).renderSubText({}, 'right', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0.2 0) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': undefined,
+          'x': 7.5,
+          'y': 3.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('link text', () => {
+    const res = rendering({scale: 1}).renderSubText({}, 'bottom', {
+      text: 'test'
+    }, false, true);
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.05) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('multi-line text', () => {
+    const res = rendering({scale: 1}).renderSubText({}, 'left', {
+      text: 'test1\ntest2\ntest3'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(-0.2 0) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'end',
+          'x': -7.5,
+          'y': -14.25
+        },
+        'tspan': [{
+          '_attributes': {
+            'x': -7.5,
+            'dy': 0,
+            'text-anchor': 'end'
+          },
+          '_text': 'test1'
+        }, {
+          '_attributes': {
+            'x': -7.5,
+            'dy': '1.2em',
+            'text-anchor': 'end'
+          },
+          '_text': 'test2'
+        }, {
+          '_attributes': {
+            'x': -7.5,
+            'dy': '1.2em',
+            'text-anchor': 'end'
+          },
+          '_text': 'test3'
+        }]
+      }
+    });
+  });
+  test('link text reversed', () => {
+    const res = rendering({scale: 1}).renderSubText({}, 'bottom', {
+      text: 'test'
+    }, true, true);
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `rotate(180) translate(0 0.05) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('local font size', () => {
+    const res = rendering({scale: 1, texts: {'font-size': 20}}).renderSubText({}, 'bottom', {
+      text: 'test',
+      'font-size': 10
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': 10,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 12.5
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('global font size', () => {
+    const res = rendering({scale: 1, texts: {'font-size': 20}}).renderSubText({}, 'bottom', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 25
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('local margin', () => {
+    const res = rendering({scale: 1, texts: {margin: 0.1}}).renderSubText({}, 'bottom', {
+      text: 'test',
+      margin: 0.3
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.3) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('global margin', () => {
+    const res = rendering({scale: 1, texts: {margin: 0.1}}).renderSubText({}, 'bottom', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.1) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('local style', () => {
+    const res = rendering({scale: 1, texts: {'font-style': 'italic underlined'}}).renderSubText({}, 'bottom', {
+      text: 'test',
+      'font-style': 'bold'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': 'bold',
+          'font-style': 'normal',
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('global style', () => {
+    const res = rendering({scale: 1, texts: {'font-style': 'bold italic underlined'}}).renderSubText({}, 'bottom', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': 'underline',
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('local color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubText({color: 'green'}, 'bottom', {
+      text: 'test',
+      color: 'blue'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': 'blue',
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('node/link color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubText({color: 'green'}, 'bottom', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': 'green',
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('global texts color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}, texts: {color: 'black'}}).renderSubText({}, 'bottom', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': 'black',
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('global node color', () => {
+    const res = rendering({scale: 1, icons: {color: 'red'}}).renderSubText({}, 'bottom', {
+      text: 'test'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.2) scale(1 1)`,
+        'fill': 'red',
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('global link color', () => {
+    const res = rendering({scale: 1, links: {color: 'red'}}).renderSubText({}, 'bottom', {
+      text: 'test'
+    }, false, true);
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(0 0.05) scale(1 1)`,
+        'fill': 'red',
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'middle',
+          'x': 0,
+          'y': 18.75
+        },
+        '_text': 'test'
+      }
+    });
+  });
+  test('local line-height', () => {
+    const res = rendering({scale: 1, texts: {'line-height': 1}}).renderSubText({}, 'left', {
+      text: 'test1\ntest2',
+      'line-height': 1.1
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(-0.2 0) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'end',
+          'x': -7.5,
+          'y': -4.5
+        },
+        'tspan': [{
+          '_attributes': {
+            'x': -7.5,
+            'dy': 0,
+            'text-anchor': 'end'
+          },
+          '_text': 'test1'
+        }, {
+          '_attributes': {
+            'x': -7.5,
+            'dy': '1.1em',
+            'text-anchor': 'end'
+          },
+          '_text': 'test2'
+        }]
+      }
+    });
+  });
+  test('global line-height', () => {
+    const res = rendering({scale: 1, texts: {'line-height': 1}}).renderSubText({}, 'left', {
+      text: 'test1\ntest2'
+    });
+    expect(res).toEqual({
+      '_attributes': {
+        'transform': `translate(-0.2 0) scale(1 1)`,
+        'fill': undefined,
+      },
+      'text': {
+        '_attributes': {
+          'font-family': undefined,
+          'font-size': undefined,
+          'font-weight': undefined,
+          'font-style': undefined,
+          'text-decoration': undefined,
+          'text-anchor': 'end',
+          'x': -7.5,
+          'y': -3.75
+        },
+        'tspan': [{
+          '_attributes': {
+            'x': -7.5,
+            'dy': 0,
+            'text-anchor': 'end'
+          },
+          '_text': 'test1'
+        }, {
+          '_attributes': {
+            'x': -7.5,
+            'dy': '1em',
+            'text-anchor': 'end'
+          },
+          '_text': 'test2'
+        }]
+      }
+    });
+  });
+});
+
 describe('renderNode', () => {
   test('no icon', () => {
     const res = rendering({'h-spacing': 1}).renderNode({

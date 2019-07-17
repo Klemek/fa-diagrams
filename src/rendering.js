@@ -249,13 +249,14 @@ module.exports = (options) => {
     },
 
     /**
+     * Generate the correct svg text with possible tspan in case of multi-line
      * @param {string} text
      * @param {number} lineHeight
      * @param {number} x
      * @param {string} anchor
      * @return {Object} svg text
      */
-    getSvgText: (text, lineHeight, x, anchor) => {
+    renderSvgText: (text, lineHeight, x, anchor) => {
       text = text.trim();
       if (!text.includes('\n'))
         return {'_text': text};
@@ -264,7 +265,7 @@ module.exports = (options) => {
         list.push({
           '_attributes': {
             'x': x,
-            'dy': i === 0 ? '0' : `${lineHeight}em`,
+            'dy': i === 0 ? 0 : `${lineHeight}em`,
             'text-anchor': anchor
           },
           '_text': line
@@ -273,6 +274,12 @@ module.exports = (options) => {
       return {'tspan': list};
     },
 
+    /**
+     * Get the svg font-weight property from defined style
+     * @param {string} style
+     * @param {boolean} force
+     * @returns {string|undefined}
+     */
     getFontWeight: (style, force = false) => {
       if (!style)
         return undefined;
@@ -282,6 +289,12 @@ module.exports = (options) => {
       return force ? 'normal' : undefined;
     },
 
+    /**
+     * Get the svg font-style property from defined style
+     * @param {string} style
+     * @param {boolean} force
+     * @returns {string|undefined}
+     */
     getFontStyle: (style, force = false) => {
       if (!style)
         return undefined;
@@ -293,6 +306,11 @@ module.exports = (options) => {
       return force ? 'normal' : undefined;
     },
 
+    /**
+     * Get the svg text-decoration property from defined style
+     * @param {string} style
+     * @returns {string|undefined}
+     */
     getTextDecoration: (style) => {
       if (!style)
         return undefined;
@@ -308,6 +326,7 @@ module.exports = (options) => {
     },
 
     /**
+     * Generate a svg group from the given sub-element
      * @param {Node2|Link2} element
      * @param {string} side
      * @param {SubElement2} subE
@@ -339,7 +358,7 @@ module.exports = (options) => {
       }
 
       const lineHeight = subE['line-height'] || options['texts']['line-height'];
-      const text = self.getSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
+      const text = self.renderSvgText(subE.text, lineHeight, pos.x * fontSize / 2, anchor);
       const textHeight = text['tspan'] ? text['tspan'].length - 1 : 0;
 
       text['_attributes'] = {
@@ -363,6 +382,7 @@ module.exports = (options) => {
     },
 
     /**
+     * Generate the svg group from a given node
      * @param {Node2} node
      * @return {Object} svg group
      */
@@ -400,6 +420,7 @@ module.exports = (options) => {
     },
 
     /**
+     * Generate a svg group from the given link
      * @param {Object<string,Node2>} nodes
      * @param {Link2} link
      * @return {Object} svg group
@@ -518,7 +539,7 @@ module.exports = (options) => {
 
         ['bottom', 'top'].forEach(sub => {
           if (typeof link[sub] === 'string')
-            link[sub] = {text: link[sub]};
+            link[sub] = {text: link[sub].trim()};
         });
 
         const group = self.renderLink(nodes, link);
@@ -533,7 +554,7 @@ module.exports = (options) => {
 
         ['bottom', 'top', 'left', 'right'].forEach(sub => {
           if (typeof nodes[key][sub] === 'string')
-            nodes[key][sub] = {text: nodes[key][sub]};
+            nodes[key][sub] = {text: nodes[key][sub].trim()};
         });
 
         const group = self.renderNode(nodes[key]);
