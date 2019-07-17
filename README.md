@@ -114,7 +114,7 @@ const data = {
       from: 'node1',
       to: 'node2',
       color: '#333333',
-      bottom: 'hello'
+      bottom: '"hello"'
     }
   ]
 };
@@ -209,7 +209,7 @@ Array of object as following:
 | **`from`** | string | **yes** | source node name  |
 | **`to`** | string | **yes** | destination node name |
 | `type` | string | no | link's appearance (see [Link types](#link-types)) |
-| `top`, `bottom` | string or object | no | see [Sub-elements](#sub-elements) |
+| `top`, `bottom` **or** `left`, `right` | string or object | no | left and right are relative of the link's direction, top and bottom relative of the link's angle, see [Sub-elements](#sub-elements) |
 | `color` | string | no | redefine the color |
 | `scale` | number | no | redefine this link scale |
 | `size` | number | no | forced size/length of the link |
