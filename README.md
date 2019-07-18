@@ -119,7 +119,7 @@ Get the scripts from this repository `dist` folder
 <script src="fa-diagrams.min.js"></script> <!-- 110.40 KB -->
 ```
 
-### CDN (soon)
+### CDN
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/fa-diagrams@latest/dist/fa-diagrams-data.min.js"></script>
@@ -133,15 +133,7 @@ or
 <script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams.min.js"></script>
 ```
 
-or
-
-```html
-<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams-data.min.js"></script>
-<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams.min.js"></script>
-```
-
-
-### NPM (soon)
+### NPM
 
 ```
 npm install fa-diagrams
