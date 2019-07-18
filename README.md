@@ -53,31 +53,34 @@
 ```javascript
 const faDiagrams = require('fa-diagrams');
 
+// data: sample
 const data = {
-  nodes: [
+  "nodes": [
     {
-      name: 'node1',
-      icon: 'laptop-code',
-      color: '#4E342E',
-      bottom: 'my app',
+      "name": "node1",
+      "icon": "laptop-code",
+      "color": "#4E342E",
+      "bottom": "my app"
     },
     {
-      name: 'node2',
-      icon: 'globe',
-      color: '#455A64',
-      bottom: 'world'
+      "name": "node2",
+      "icon": "globe",
+      "color": "#455A64",
+      "bottom": "world"
     }
   ],
-  links: [
+  "links": [
     {
-      from: 'node1',
-      to: 'node2',
-      color: '#333333',
-      top: {icon: 'envelope'},
-      bottom: '"hello"'
+      "from": "node1",
+      "to": "node2",
+      "color": "#333333",
+      "top": {
+        "icon": "envelope"
+      },
+      "bottom": "\"hello\""
     }
   ]
-};
+}
 
 const svg = faDiagrams.compute(data); // string containing xml data
 
@@ -341,5 +344,59 @@ If you want to change the icons you can edit/build your own `resources.json` as 
 
 ## Examples
 *[back to top](#top)*
+
+<!-- data: example1 -->
+```json
+{
+  "nodes": [
+    {
+      "name": "node1",
+      "icon": "laptop-code",
+      "color": "#4E342E",
+      "bottom": "my app"
+    },
+    {
+      "name": "node2",
+      "icon": "globe",
+      "color": "#455A64",
+      "bottom": "world"
+    }
+  ],
+  "links": [
+    {
+      "from": "node1",
+      "to": "node2",
+      "color": "#333333",
+      "top": {
+        "icon": "envelope"
+      },
+      "bottom": "\"hello\""
+    }
+  ]
+}
+```
+
+<!-- data: example1 -->
+```yaml
+nodes:
+  - name: node1
+    icon: laptop-code
+    color: '#4E342E'
+    bottom: my app
+  - name: node2
+    icon: globe
+    color: '#455A64'
+    bottom: world
+links:
+  - from: node1
+    to: node2
+    color: '#333333'
+    top:
+      icon: envelope
+    bottom: '"hello"'
+
+```
+
+![](preview/example1.svg)
 
 (soon)

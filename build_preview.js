@@ -38,7 +38,42 @@ fs.writeFileSync(`preview/links.svg`, rendering.toXML({'g': g}, {w: 1536 * 2, h:
 
 const faDiagrams = require('./src/index');
 
-const data = {
+let readme = fs.readFileSync('README.md', {encoding: 'utf-8'});
+
+const generatePreview = (name, exportSample, data) => {
+  const jsRegex = new RegExp(`\\/\\/ data: ${name}([\\s\\S](?!};))*\n};`, 'm');
+  const jsonRegex = new RegExp(`<!-- data: ${name} -->\\n\`\`\`json([\\s\\S](?!\`\`\`))*`, 'm');
+  const yamlRegex = new RegExp(`<!-- data: ${name} -->\\n\`\`\`yaml([\\s\\S](?!\`\`\`))*`, 'm');
+
+  console.log('readme : ', readme.length);
+
+  // JS object
+  if (jsRegex.test(readme)) {
+    console.log(`preview ${name}: found JS object`);
+    console.log(jsRegex.exec(readme))
+    readme = readme.replace(jsRegex, `// data: ${name}\nconst data = ${JSON.stringify(data, null, 2)}`);
+  }
+  // JSON
+  if (jsonRegex.test(readme)) {
+    console.log(`preview ${name}: found JSON definition`);
+    readme = readme.replace(jsonRegex, `<!-- data: ${name} -->
+\`\`\`json
+${JSON.stringify(data, null, 2)}`);
+  }
+  // YAML
+  if (yamlRegex.test(readme)) {
+    console.log(`preview ${name}: found YAML definition`);
+    readme = readme.replace(yamlRegex, `<!-- data: ${name} -->
+\`\`\`yaml
+${yaml.safeDump(data)}`);
+  }
+
+  if (exportSample)
+    fs.writeFileSync('docs/sample.yml', yaml.safeDump(data), {encoding: 'utf-8'});
+  fs.writeFileSync(`preview/${name}.svg`, faDiagrams.compute(data), {encoding: 'utf-8'});
+};
+
+generatePreview('sample', false, {
   nodes: [
     {
       name: 'node1',
@@ -62,8 +97,32 @@ const data = {
       bottom: '"hello"'
     }
   ]
-};
+});
 
-fs.writeFileSync('docs/sample.yml', yaml.safeDump(data), {encoding: 'utf-8'});
+generatePreview('example1', false, {
+  nodes: [
+    {
+      name: 'node1',
+      icon: 'laptop-code',
+      color: '#4E342E',
+      bottom: 'my app'
+    },
+    {
+      name: 'node2',
+      icon: 'globe',
+      color: '#455A64',
+      bottom: 'world'
+    }
+  ],
+  links: [
+    {
+      from: 'node1',
+      to: 'node2',
+      color: '#333333',
+      top: {icon: 'envelope'},
+      bottom: '"hello"'
+    }
+  ]
+});
 
-fs.writeFileSync('preview/sample.svg', faDiagrams.compute(data), {encoding: 'utf-8'});
+fs.writeFileSync('README.md', readme, {encoding: 'utf-8'});
