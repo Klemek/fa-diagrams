@@ -349,7 +349,10 @@ If you want to change the icons you can edit/build your own `resources.json` as 
 
 ![](preview/example1.svg)
 
-JSON data
+<details>
+<summary>JSON data (click)</summary>
+<p>
+
 <!-- data: example1 -->
 ```json
 {
@@ -380,8 +383,13 @@ JSON data
   ]
 }
 ```
+</p>
+</details>
 
-YAML data
+<details>
+<summary>YAML data (click)</summary>
+<p>
+
 <!-- data: example1 -->
 ```yaml
 nodes:
@@ -402,5 +410,7 @@ links:
     bottom: '"hello"'
 
 ```
+</p>
+</details>
 
 (soon)
