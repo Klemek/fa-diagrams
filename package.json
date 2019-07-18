@@ -41,10 +41,10 @@
     "browserify": "^16.3.0",
     "coveralls": "^3.0.4",
     "jest": "^24.8.0",
+    "js-yaml": "^3.13.1",
     "jshint": "^2.10.2",
     "node-svn-ultimate": "^1.2.0",
     "rimraf": "^2.6.3",
-    "uglify-es": "^3.3.9",
-    "yaml": "^1.6.0"
+    "uglify-es": "^3.3.9"
   }
 }

@@ -1,16 +1,16 @@
 nodes:
   - name: node1
     icon: laptop-code
-    color: "#4E342E"
+    color: '#4E342E'
     bottom: my app
   - name: node2
     icon: globe
-    color: "#455A64"
+    color: '#455A64'
     bottom: world
 links:
   - from: node1
     to: node2
-    color: "#333333"
+    color: '#333333'
     top:
       icon: envelope
     bottom: '"hello"'

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>fa-diagrams example</title>
-    <script src="jquery-3.4.1.min.js"></script>
-    <script src="yaml.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@3.13.1/dist/js-yaml.min.js"></script>
     <script src="github-cdn.js"></script>
     <style>
         * {
@@ -67,7 +67,7 @@
                   data[key] = data[key].replace(/\\n/gm, '\n');
               });
             };
-            let data = YAML.parse($('#input').val());
+            let data = jsyaml.load($('#input').val());
             findLineBreaks(data);
             $('#right').html(faDiagrams.compute(data));
           } catch (err) {

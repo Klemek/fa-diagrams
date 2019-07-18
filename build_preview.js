@@ -1,5 +1,5 @@
 const fs = require('fs');
-const YAML = require('yaml');
+const yaml = require('js-yaml');
 
 const rendering = require('./src/rendering')({
   'scale': 0.05,
@@ -64,6 +64,6 @@ const data = {
   ]
 };
 
-fs.writeFileSync('docs/sample.yml', YAML.stringify(data, null, 4), {encoding: 'utf-8'});
+fs.writeFileSync('docs/sample.yml', yaml.safeDump(data), {encoding: 'utf-8'});
 
 fs.writeFileSync('preview/sample.svg', faDiagrams.compute(data), {encoding: 'utf-8'});
