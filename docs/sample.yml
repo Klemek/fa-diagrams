@@ -1,6 +1,6 @@
 options:
   placing:
-    diagonals: true
+    diagonals: false
   rendering:
     icons:
       color: '#00695C'

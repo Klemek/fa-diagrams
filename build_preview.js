@@ -1,5 +1,6 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
+const svg2img = require('svg2img');
 
 const rendering = require('./src/rendering')({
   'scale': 0.05,
@@ -34,7 +35,14 @@ const g = [];
   });
 });
 
-fs.writeFileSync(`preview/links.svg`, rendering.toXML({'g': g}, {w: 1536 * 2, h: 4 * 712 + 100}), {encoding: 'utf-8'});
+const svgLinks = rendering.toXML({'g': g}, {w: 1536 * 2, h: 4 * 712 + 100});
+
+fs.writeFileSync(`preview/links.svg`, svgLinks, {encoding: 'utf-8'});
+
+svg2img(svgLinks, function(error, buffer) {
+  if(!error)
+    fs.writeFileSync(`preview/links.png`, buffer);
+});
 
 const faDiagrams = require('./src/index');
 
@@ -68,7 +76,12 @@ ${yaml.safeDump(data)}`);
 
   if (exportSample)
     fs.writeFileSync('docs/sample.yml', yaml.safeDump(data), {encoding: 'utf-8'});
-  fs.writeFileSync(`preview/${name}.svg`, faDiagrams.compute(data), {encoding: 'utf-8'});
+  const svg = faDiagrams.compute(data);
+  fs.writeFileSync(`preview/${name}.svg`, svg, {encoding: 'utf-8'});
+  svg2img(svg, function(error, buffer) {
+    if(!error)
+      fs.writeFileSync(`preview/${name}.png`, buffer);
+  });
 };
 
 generatePreview('example1', false, {

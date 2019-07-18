@@ -1,10 +1,9 @@
 {
   "name": "fa-diagrams",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "SVG diagrams built from Font-Awesome icons",
   "main": "src/index.js",
   "files": [
-    "/preview",
     "/src",
     "/dist",
     "/resources.json",
@@ -12,7 +11,7 @@
   ],
   "scripts": {
     "test": "jest --silent",
-    "prepublishOnly": "browserify --require ./resources.json:../resources.json -o dist/fa-diagrams-data.js && browserify --exclude ../resources.json src/index.js -o dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams.min.js -- dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams-data.min.js -- dist/fa-diagrams-data.js"
+    "prepublishOnly": "node build_preview.js && browserify --require ./resources.json:../resources.json -o dist/fa-diagrams-data.js && browserify --exclude ../resources.json src/index.js -o dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams.min.js -- dist/fa-diagrams.js && uglifyjs -m -c -o dist/fa-diagrams-data.min.js -- dist/fa-diagrams-data.js"
   },
   "repository": {
     "type": "git",
@@ -46,6 +45,7 @@
     "jshint": "^2.10.2",
     "node-svn-ultimate": "^1.2.0",
     "rimraf": "^2.6.3",
+    "svg2img": "^0.6.1",
     "uglify-es": "^3.3.9"
   }
 }

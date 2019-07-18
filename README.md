@@ -5,7 +5,7 @@
 # fa-diagrams
 **SVG diagrams built from Font-Awesome icons**
 
-![sample](preview/example1.svg)
+![sample](preview/example1.png)
 
 ### **[Web Editor](https://klemek.github.io/fa-diagrams)**
 
@@ -263,7 +263,7 @@ You can also specify a custom icon by entering the following object instead of a
 
 Here are the accepted types and their preview :
 
-![](preview/links.svg)
+![](preview/links.png)
 
 You can use **`none`** to make an invisible link.
 
@@ -326,7 +326,7 @@ If you want to change the icons you can edit/build your own `resources.json` as 
 
 ### Example 1 : Hello World
 
-![](preview/example1.svg)
+![](preview/example1.png)
 
 <details>
 <summary>JSON data (click)</summary>
@@ -394,7 +394,7 @@ links:
 
 ### Example 2 : Web App
 
-![](preview/example2.svg)
+![](preview/example2.png)
 
 <details>
 <summary>JSON data (click)</summary>
@@ -405,7 +405,7 @@ links:
 {
   "options": {
     "placing": {
-      "diagonals": true
+      "diagonals": false
     },
     "rendering": {
       "icons": {
@@ -498,7 +498,7 @@ links:
 ```yaml
 options:
   placing:
-    diagonals: true
+    diagonals: false
   rendering:
     icons:
       color: '#00695C'
