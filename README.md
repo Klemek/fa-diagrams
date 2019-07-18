@@ -25,14 +25,14 @@
 
 ## Summary
 
+* [Usage](#usage)
+  * [Node module](#node-module)
+  * [Html script](#html-script)
 * [Install](#install)
   * [CDN](#cdn)
   * [Static scripts](#static-scripts)
   * [NPM](#npm)
   * [Build from sources](#build-from-sources)
-* [Usage](#usage)
-  * [Node module](#node-module)
-  * [Html script](#html-script)
 * [API](#api)
   * [`options`](#options)
   * [`nodes`](#nodes)
@@ -44,57 +44,6 @@
   * [Thrown errors](#thrown-errors)
   * [Change icons](#change-icons)
 * [Examples](#examples)
-  
-## Install  
-*[back to top](#top)*
-
-### Static scripts
-
-Get the scripts from this repository `dist` folder
-
-```html
-<script src="fa-diagrams-data.min.js"></script> <!-- 1.04 MB -->
-<script src="fa-diagrams.min.js"></script> <!-- 110.40 KB -->
-```
-
-### CDN (soon)
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/fa-diagrams@latest/dist/fa-diagrams-data.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fa-diagrams@latest/dist/fa-diagrams.min.js"></script>
-```
-
-or
-
-```html
-<script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams-data.min.js"></script>
-<script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams.min.js"></script>
-```
-
-or
-
-```html
-<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams-data.min.js"></script>
-<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams.min.js"></script>
-```
-
-
-### NPM (soon)
-
-```
-npm install fa-diagrams
-```
-
-### Build from sources
-
-You will need subversion installed (used for precise folder fetching in GitHub)
-
-```
-git clone https://github.com/klemek/fa-diagrams.git
-cd fa-diagrams
-npm install
-node build.sh
-```
 
 ## Usage
 *[back to top](#top)*
@@ -166,6 +115,57 @@ Will produce the following diagram:
 ...
 </body>
 </html>
+```
+
+## Install  
+*[back to top](#top)*
+
+### Static scripts
+
+Get the scripts from this repository `dist` folder
+
+```html
+<script src="fa-diagrams-data.min.js"></script> <!-- 1.04 MB -->
+<script src="fa-diagrams.min.js"></script> <!-- 110.40 KB -->
+```
+
+### CDN (soon)
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/fa-diagrams@latest/dist/fa-diagrams-data.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fa-diagrams@latest/dist/fa-diagrams.min.js"></script>
+```
+
+or
+
+```html
+<script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams-data.min.js"></script>
+<script src="https://unpkg.com/fa-diagrams/dist/fa-diagrams.min.js"></script>
+```
+
+or
+
+```html
+<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams-data.min.js"></script>
+<script src="https://cdn.rawgit.com/Klemek/fa-diagrams/master/dist/fa-diagrams.min.js"></script>
+```
+
+
+### NPM (soon)
+
+```
+npm install fa-diagrams
+```
+
+### Build from sources
+
+You will need subversion installed (used for precise folder fetching in GitHub)
+
+```
+git clone https://github.com/klemek/fa-diagrams.git
+cd fa-diagrams
+npm install
+node build.sh
 ```
 
 ## API
