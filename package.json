@@ -1,6 +1,6 @@
 {
   "name": "fa-diagrams",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SVG diagrams built from Font-Awesome icons",
   "main": "src/index.js",
   "files": [
