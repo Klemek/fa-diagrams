@@ -5,23 +5,9 @@
 # fa-diagrams
 **SVG diagrams built from Font-Awesome icons**
 
-**[Demo](https://klemek.github.io/fa-diagrams)**
+![sample](preview/example1.svg)
 
-## RoadMap to v1
-
-* [x] Font-Awesome paths scrapping in build
-* [x] Node placing with links
-* [x] SVG output
-* [x] Node's icon rendering
-* [x] Simple links rendering
-* [x] Dashed links rendering
-* [x] Colors
-* [x] Sub-texts
-* [x] Font styles
-* [x] Sub-icons
-* [x] Unit testing
-* [ ] Examples
-
+### **[Web Editor](https://klemek.github.io/fa-diagrams)**
 
 ## Summary
 
@@ -44,6 +30,8 @@
   * [Thrown errors](#thrown-errors)
   * [Change icons](#change-icons)
 * [Examples](#examples)
+  * [Example 1 : Hello World](#example-1-hello-world)
+  * [Example 2 : Web App](#example2-web-app)
 
 ## Usage
 *[back to top](#top)*
@@ -53,7 +41,7 @@
 ```javascript
 const faDiagrams = require('fa-diagrams');
 
-// data: sample
+// data: example1
 const data = {
   "nodes": [
     {
@@ -95,9 +83,8 @@ svg2img(svg, function(error, buffer) {
 });
 ```
 
-Will produce the following diagram:
+Will produce the diagram above
 
-![sample](preview/sample.svg)
 
 ### Html script
 
@@ -319,23 +306,23 @@ If you want to change the icons you can edit/build your own `resources.json` as 
 
 ```javascript
 {
-    "name": "squares",
-    "height": 60, //height of all icons
-    "index": [ // which categories are there and in which order it should be searched
+    "name";: "squares",
+    "height";: 60, //height of all icons
+    "index";: [ // which categories are there and in which order it should be searched
         "solid",
         "hollow"
     ],
-    "icons": {
-      "solid": {
-        "square":{
-          "path":"M10 10v-40h40v40z",
-          "width":60
+    "icons";: {
+      "solid";: {
+        "square";:{
+          "path";:"M10 10v-40h40v40z",
+          "width";:60
         }
       },
-      "hollow": {
-        "square":{
-          "path":"M10 10v-40h40v40h-40m10 10v-20h20v20h-20z",
-          "width":60
+      "hollow";: {
+        "square";:{
+          "path";:"M10 10v-40h40v40h-40m10 10v-20h20v20h-20z",
+          "width";:60
         }
       }
     }
@@ -345,7 +332,7 @@ If you want to change the icons you can edit/build your own `resources.json` as 
 ## Examples
 *[back to top](#top)*
 
-### Example 1
+### Example 1 : Hello World
 
 ![](preview/example1.svg)
 
@@ -413,4 +400,163 @@ links:
 </p>
 </details>
 
-(soon)
+### Example 2 : Web App
+
+![](preview/example2.svg)
+
+<details>
+<summary>JSON data (click)</summary>
+<p>
+
+<!-- data: example2 -->
+```json
+{
+  "options": {
+    "placing": {
+      "diagonals": true
+    },
+    "rendering": {
+      "icons": {
+        "color": "#00695C"
+      },
+      "links": {
+        "color": "#26A69A"
+      },
+      "texts": {
+        "color": "#004D40",
+        "font": "mono",
+        "font-size": 12,
+        "margin": 0.25
+      },
+      "sub-icons": {
+        "color": "#004D40"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "name": "client",
+      "icon": "laptop",
+      "bottom": "user"
+    },
+    {
+      "name": "page",
+      "icon": "file-code",
+      "top": "index.html"
+    },
+    {
+      "name": "js",
+      "icon": "js-square",
+      "bottom": "front-end"
+    },
+    {
+      "name": "server",
+      "icon": "node",
+      "bottom": "back-end"
+    },
+    {
+      "name": "db",
+      "icon": "database"
+    }
+  ],
+  "links": [
+    {
+      "from": "client",
+      "to": "page"
+    },
+    {
+      "from": "page",
+      "to": "js",
+      "type": "double",
+      "top": {
+        "icon": "vuejs"
+      },
+      "bottom": "VueJS",
+      "direction": "down"
+    },
+    {
+      "from": "js",
+      "to": "server",
+      "type": "split-double",
+      "direction": "right",
+      "top": {
+        "text": "Ajax"
+      },
+      "bottom": {
+        "text": "JSON"
+      }
+    },
+    {
+      "from": "db",
+      "to": "server",
+      "type": "double",
+      "bottom": "Sequelize"
+    }
+  ]
+}
+```
+</p>
+</details>
+
+<details>
+<summary>YAML data (click)</summary>
+<p>
+
+<!-- data: example2 -->
+```yaml
+options:
+  placing:
+    diagonals: true
+  rendering:
+    icons:
+      color: '#00695C'
+    links:
+      color: '#26A69A'
+    texts:
+      color: '#004D40'
+      font: mono
+      font-size: 12
+      margin: 0.25
+    sub-icons:
+      color: '#004D40'
+nodes:
+  - name: client
+    icon: laptop
+    bottom: user
+  - name: page
+    icon: file-code
+    top: index.html
+  - name: js
+    icon: js-square
+    bottom: front-end
+  - name: server
+    icon: node
+    bottom: back-end
+  - name: db
+    icon: database
+links:
+  - from: client
+    to: page
+  - from: page
+    to: js
+    type: double
+    top:
+      icon: vuejs
+    bottom: VueJS
+    direction: down
+  - from: js
+    to: server
+    type: split-double
+    direction: right
+    top:
+      text: Ajax
+    bottom:
+      text: JSON
+  - from: db
+    to: server
+    type: double
+    bottom: Sequelize
+
+```
+</p>
+</details>

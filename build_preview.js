@@ -45,12 +45,10 @@ const generatePreview = (name, exportSample, data) => {
   const jsonRegex = new RegExp(`<!-- data: ${name} -->\\n\`\`\`json([\\s\\S](?!\`\`\`))*`, 'm');
   const yamlRegex = new RegExp(`<!-- data: ${name} -->\\n\`\`\`yaml([\\s\\S](?!\`\`\`))*`, 'm');
 
-  console.log('readme : ', readme.length);
-
   // JS object
   if (jsRegex.test(readme)) {
     console.log(`preview ${name}: found JS object`);
-    console.log(jsRegex.exec(readme))
+    console.log(jsRegex.exec(readme));
     readme = readme.replace(jsRegex, `// data: ${name}\nconst data = ${JSON.stringify(data, null, 2)}`);
   }
   // JSON
@@ -73,7 +71,7 @@ ${yaml.safeDump(data)}`);
   fs.writeFileSync(`preview/${name}.svg`, faDiagrams.compute(data), {encoding: 'utf-8'});
 };
 
-generatePreview('sample', false, {
+generatePreview('example1', false, {
   nodes: [
     {
       name: 'node1',
@@ -99,28 +97,87 @@ generatePreview('sample', false, {
   ]
 });
 
-generatePreview('example1', false, {
-  nodes: [
+generatePreview('example2', true, {
+  'options': {
+    'placing': {
+      'diagonals': false
+    },
+    'rendering': {
+      'icons': {
+        'color': '#00695C'
+      },
+      'links': {
+        'color': '#26A69A'
+      },
+      'texts': {
+        'color':'#004D40',
+        'font': 'mono',
+        'font-size': 12,
+        'margin': 0.25
+      },
+      'sub-icons': {
+        'color':'#004D40',
+      },
+    }
+  },
+  'nodes': [
     {
-      name: 'node1',
-      icon: 'laptop-code',
-      color: '#4E342E',
-      bottom: 'my app'
+      'name': 'client',
+      'icon': 'laptop',
+      'bottom': 'user'
     },
     {
-      name: 'node2',
-      icon: 'globe',
-      color: '#455A64',
-      bottom: 'world'
+      'name': 'page',
+      'icon': 'file-code',
+      'top': 'index.html'
+    },
+    {
+      'name': 'js',
+      'icon': 'js-square',
+      'bottom': 'front-end'
+    },
+    {
+      'name': 'server',
+      'icon': 'node',
+      'bottom': 'back-end'
+    },
+    {
+      'name': 'db',
+      'icon': 'database'
     }
   ],
-  links: [
+  'links': [
     {
-      from: 'node1',
-      to: 'node2',
-      color: '#333333',
-      top: {icon: 'envelope'},
-      bottom: '"hello"'
+      'from': 'client',
+      'to': 'page'
+    },
+    {
+      'from': 'page',
+      'to': 'js',
+      'type': 'double',
+      'top': {
+        'icon': 'vuejs'
+      },
+      'bottom': 'VueJS',
+      'direction': 'down'
+    },
+    {
+      'from': 'js',
+      'to': 'server',
+      'type': 'split-double',
+      'direction': 'right',
+      'top': {
+        'text': 'Ajax'
+      },
+      'bottom': {
+        'text': 'JSON'
+      }
+    },
+    {
+      'from': 'db',
+      'to': 'server',
+      'type': 'double',
+      'bottom': 'Sequelize'
     }
   ]
 });
