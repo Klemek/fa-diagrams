@@ -392,6 +392,37 @@ links:
 </p>
 </details>
 
+<details>
+<summary>TOML data (click)</summary>
+<p>
+
+<!-- data: example1 -->
+```toml
+[[nodes]]
+name = "node1"
+icon = "laptop-code"
+color = "#4E342E"
+bottom = "my app"
+
+[[nodes]]
+name = "node2"
+icon = "globe"
+color = "#455A64"
+bottom = "world"
+
+[[links]]
+from = "node1"
+to = "node2"
+color = "#333333"
+bottom = '"hello"'
+
+  [links.top]
+  icon = "envelope"
+
+```
+</p>
+</details>
+
 ### Example 2 : Web App
 
 ![](preview/example2.png)
@@ -548,6 +579,90 @@ links:
     to: server
     type: double
     bottom: Sequelize
+
+```
+</p>
+</details>
+
+<details>
+<summary>TOML data (click)</summary>
+<p>
+
+<!-- data: example2 -->
+```toml
+[options.placing]
+diagonals = false
+
+[options.rendering.icons]
+color = "#00695C"
+
+[options.rendering.links]
+color = "#26A69A"
+
+[options.rendering.texts]
+color = "#004D40"
+font = "mono"
+font-size = 12
+margin = 0.25
+
+[options.rendering.sub-icons]
+color = "#004D40"
+
+[[nodes]]
+name = "client"
+icon = "laptop"
+bottom = "user"
+
+[[nodes]]
+name = "page"
+icon = "file-code"
+top = "index.html"
+
+[[nodes]]
+name = "js"
+icon = "js-square"
+bottom = "front-end"
+
+[[nodes]]
+name = "server"
+icon = "node"
+bottom = "back-end"
+
+[[nodes]]
+name = "db"
+icon = "database"
+
+[[links]]
+from = "client"
+to = "page"
+
+[[links]]
+from = "page"
+to = "js"
+type = "double"
+bottom = "VueJS"
+direction = "down"
+
+  [links.top]
+  icon = "vuejs"
+
+[[links]]
+from = "js"
+to = "server"
+type = "split-double"
+direction = "right"
+
+  [links.top]
+  text = "Ajax"
+
+  [links.bottom]
+  text = "JSON"
+
+[[links]]
+from = "db"
+to = "server"
+type = "double"
+bottom = "Sequelize"
 
 ```
 </p>

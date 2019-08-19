@@ -1,6 +1,7 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const svg2img = require('svg2img');
+const toml = require('@iarna/toml');
 
 const rendering = require('./src/rendering')({
   'scale': 0.05,
@@ -52,6 +53,7 @@ const generatePreview = (name, exportSample, data) => {
   const jsRegex = new RegExp(`\\/\\/ data: ${name}([\\s\\S](?!};))*\n};`, 'm');
   const jsonRegex = new RegExp(`<!-- data: ${name} -->\\n\`\`\`json([\\s\\S](?!\`\`\`))*`, 'm');
   const yamlRegex = new RegExp(`<!-- data: ${name} -->\\n\`\`\`yaml([\\s\\S](?!\`\`\`))*`, 'm');
+  const tomlRegex = new RegExp(`<!-- data: ${name} -->\\n\`\`\`toml([\\s\\S](?!\`\`\`))*`, 'm');
 
   // JS object
   if (jsRegex.test(readme)) {
@@ -73,9 +75,16 @@ ${JSON.stringify(data, null, 2)}`);
 \`\`\`yaml
 ${yaml.safeDump(data)}`);
   }
+  // TOML
+  if (tomlRegex.test(readme)) {
+    console.log(`preview ${name}: found TOML definition`);
+    readme = readme.replace(tomlRegex, `<!-- data: ${name} -->
+\`\`\`toml
+${toml.stringify(data)}`);
+  }
 
   if (exportSample)
-    fs.writeFileSync('docs/sample.yml', yaml.safeDump(data), {encoding: 'utf-8'});
+    fs.writeFileSync('docs/sample.toml', toml.stringify(data), {encoding: 'utf-8'});
   const svg = faDiagrams.compute(data);
   fs.writeFileSync(`preview/${name}.svg`, svg, {encoding: 'utf-8'});
   svg2img(svg, function(error, buffer) {
