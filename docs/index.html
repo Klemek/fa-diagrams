@@ -76,7 +76,7 @@
             findLineBreaks(data);
             $('#right').html(faDiagrams.compute(data));
           } catch (err) {
-            $('#right').html(`<h2>${err.toString().replace(/\n/gm, '<br>')}<br>(More info at <a target="_blank" href="https://github.com/Klemek/fa-diagrams">fa-diagrams</a> and <a target="_blank" href="https://github.com/toml-lang/toml">TOML</a></h2>`);
+            $('#right').html(`<h2>${err.toString().replace(/\n/gm, '<br>')}</h2><h3>(More info at <a target="_blank" href="https://github.com/Klemek/fa-diagrams">fa-diagrams</a> and <a target="_blank" href="https://github.com/toml-lang/toml">TOML</a>)</h3>`);
             console.error(err);
           }
         }, 500);
