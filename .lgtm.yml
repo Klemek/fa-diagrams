@@ -1,0 +1,7 @@
+path_classifiers:
+  docs:
+    - docs
+  generated:
+    - dist
+  test:
+    - test
