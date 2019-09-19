@@ -1,6 +1,8 @@
 [![npm version](https://img.shields.io/npm/v/fa-diagrams.svg)](https://www.npmjs.com/package/fa-diagrams)
 [![Build Status](https://img.shields.io/travis/Klemek/fa-diagrams.svg?branch=master)](https://travis-ci.org/Klemek/fa-diagrams)
 [![Coverage Status](https://img.shields.io/coveralls/github/Klemek/fa-diagrams.svg?branch=master)](https://coveralls.io/github/Klemek/fa-diagrams?branch=master)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Klemek/fa-diagrams.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Klemek/fa-diagrams/context:javascript)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/Klemek/fa-diagrams.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Klemek/fa-diagrams/alerts/)
 
 # fa-diagrams
 **SVG diagrams built from Font-Awesome icons**
