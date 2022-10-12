@@ -46,7 +46,7 @@
     "jshint": "^2.10.2",
     "node-svn-ultimate": "^1.2.0",
     "rimraf": "^2.6.3",
-    "svg2img": "^0.6.1",
+    "svg2img": "^1.0.0-beta.2",
     "uglify-es": "^3.3.9"
   }
 }
